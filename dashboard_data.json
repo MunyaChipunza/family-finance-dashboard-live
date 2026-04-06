@@ -1,0 +1,567 @@
+{
+  "title": "Family Finance Dashboard",
+  "subtitle": "Single-workbook dashboard for cash, commitments, debt, and long-term assets.",
+  "sourceName": "Finance_Input.xlsx",
+  "generatedAt": "2026-04-06T14:49:41.536335+02:00",
+  "sourceUpdatedAt": "2026-04-06T14:39:37.187036+02:00",
+  "refreshSeconds": 60,
+  "summaryCards": [
+    {
+      "label": "Net Income",
+      "value": "R 61,839.84 - R 61,941.92",
+      "detail": "Combined monthly take-home range",
+      "tone": "good"
+    },
+    {
+      "label": "Monthly Costs",
+      "value": "R 60,330.32 - R 60,430.32",
+      "detail": "Confirmed monthly commitments only",
+      "tone": "warn"
+    },
+    {
+      "label": "Debt Instalments",
+      "value": "R 10,923.47",
+      "detail": "Active monthly debt repayments",
+      "tone": "bad"
+    },
+    {
+      "label": "Tracked Outflows",
+      "value": "R 71,253.79 - R 71,353.79",
+      "detail": "Monthly costs plus debt instalments",
+      "tone": "warn"
+    },
+    {
+      "label": "Liquid Cash",
+      "value": "R 57,288.71",
+      "detail": "Current accounts only",
+      "tone": "good"
+    },
+    {
+      "label": "Reserves",
+      "value": "R 15,284.67",
+      "detail": "Notice and reserve savings",
+      "tone": "info"
+    },
+    {
+      "label": "Medical Saver",
+      "value": "R 15,963.12",
+      "detail": "Momentum HealthSaver balance",
+      "tone": "info"
+    },
+    {
+      "label": "Investments",
+      "value": "R 285,420.32",
+      "detail": "Long-term investment and retirement totals",
+      "tone": "good"
+    },
+    {
+      "label": "Debt Balances",
+      "value": "R 427,121.44",
+      "detail": "Outstanding active debt balances",
+      "tone": "bad"
+    }
+  ],
+  "cashHighlights": [
+    {
+      "label": "Standard Bank - Main account",
+      "meta": "Kuhle | Cash / current account",
+      "amount": 2082.65,
+      "currency": "ZAR"
+    },
+    {
+      "label": "Discovery Bank - MAIN ACCOUNT",
+      "meta": "Kuhle | Day-to-day cash",
+      "amount": 55206.06,
+      "currency": "ZAR"
+    },
+    {
+      "label": "Discovery Bank - RAINY DAY",
+      "meta": "Kuhle | Savings / emergency reserve",
+      "amount": 5094.89,
+      "currency": "ZAR"
+    },
+    {
+      "label": "Discovery Bank - VERY RAINY DAY",
+      "meta": "Kuhle | Savings / emergency reserve",
+      "amount": 10189.78,
+      "currency": "ZAR"
+    },
+    {
+      "label": "Momentum - HealthSaver",
+      "meta": "Kuhle | Restricted savings / medical",
+      "amount": 15963.12,
+      "currency": "ZAR"
+    }
+  ],
+  "debtHighlights": [
+    {
+      "label": "Discovery Bank - Black Credit Card",
+      "meta": "Kuhle | Positive-balance card / cash float unless corrected",
+      "amount": 5746.01
+    },
+    {
+      "label": "BMW X1 xDrive20d finance",
+      "meta": "Standard Bank | Around 1st / 2nd of month",
+      "balance": 274058.92,
+      "instalment": 6230.18
+    },
+    {
+      "label": "Audi vehicle finance",
+      "meta": "ABSA | Around month-end",
+      "balance": 153062.52,
+      "instalment": 4693.29
+    }
+  ],
+  "incomeRows": [
+    {
+      "owner": "Kuhle",
+      "source": "Salary / take-home pay",
+      "monthlyMin": 23427.62,
+      "monthlyMax": 23529.7,
+      "notes": "Range inferred from salary deposits"
+    },
+    {
+      "owner": "Munya",
+      "source": "Salary / take-home pay",
+      "monthlyMin": 38412.22,
+      "monthlyMax": 38412.22,
+      "notes": "From payslip"
+    },
+    {
+      "owner": "Household",
+      "source": "Combined take-home pay",
+      "monthlyMin": 61839.84,
+      "monthlyMax": 61941.92,
+      "notes": "Reference only"
+    }
+  ],
+  "cashRows": [
+    {
+      "owner": "Kuhle",
+      "institution": "Standard Bank",
+      "product": "Main account",
+      "accountType": "Bank account",
+      "balance": 2082.65,
+      "currency": "ZAR",
+      "asOf": "2026-04-06",
+      "treatment": "Cash / current account",
+      "notes": ""
+    },
+    {
+      "owner": "Kuhle",
+      "institution": "Discovery Bank",
+      "product": "MAIN ACCOUNT",
+      "accountType": "Transaction account",
+      "balance": 55206.06,
+      "currency": "ZAR",
+      "asOf": "2026-04-06",
+      "treatment": "Day-to-day cash",
+      "notes": "Treat as operating cash, not savings"
+    },
+    {
+      "owner": "Kuhle",
+      "institution": "Discovery Bank",
+      "product": "RAINY DAY",
+      "accountType": "32 Day Notice Savings",
+      "balance": 5094.89,
+      "currency": "ZAR",
+      "asOf": "2026-04-06",
+      "treatment": "Savings / emergency reserve",
+      "notes": ""
+    },
+    {
+      "owner": "Kuhle",
+      "institution": "Discovery Bank",
+      "product": "VERY RAINY DAY",
+      "accountType": "32 Day Notice Savings",
+      "balance": 10189.78,
+      "currency": "ZAR",
+      "asOf": "2026-04-06",
+      "treatment": "Savings / emergency reserve",
+      "notes": ""
+    },
+    {
+      "owner": "Kuhle",
+      "institution": "Momentum",
+      "product": "HealthSaver",
+      "accountType": "Medical savings",
+      "balance": 15963.12,
+      "currency": "ZAR",
+      "asOf": "2026-04-06",
+      "treatment": "Restricted savings / medical",
+      "notes": "Momentum medical contribution is payroll deducted"
+    }
+  ],
+  "cardRows": [
+    {
+      "owner": "Kuhle",
+      "institution": "Discovery Bank",
+      "product": "Black Credit Card",
+      "currentBalance": 5746.01,
+      "pendingTransactions": -4446.57,
+      "availableBalance": 2299.44,
+      "creditLimit": 1000.0,
+      "paymentDue": "1st monthly",
+      "minPayment": 80.0,
+      "effectiveRate": "19.75%",
+      "treatment": "Positive-balance card / cash float unless corrected",
+      "notes": "Please correct if this should be treated as debt"
+    }
+  ],
+  "debtRows": [
+    {
+      "owner": "Household",
+      "lender": "Standard Bank",
+      "product": "BMW X1 xDrive20d finance",
+      "monthlyInstalment": 6230.18,
+      "observedDebit": 6299.18,
+      "outstandingBalance": 274058.92,
+      "interestRate": "",
+      "debitTiming": "Around 1st / 2nd of month",
+      "status": "Active",
+      "notes": "Observed debit likely includes fees / insurance"
+    },
+    {
+      "owner": "Household",
+      "lender": "ABSA",
+      "product": "Audi vehicle finance",
+      "monthlyInstalment": 4693.29,
+      "observedDebit": 4693.29,
+      "outstandingBalance": 153062.52,
+      "interestRate": "",
+      "debitTiming": "Around month-end",
+      "status": "Active",
+      "notes": ""
+    }
+  ],
+  "costRows": [
+    {
+      "category": "Housing",
+      "item": "Rent",
+      "monthlyMin": 22000.0,
+      "monthlyMax": 22000.0,
+      "treatment": "Fixed",
+      "notes": ""
+    },
+    {
+      "category": "Groceries",
+      "item": "Groceries",
+      "monthlyMin": 8000.0,
+      "monthlyMax": 8000.0,
+      "treatment": "Estimated / regular",
+      "notes": ""
+    },
+    {
+      "category": "Giving",
+      "item": "Tithe",
+      "monthlyMin": 6100.0,
+      "monthlyMax": 6100.0,
+      "treatment": "Estimated / regular",
+      "notes": ""
+    },
+    {
+      "category": "Education",
+      "item": "Anoona school fees",
+      "monthlyMin": 4135.0,
+      "monthlyMax": 4135.0,
+      "treatment": "Fixed",
+      "notes": ""
+    },
+    {
+      "category": "Utilities",
+      "item": "Electricity",
+      "monthlyMin": 3000.0,
+      "monthlyMax": 3000.0,
+      "treatment": "Estimated active monthly amount",
+      "notes": ""
+    },
+    {
+      "category": "Education",
+      "item": "Math tutoring",
+      "monthlyMin": 3000.0,
+      "monthlyMax": 3000.0,
+      "treatment": "Estimated / regular",
+      "notes": ""
+    },
+    {
+      "category": "Transport",
+      "item": "Audi fuel",
+      "monthlyMin": 2500.0,
+      "monthlyMax": 2500.0,
+      "treatment": "Estimated / regular",
+      "notes": ""
+    },
+    {
+      "category": "Transport",
+      "item": "BMW fuel",
+      "monthlyMin": 2500.0,
+      "monthlyMax": 2500.0,
+      "treatment": "Estimated / regular",
+      "notes": ""
+    },
+    {
+      "category": "Insurance",
+      "item": "Discovery insurance",
+      "monthlyMin": 2015.11,
+      "monthlyMax": 2015.11,
+      "treatment": "Fixed",
+      "notes": "Separate from Momentum medical aid"
+    },
+    {
+      "category": "Education",
+      "item": "Lumiso fees",
+      "monthlyMin": 1900.0,
+      "monthlyMax": 2000.0,
+      "treatment": "Estimated / regular",
+      "notes": "Range retained"
+    },
+    {
+      "category": "Insurance",
+      "item": "Dis-Chem insurance / medical",
+      "monthlyMin": 1515.0,
+      "monthlyMax": 1515.0,
+      "treatment": "Fixed",
+      "notes": "For Kuhle and kids; separate from Momentum"
+    },
+    {
+      "category": "Insurance",
+      "item": "Discovery life cover",
+      "monthlyMin": 1001.09,
+      "monthlyMax": 1001.09,
+      "treatment": "Fixed",
+      "notes": ""
+    },
+    {
+      "category": "Communications",
+      "item": "Telkom",
+      "monthlyMin": 991.64,
+      "monthlyMax": 991.64,
+      "treatment": "Fixed",
+      "notes": ""
+    },
+    {
+      "category": "Health / Fitness",
+      "item": "Virgin Active",
+      "monthlyMin": 450.0,
+      "monthlyMax": 450.0,
+      "treatment": "Fixed",
+      "notes": ""
+    },
+    {
+      "category": "Insurance",
+      "item": "Nyaradzo funeral cover",
+      "monthlyMin": 288.0,
+      "monthlyMax": 288.0,
+      "treatment": "Fixed",
+      "notes": ""
+    },
+    {
+      "category": "Subscriptions",
+      "item": "Netflix",
+      "monthlyMin": 250.0,
+      "monthlyMax": 250.0,
+      "treatment": "Fixed",
+      "notes": ""
+    },
+    {
+      "category": "Insurance",
+      "item": "Outsurance funeral cover",
+      "monthlyMin": 222.0,
+      "monthlyMax": 222.0,
+      "treatment": "Fixed",
+      "notes": ""
+    },
+    {
+      "category": "Subscriptions",
+      "item": "Google One",
+      "monthlyMin": 184.99,
+      "monthlyMax": 184.99,
+      "treatment": "Fixed",
+      "notes": ""
+    },
+    {
+      "category": "Insurance",
+      "item": "Mukuru funeral cover",
+      "monthlyMin": 182.5,
+      "monthlyMax": 182.5,
+      "treatment": "Fixed",
+      "notes": ""
+    },
+    {
+      "category": "Subscriptions",
+      "item": "Spotify",
+      "monthlyMin": 94.99,
+      "monthlyMax": 94.99,
+      "treatment": "Fixed",
+      "notes": ""
+    }
+  ],
+  "investmentRows": [
+    {
+      "owner": "Munya",
+      "institution": "Allan Gray",
+      "product": "Total investment value",
+      "balance": 71465.45,
+      "currency": "ZAR",
+      "asOf": "2026-04-02",
+      "treatment": "Summary only",
+      "notes": "Do not add on top of Allan Gray detail rows"
+    },
+    {
+      "owner": "Munya",
+      "institution": "Allan Gray",
+      "product": "Retirement Annuity Fund",
+      "balance": 54059.1,
+      "currency": "ZAR",
+      "asOf": "2026-04-02",
+      "treatment": "Long-term retirement asset",
+      "notes": "Component of Allan Gray total"
+    },
+    {
+      "owner": "Munya",
+      "institution": "Allan Gray",
+      "product": "Tax-Free Investment",
+      "balance": 17406.35,
+      "currency": "ZAR",
+      "asOf": "2026-04-02",
+      "treatment": "Long-term investment asset",
+      "notes": "Component of Allan Gray total"
+    },
+    {
+      "owner": "Kuhle",
+      "institution": "EasyEquities",
+      "product": "Total portfolio value",
+      "balance": 697.86,
+      "currency": "ZAR",
+      "asOf": "2026-04-06",
+      "treatment": "Summary only",
+      "notes": "Do not add on top of EasyEquities detail rows"
+    },
+    {
+      "owner": "Kuhle",
+      "institution": "EasyEquities",
+      "product": "ZAR account",
+      "balance": 349.1,
+      "currency": "ZAR",
+      "asOf": "2026-04-06",
+      "treatment": "Detail only",
+      "notes": "Included in total portfolio value"
+    },
+    {
+      "owner": "Kuhle",
+      "institution": "EasyEquities",
+      "product": "TFSA account",
+      "balance": 0.0,
+      "currency": "ZAR",
+      "asOf": "2026-04-06",
+      "treatment": "Detail only",
+      "notes": "Included in total portfolio value"
+    },
+    {
+      "owner": "Kuhle",
+      "institution": "EasyEquities",
+      "product": "USD account",
+      "balance": 20.71,
+      "currency": "USD",
+      "asOf": "2026-04-06",
+      "treatment": "Detail only",
+      "notes": "Included in total portfolio value"
+    },
+    {
+      "owner": "Kuhle",
+      "institution": "Sanlam",
+      "product": "Umbrella Provident Fund member share",
+      "balance": 213257.01,
+      "currency": "ZAR",
+      "asOf": "2025-09-30",
+      "treatment": "Retirement asset",
+      "notes": "Still active / relevant"
+    },
+    {
+      "owner": "Kuhle",
+      "institution": "Sanlam",
+      "product": "Emergency Savings Pot",
+      "balance": 29899.02,
+      "currency": "ZAR",
+      "asOf": "2025-09-30",
+      "treatment": "Sub-component detail",
+      "notes": "Part of provident structure"
+    }
+  ],
+  "excludedRows": [
+    {
+      "item": "Capitec transfer",
+      "reason": "Internal transfer only; not an expense or debt payment",
+      "referenceAmount": 4100.0,
+      "notes": ""
+    },
+    {
+      "item": "Property levies",
+      "reason": "Removed because property was sold",
+      "referenceAmount": 2421.0,
+      "notes": "Historical amount only"
+    },
+    {
+      "item": "ABSA personal loan",
+      "reason": "Settled / in credit; not an ongoing monthly budget line",
+      "referenceAmount": 2987.58,
+      "notes": "Historical debit amount retained for reference"
+    },
+    {
+      "item": "Momentum medical contribution",
+      "reason": "Payroll-deducted before net pay, so excluded from monthly costs",
+      "referenceAmount": 2029.0,
+      "notes": ""
+    }
+  ],
+  "openItems": [
+    {
+      "area": "Ownership",
+      "question": "Who should the BMW finance be assigned to?",
+      "assumption": "Currently marked as Household",
+      "update": ""
+    },
+    {
+      "area": "Ownership",
+      "question": "Who should the Audi finance be assigned to?",
+      "assumption": "Currently marked as Household",
+      "update": ""
+    },
+    {
+      "area": "Timing",
+      "question": "Exact debit calendar day for rent / Audi / BMW / Telkom / insurance / tithe",
+      "assumption": "Automated / debited already",
+      "update": ""
+    },
+    {
+      "area": "Cash",
+      "question": "Any cash at home / petty cash to capture?",
+      "assumption": "None captured",
+      "update": ""
+    },
+    {
+      "area": "Receivables",
+      "question": "Any money owed to you?",
+      "assumption": "None captured",
+      "update": ""
+    },
+    {
+      "area": "Support",
+      "question": "Any family support / black tax not listed?",
+      "assumption": "None captured",
+      "update": ""
+    },
+    {
+      "area": "Once-offs",
+      "question": "Any once-off expenses in the next 12 months?",
+      "assumption": "None flagged currently",
+      "update": ""
+    },
+    {
+      "area": "Monthly costs",
+      "question": "Any other monthly line not listed?",
+      "assumption": "None captured beyond current list",
+      "update": ""
+    }
+  ]
+}
