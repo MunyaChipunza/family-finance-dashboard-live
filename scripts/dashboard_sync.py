@@ -13,6 +13,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 BUNDLE_DIR = SCRIPT_DIR.parent
 DEFAULT_WORKBOOK = (BUNDLE_DIR.parent / "Finance.xlsx").resolve()
 DEFAULT_OUTPUT = (BUNDLE_DIR / "dashboard_data.json").resolve()
+DEFAULT_LOCAL_SNAPSHOT = (BUNDLE_DIR.parent / "Finance_Dashboard.html").resolve()
 DEFAULT_STATE = (SCRIPT_DIR / ".sync_state.json").resolve()
 TIMEZONE = dt.timezone(dt.timedelta(hours=2), name="SAST")
 HEADER_SENTINEL = ("Status", "Section", "Group", "Item")
@@ -489,6 +490,117 @@ def build_open_items(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return result
 
 
+def render_local_snapshot(payload: dict[str, Any]) -> str:
+    data_blob = json.dumps(payload)
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Family Finance Executive Dashboard</title>
+<style>
+:root{{--bg:#f4efe6;--panel:#fffaf1;--line:#d8cfbf;--ink:#1f2a24;--muted:#67756d;--emerald:#355342;--gold:#c79836;--coral:#b65e43;--aqua:#4c8d88;--shadow:0 22px 50px rgba(57,44,25,.12)}}
+*{{box-sizing:border-box;margin:0;padding:0}}
+body{{min-height:100vh;background:linear-gradient(180deg,#f8f3ea,#efe6d7 58%,#f4ecde);color:var(--ink);font:14px/1.5 'Segoe UI',Arial,sans-serif}}
+.shell{{max-width:1480px;margin:0 auto;padding:28px 20px 40px}}
+.panel,.card,.surface,.table-shell,.note{{background:linear-gradient(180deg,rgba(255,253,247,.98),rgba(255,250,241,.98));border:1px solid rgba(53,83,66,.14);border-radius:24px;box-shadow:var(--shadow)}}
+.hero{{padding:28px;display:grid;grid-template-columns:1.1fr .9fr;gap:22px;background:linear-gradient(135deg,rgba(255,251,243,.98),rgba(244,235,214,.98) 54%,rgba(231,242,235,.98))}}
+.eyebrow{{font:11px Consolas,monospace;letter-spacing:1.8px;text-transform:uppercase;color:#6b8b63;margin-bottom:10px}}
+.title{{font:700 48px/1 Georgia,serif}}
+.title span{{color:var(--coral)}}
+.subtitle{{margin-top:10px;max-width:760px;color:#425248;font-size:16px}}
+.exec{{margin-top:18px;font-size:15px;color:#324039;max-width:800px}}
+.focus-grid{{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}}
+.focus{{padding:16px;border-radius:18px;border:1px solid rgba(53,83,66,.10);background:rgba(255,255,255,.55)}}
+.focus.good{{background:rgba(107,139,99,.10)}} .focus.warn{{background:rgba(199,152,54,.10)}} .focus.bad{{background:rgba(182,94,67,.10)}} .focus.info{{background:rgba(76,141,136,.10)}}
+.focus h4{{font-size:16px}} .focus p{{margin-top:8px;color:#5a695f}}
+.status{{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(53,83,66,.18);background:rgba(53,83,66,.09);font:600 11px Consolas,monospace;text-transform:uppercase;letter-spacing:1px;color:var(--emerald)}}
+.status.warn{{border-color:rgba(199,152,54,.28);background:rgba(199,152,54,.12);color:#8f6a1b}} .status.bad{{border-color:rgba(182,94,67,.28);background:rgba(182,94,67,.12);color:var(--coral)}}
+.meta{{font:11px/1.8 Consolas,monospace;color:#55645c;text-align:right}}
+.meta em{{font-style:normal;color:var(--emerald)}}
+.score-shell{{display:grid;grid-template-columns:200px 1fr;gap:18px;align-items:center;padding:18px;border-radius:22px;background:rgba(255,255,255,.62);border:1px solid rgba(53,83,66,.10)}}
+.score-ring{{width:170px;height:170px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--emerald) 0deg,rgba(53,83,66,.12) 0deg);padding:16px;margin:0 auto}}
+.score-core{{width:100%;height:100%;border-radius:50%;background:linear-gradient(180deg,#fffefb,#f7efe0);display:grid;place-items:center;text-align:center;border:1px solid rgba(53,83,66,.10)}}
+.score-number{{font:700 42px/1 Georgia,serif}} .score-label{{margin-top:6px;font:12px Consolas,monospace;color:#59675f;text-transform:uppercase}}
+.pillars{{display:grid;gap:12px}} .pillar-name{{font:11px Consolas,monospace;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}}
+.pillar-top{{display:flex;justify-content:space-between;gap:10px;align-items:center}} .pillar-bar{{margin-top:6px;height:10px;border-radius:999px;background:#e7dfd1;overflow:hidden}} .pillar-fill{{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--emerald),var(--aqua))}}
+.section{{margin-top:22px}} .label{{font:11px Consolas,monospace;letter-spacing:1.4px;text-transform:uppercase;color:var(--emerald);margin-bottom:12px}}
+.cards{{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}} .card{{padding:16px;border-top:4px solid rgba(53,83,66,.18)}} .card.good{{border-top-color:var(--emerald)}} .card.warn{{border-top-color:var(--gold)}} .card.bad{{border-top-color:var(--coral)}} .card.info{{border-top-color:var(--aqua)}}
+.card-k{{font:10px Consolas,monospace;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}} .card-v{{margin-top:8px;font-size:30px;font-weight:700;line-height:1}} .card-d{{margin-top:8px;color:#4f5f56;font-size:12px}}
+.split{{display:grid;grid-template-columns:1fr 1fr;gap:18px}} .surface{{padding:20px}}
+.bar-list{{display:grid;gap:12px}} .bar-row{{padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.55);border:1px solid rgba(53,83,66,.10)}}
+.bar-top{{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}} .bar-title{{font-size:16px;font-weight:700}} .bar-meta{{margin-top:5px;color:#617067;font-size:12px}} .bar-value{{font:700 18px Consolas,monospace;white-space:nowrap}}
+.track{{margin-top:12px;height:10px;border-radius:999px;background:#e7dfd1;overflow:hidden}} .fill{{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--emerald),var(--aqua))}} .fill.warn{{background:linear-gradient(90deg,var(--gold),#e4b154)}} .fill.bad{{background:linear-gradient(90deg,var(--coral),#d3815b)}}
+.table-shell{{padding:18px}} .table-wrap{{overflow:auto;border:1px solid rgba(53,83,66,.10);border-radius:18px}}
+table{{width:100%;border-collapse:collapse;min-width:760px}} th,td{{padding:12px 14px;border-bottom:1px solid rgba(53,83,66,.08);text-align:left}}
+th{{background:#f2eadf;color:#59685f;font:11px Consolas,monospace;text-transform:uppercase;letter-spacing:1px}} td{{color:#233027}} tr:nth-child(even) td{{background:rgba(235,226,211,.22)}}
+.pill{{display:inline-block;padding:4px 10px;border-radius:999px;font:11px Consolas,monospace;background:rgba(53,83,66,.08);color:var(--emerald)}} .note-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}} .note{{padding:16px}} .note h4{{font-size:16px}} .note p{{margin-top:8px;color:#5d6b63}}
+@media (max-width:980px){{.hero,.split,.score-shell{{grid-template-columns:1fr}} .meta{{text-align:left}}}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="hero panel">
+    <div>
+      <div class="eyebrow">Local Executive Snapshot</div>
+      <div class="title">Family Finance <span>Executive Dashboard</span></div>
+      <p class="subtitle" id="subtitle"></p>
+      <p class="exec" id="executiveSummary"></p>
+      <div class="focus-grid" id="focusItems"></div>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap">
+        <div class="status" id="statusBadge"><span id="statusText"></span></div>
+        <div class="meta">
+          <div>Mode: <em id="dataMode"></em></div>
+          <div>Report month: <em id="reportMonth"></em></div>
+          <div>Workbook: <em id="sourceName"></em></div>
+          <div>Generated: <em id="generatedAt"></em></div>
+        </div>
+      </div>
+      <div class="score-shell" style="margin-top:16px">
+        <div class="score-ring" id="scoreRing"><div class="score-core"><div><div class="score-number" id="scoreValue"></div><div class="score-label" id="scoreLabel"></div></div></div></div>
+        <div class="pillars" id="pillarScores"></div>
+      </div>
+    </div>
+  </header>
+  <section class="section"><div class="label">Board Summary</div><div class="cards" id="summaryCards"></div></section>
+  <section class="section split"><div class="surface"><div class="label">Operating Model</div><div class="bar-list" id="performanceRows"></div></div><div class="surface"><div class="label">Capital Stack</div><div class="bar-list" id="capitalStack"></div></div></section>
+  <section class="section split"><div class="surface"><div class="label">Top Monthly Cost Drivers</div><div class="bar-list" id="topCosts"></div></div><div class="surface"><div class="label">Watchlist</div><div class="bar-list" id="watchlist"></div></div></section>
+  <section class="section split"><div class="table-shell"><div class="label">Cash, Reserves, And Float</div><div class="table-wrap"><table id="cashTable"></table></div></div><div class="table-shell"><div class="label">Debt Profile</div><div class="table-wrap"><table id="debtTable"></table></div></div></section>
+  <section class="section"><div class="label">Open Items</div><div class="note-grid" id="openItems"></div></section>
+</div>
+<script>
+const dashboard = {data_blob};
+function esc(v){{return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}}
+function fmtMoney(v,c='ZAR'){{if(v===null||v===undefined||v==='') return '-'; if(String(c).toUpperCase()==='USD') return new Intl.NumberFormat('en-US',{{style:'currency',currency:'USD',maximumFractionDigits:2}}).format(Number(v)); return new Intl.NumberFormat('en-ZA',{{style:'currency',currency:'ZAR',maximumFractionDigits:2}}).format(Number(v));}}
+function fmtDateTime(v){{if(!v) return '-'; try{{return new Intl.DateTimeFormat('en-ZA',{{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZone:'Africa/Johannesburg'}}).format(new Date(v))}}catch{{return v}}}}
+function toneClass(t){{return ['good','warn','bad','info'].includes(t) ? t : 'info'}}
+function renderCards(){{const host=document.getElementById('summaryCards');host.innerHTML=(dashboard.summaryCards||[]).map(item=>`<div class="card ${{toneClass(item.tone)}}"><div class="card-k">${{esc(item.label)}}</div><div class="card-v">${{esc(item.value)}}</div><div class="card-d">${{esc(item.detail)}}</div></div>`).join('')}}
+function renderFocus(){{const host=document.getElementById('focusItems');host.innerHTML=(dashboard.focusItems||[]).map(item=>`<div class="focus ${{toneClass(item.tone)}}"><h4>${{esc(item.title)}}</h4><p>${{esc(item.detail)}}</p></div>`).join('')}}
+function renderScore(){{const score=Number(dashboard.healthScore||0);document.getElementById('scoreValue').textContent=score;document.getElementById('scoreLabel').textContent=`${{dashboard.health?.label||'Health'}} Score`;document.getElementById('scoreRing').style.background=`conic-gradient(var(--emerald) ${{Math.max(0,Math.min(100,score))*3.6}}deg, rgba(53,83,66,.12) 0deg)`;document.getElementById('pillarScores').innerHTML=(dashboard.pillarScores||[]).map(item=>{{const width=item.outOf?Math.max(0,Math.min(100,(Number(item.score)/Number(item.outOf))*100)):0;return `<div><div class="pillar-top"><div class="pillar-name">${{esc(item.label)}}</div><div class="pill">${{esc(String(item.score))}}/${{esc(String(item.outOf))}}</div></div><div class="pillar-bar"><div class="pillar-fill" style="width:${{width}}%"></div></div></div>`}}).join('')}}
+function renderBarList(id,items,valueFn,titleFn,metaFn,displayFn,toneFn){{const host=document.getElementById(id);if(!(items||[]).length){{host.innerHTML='<div class="bar-row"><div class="bar-title">No data yet</div></div>';return;}}const maxValue=Math.max(...items.map(item=>Math.abs(Number(valueFn(item)||0))),1);host.innerHTML=items.map(item=>{{const value=Number(valueFn(item)||0);const width=Math.max(6,Math.min(100,(Math.abs(value)/maxValue)*100));const tone=toneClass(toneFn(item));return `<div class="bar-row"><div class="bar-top"><div><div class="bar-title">${{esc(titleFn(item))}}</div><div class="bar-meta">${{esc(metaFn(item))}}</div></div><div class="bar-value">${{esc(displayFn(item))}}</div></div><div class="track"><div class="fill ${{tone}}" style="width:${{width}}%"></div></div></div>`}}).join('')}}
+function renderTable(id,headers,rows){{const table=document.getElementById(id);if(!(rows||[]).length){{table.innerHTML='<tbody><tr><td>No rows available.</td></tr></tbody>';return;}}table.innerHTML=`<thead><tr>${{headers.map(h=>`<th>${{esc(h.label)}}</th>`).join('')}}</tr></thead><tbody>${{rows.map(row=>`<tr>${{headers.map(h=>`<td>${{h.render?h.render(row):esc(row[h.key] ?? '')}}</td>`).join('')}}</tr>`).join('')}}</tbody>`}}
+function renderOpen(){{const host=document.getElementById('openItems');host.innerHTML=(dashboard.openItems||[]).map(item=>`<div class="note"><h4>${{esc(item.area)}}</h4><p>${{esc(item.question)}}</p><p><span class="pill">Current</span> ${{esc(item.assumption||'-')}}</p><p><span class="pill">Update</span> ${{esc(item.update||'-')}}</p></div>`).join('')}}
+document.getElementById('subtitle').textContent=dashboard.subtitle||'';document.getElementById('executiveSummary').textContent=dashboard.executiveSummary||'';document.getElementById('dataMode').textContent=dashboard.dataMode||'-';document.getElementById('reportMonth').textContent=dashboard.reportMonth||'-';document.getElementById('sourceName').textContent=dashboard.sourceName||'-';document.getElementById('generatedAt').textContent=fmtDateTime(dashboard.generatedAt);document.getElementById('statusBadge').className=`status ${{toneClass(dashboard.health?.tone)}}`;document.getElementById('statusText').textContent=dashboard.health?.label||'Live';
+renderFocus();renderScore();renderCards();
+renderBarList('performanceRows',dashboard.performanceRows||[],item=>item.actual,item=>item.label,item=>`Budget ${{fmtMoney(item.budget)}} | Actual ${{fmtMoney(item.actual)}} | Variance ${{fmtMoney(item.variance)}}`,item=>fmtMoney(item.actual),item=>item.tone);
+renderBarList('capitalStack',dashboard.capitalStack||[],item=>item.amount,item=>item.label,item=>item.detail||'',item=>fmtMoney(item.amount),item=>item.tone);
+renderBarList('topCosts',dashboard.topCostRows||[],item=>item.actual||item.budget,item=>item.item,item=>`${{item.group}} | ${{item.owner||'Household'}}`,item=>fmtMoney(item.actual||item.budget),()=> 'warn');
+renderBarList('watchlist',dashboard.watchlistRows||[],item=>Math.abs(item.variance||item.actual||item.budget),item=>item.item,item=>`${{item.reason}} | Budget ${{fmtMoney(item.budget)}} | Actual ${{fmtMoney(item.actual)}}`,item=>item.reason==='Over budget'?fmtMoney(item.variance):fmtMoney(item.actual||item.budget),item=>item.tone||'warn');
+renderTable('cashTable',[{{label:'Account',key:'item'}},{{label:'Owner',key:'owner'}},{{label:'Type',key:'tag'}},{{label:'Balance',render:r=>fmtMoney(r.balance,r.currency)}},{{label:'Notes',key:'notes'}}],dashboard.cashAccounts||[]);
+renderTable('debtTable',[{{label:'Debt',key:'item'}},{{label:'Outstanding',render:r=>fmtMoney(r.balance)}},{{label:'Monthly',render:r=>fmtMoney(r.instalment)}},{{label:'Timing',key:'timing'}},{{label:'Notes',key:'notes'}}],dashboard.debtHighlights||[]);
+renderOpen();
+</script>
+</body>
+</html>"""
+
+
+def write_local_snapshot(payload: dict[str, Any], target: Path = DEFAULT_LOCAL_SNAPSHOT) -> Path:
+    target.write_text(render_local_snapshot(payload), encoding="utf-8")
+    return target
+
+
 def refresh_dashboard_data(workbook: str | None = None, output: str | Path = DEFAULT_OUTPUT) -> Path:
     workbook_path, wb = load_workbook_source(workbook)
     ws = wb[wb.sheetnames[0]]
@@ -655,6 +767,7 @@ def refresh_dashboard_data(workbook: str | None = None, output: str | Path = DEF
     if not output_path.is_absolute():
         output_path = (BUNDLE_DIR / output_path).resolve()
     output_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    write_local_snapshot(payload)
     return output_path
 
 
