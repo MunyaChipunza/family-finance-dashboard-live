@@ -1,84 +1,142 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Family Finance Dashboard</title>
+<title>Family Finance Command Deck</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f3efe5;--ink:#1f2b22;--muted:#65736a;--panel:#fffdf7;--line:#ddd4c2;--olive:#365343;--moss:#6c8b64;--gold:#c4932f;--terracotta:#b45d3c;--sand:#ebe2d3;--shadow:0 18px 40px rgba(60,47,28,.12)}
+:root{--bg:#f4efe6;--bg2:#efe7da;--panel:#fffaf1;--line:#d8cfbf;--ink:#1f2a24;--muted:#67756d;--emerald:#355342;--moss:#6b8b63;--gold:#c79836;--coral:#b65e43;--aqua:#4c8d88;--cream:#fffdf7;--shadow:0 24px 60px rgba(57,44,25,.12)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;background:radial-gradient(circle at top left,rgba(196,147,47,.16),transparent 28%),radial-gradient(circle at top right,rgba(108,139,100,.14),transparent 24%),linear-gradient(180deg,#f7f1e5,#eee6d9 58%,#efe8db);color:var(--ink);font:14px/1.5 'Space Grotesk',sans-serif}
-.shell{max-width:1460px;margin:0 auto;padding:28px 20px 40px}
-.panel,.card,.surface,.table-shell{background:linear-gradient(180deg,rgba(255,253,247,.98),rgba(255,250,241,.98));border:1px solid rgba(84,100,86,.14);border-radius:22px;box-shadow:var(--shadow)}
-header{padding:26px 28px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(255,251,243,.98),rgba(244,235,214,.98) 52%,rgba(226,240,227,.98));position:relative;overflow:hidden}
-header:after{content:"";position:absolute;right:-48px;top:-62px;width:220px;height:220px;background:radial-gradient(circle,rgba(54,83,67,.12),transparent 70%)}
+body{min-height:100vh;background:
+radial-gradient(circle at top left,rgba(199,152,54,.17),transparent 28%),
+radial-gradient(circle at top right,rgba(76,141,136,.15),transparent 22%),
+linear-gradient(180deg,#f8f3ea,#efe6d7 58%,#f4ecde);color:var(--ink);font:14px/1.5 'Space Grotesk',sans-serif}
+.shell{max-width:1520px;margin:0 auto;padding:28px 20px 40px}
+.panel,.card,.surface,.table-shell,.note{background:linear-gradient(180deg,rgba(255,253,247,.98),rgba(255,250,241,.98));border:1px solid rgba(53,83,66,.14);border-radius:24px;box-shadow:var(--shadow)}
+.hero{padding:28px;display:grid;grid-template-columns:1.15fr .85fr;gap:22px;position:relative;overflow:hidden;background:
+linear-gradient(135deg,rgba(255,251,243,.98),rgba(244,235,214,.98) 54%,rgba(231,242,235,.98))}
+.hero:after{content:"";position:absolute;right:-64px;top:-82px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(53,83,66,.12),transparent 70%)}
 .eyebrow{font:11px 'IBM Plex Mono',monospace;letter-spacing:1.8px;text-transform:uppercase;color:var(--moss);margin-bottom:10px}
-.title{font:48px/1 'Fraunces',serif;letter-spacing:-.03em}
-.title span{color:var(--terracotta)}
-.subtitle{margin-top:10px;max-width:720px;color:#425248}
-.head-side{display:flex;flex-direction:column;align-items:flex-end;gap:12px;position:relative;z-index:1}
-.status{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(54,83,67,.18);background:rgba(54,83,67,.08);font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:1px;color:var(--olive)}
-.status.warn{border-color:rgba(196,147,47,.26);background:rgba(196,147,47,.10);color:#8b681c}
-.status.bad{border-color:rgba(180,93,60,.24);background:rgba(180,93,60,.10);color:var(--terracotta)}
+.title{font:56px/1 'Fraunces',serif;letter-spacing:-.04em}
+.title span{color:var(--coral)}
+.subtitle{margin-top:10px;max-width:760px;color:#425248;font-size:16px}
+.exec{margin-top:18px;font-size:15px;color:#324039;max-width:800px}
+.focus-grid{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.focus{padding:16px;border-radius:18px;border:1px solid rgba(53,83,66,.10);background:rgba(255,255,255,.55)}
+.focus.good{background:rgba(107,139,99,.10)}
+.focus.warn{background:rgba(199,152,54,.10)}
+.focus.bad{background:rgba(182,94,67,.10)}
+.focus h4{font-size:16px}
+.focus p{margin-top:8px;color:#5a695f}
+.hero-side{display:flex;flex-direction:column;gap:16px;align-items:stretch;position:relative;z-index:1}
+.top-meta{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.status{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(53,83,66,.18);background:rgba(53,83,66,.09);font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:1px;color:var(--emerald)}
+.status.warn{border-color:rgba(199,152,54,.28);background:rgba(199,152,54,.12);color:#8f6a1b}
+.status.bad{border-color:rgba(182,94,67,.28);background:rgba(182,94,67,.12);color:var(--coral)}
 .dot{width:9px;height:9px;border-radius:50%;background:currentColor;animation:pulse 1.4s ease-in-out infinite}
 @keyframes pulse{0%{transform:scale(1);opacity:1}50%{transform:scale(1.22);opacity:.45}100%{transform:scale(1);opacity:1}}
 .meta{font:11px/1.8 'IBM Plex Mono',monospace;color:#55645c;text-align:right}
-.meta em{font-style:normal;color:var(--olive)}
+.meta em{font-style:normal;color:var(--emerald)}
 .actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}
-.btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(54,83,67,.18);background:linear-gradient(135deg,rgba(54,83,67,.10),rgba(196,147,47,.10));color:var(--ink);font:600 12px 'IBM Plex Mono',monospace;cursor:pointer}
+.btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(53,83,66,.18);background:linear-gradient(135deg,rgba(53,83,66,.10),rgba(199,152,54,.10));color:var(--ink);font:600 12px 'IBM Plex Mono',monospace;cursor:pointer}
 .btn:hover{transform:translateY(-1px)}
 .btn[disabled]{opacity:.65;cursor:wait}
-.count{font:11px 'IBM Plex Mono',monospace;color:#6a766f}
+.count{font:11px 'IBM Plex Mono',monospace;color:#69756f}
+.score-shell{display:grid;grid-template-columns:210px 1fr;gap:18px;align-items:center;padding:18px;border-radius:22px;background:rgba(255,255,255,.62);border:1px solid rgba(53,83,66,.10)}
+.score-ring{width:180px;height:180px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--emerald) 0deg,rgba(53,83,66,.12) 0deg);padding:16px;margin:0 auto}
+.score-core{width:100%;height:100%;border-radius:50%;background:linear-gradient(180deg,#fffefb,#f7efe0);display:grid;place-items:center;text-align:center;border:1px solid rgba(53,83,66,.10)}
+.score-number{font:700 44px/1 'Fraunces',serif}
+.score-label{margin-top:6px;font:12px 'IBM Plex Mono',monospace;color:#59675f;text-transform:uppercase}
+.pillars{display:grid;gap:12px}
+.pillar-name{font:11px 'IBM Plex Mono',monospace;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.pillar-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.pillar-bar{margin-top:6px;height:10px;border-radius:999px;background:#e7dfd1;overflow:hidden}
+.pillar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--emerald),var(--aqua))}
 .section{margin-top:22px}
-.label{font:11px 'IBM Plex Mono',monospace;letter-spacing:1.4px;text-transform:uppercase;color:var(--olive);margin-bottom:12px}
+.label{font:11px 'IBM Plex Mono',monospace;letter-spacing:1.4px;text-transform:uppercase;color:var(--emerald);margin-bottom:12px}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
-.card{padding:16px;border-top:4px solid rgba(54,83,67,.18)}
-.card.good{border-top-color:var(--olive)} .card.warn{border-top-color:var(--gold)} .card.bad{border-top-color:var(--terracotta)} .card.info{border-top-color:var(--moss)}
+.card{padding:16px;border-top:4px solid rgba(53,83,66,.18)}
+.card.good{border-top-color:var(--emerald)}
+.card.warn{border-top-color:var(--gold)}
+.card.bad{border-top-color:var(--coral)}
+.card.info{border-top-color:var(--aqua)}
 .card-k{font:10px 'IBM Plex Mono',monospace;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
 .card-v{margin-top:8px;font-size:30px;font-weight:700;line-height:1}
-.card.good .card-v{color:var(--olive)} .card.warn .card-v{color:#8b681c} .card.bad .card-v{color:var(--terracotta)} .card.info .card-v{color:var(--moss)}
+.card.good .card-v{color:var(--emerald)}
+.card.warn .card-v{color:#8f6a1b}
+.card.bad .card-v{color:var(--coral)}
+.card.info .card-v{color:var(--aqua)}
 .card-d{margin-top:8px;color:#4f5f56;font-size:12px}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .surface{padding:20px}
-.stack{display:grid;gap:12px}
-.row-item{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;padding:14px 16px;border-radius:16px;background:rgba(235,226,211,.40);border:1px solid rgba(84,100,86,.10)}
-.row-item strong{display:block;font-size:15px}
-.row-meta{margin-top:4px;color:#64746b;font-size:12px}
-.amt{font:700 18px 'IBM Plex Mono',monospace;color:var(--olive);white-space:nowrap}
+.bar-list{display:grid;gap:12px}
+.bar-row{padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.55);border:1px solid rgba(53,83,66,.10)}
+.bar-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
+.bar-title{font-size:16px;font-weight:700}
+.bar-meta{margin-top:5px;color:#617067;font-size:12px}
+.bar-value{font:700 18px 'IBM Plex Mono',monospace;white-space:nowrap}
+.bar.good .bar-value{color:var(--emerald)}
+.bar.warn .bar-value{color:#8f6a1b}
+.bar.bad .bar-value{color:var(--coral)}
+.bar.info .bar-value{color:var(--aqua)}
+.track{margin-top:12px;height:10px;border-radius:999px;background:#e7dfd1;overflow:hidden}
+.fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--emerald),var(--aqua))}
+.fill.warn{background:linear-gradient(90deg,var(--gold),#e4b154)}
+.fill.bad{background:linear-gradient(90deg,var(--coral),#d3815b)}
 .table-shell{padding:18px}
-.table-wrap{overflow:auto;border:1px solid rgba(84,100,86,.10);border-radius:18px}
-table{width:100%;border-collapse:collapse;min-width:720px}
-th,td{padding:12px 14px;border-bottom:1px solid rgba(84,100,86,.08);text-align:left}
+.table-wrap{overflow:auto;border:1px solid rgba(53,83,66,.10);border-radius:18px}
+table{width:100%;border-collapse:collapse;min-width:760px}
+th,td{padding:12px 14px;border-bottom:1px solid rgba(53,83,66,.08);text-align:left}
 th{position:sticky;top:0;background:#f2eadf;color:#59685f;font:11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:1px}
 td{color:#233027}
 tr:nth-child(even) td{background:rgba(235,226,211,.22)}
-.pill{display:inline-block;padding:4px 10px;border-radius:999px;font:11px 'IBM Plex Mono',monospace;background:rgba(54,83,67,.08);color:var(--olive)}
-.empty{padding:24px;text-align:center;color:var(--muted);font:12px 'IBM Plex Mono',monospace}
+.pill{display:inline-block;padding:4px 10px;border-radius:999px;font:11px 'IBM Plex Mono',monospace;background:rgba(53,83,66,.08);color:var(--emerald)}
+.pill.warn{background:rgba(199,152,54,.12);color:#8f6a1b}
+.pill.bad{background:rgba(182,94,67,.12);color:var(--coral)}
 .note-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
-.note{padding:16px;border-radius:18px;background:linear-gradient(180deg,rgba(255,250,243,.98),rgba(247,239,226,.98));border:1px solid rgba(84,100,86,.10)}
+.note{padding:16px}
 .note h4{font-size:16px}
-.note p{margin-top:8px;color:#5c6a62}
-@media (max-width:980px){.split{grid-template-columns:1fr}.head-side{align-items:flex-start}.meta{text-align:left}.actions{justify-content:flex-start}}
-@media (max-width:720px){.shell{padding:18px 14px 32px}.title{font-size:36px}.surface,.table-shell,header{padding:18px}}
+.note p{margin-top:8px;color:#5d6b63}
+.empty{padding:24px;text-align:center;color:var(--muted);font:12px 'IBM Plex Mono',monospace}
+@media (max-width:1120px){.hero{grid-template-columns:1fr}.score-shell{grid-template-columns:1fr}.meta{text-align:left}.actions{justify-content:flex-start}}
+@media (max-width:920px){.split{grid-template-columns:1fr}}
+@media (max-width:720px){.shell{padding:18px 14px 32px}.hero,.surface,.table-shell{padding:18px}.title{font-size:40px}.score-ring{width:160px;height:160px}}
 </style>
 </head>
 <body>
 <div class="shell">
-  <header class="panel">
+  <header class="hero panel">
     <div>
-      <div class="eyebrow">Live Family Finance Dashboard</div>
-      <div class="title">Family <span>Finance</span></div>
-      <p class="subtitle" id="subtitle">Single-workbook dashboard for cash, commitments, debt, and long-term assets.</p>
+      <div class="eyebrow">Live Household CFO Console</div>
+      <div class="title">Family Finance <span>Command Deck</span></div>
+      <p class="subtitle" id="subtitle">Executive view of household cash, commitments, debt, and long-term capital.</p>
+      <p class="exec" id="executiveSummary">Loading...</p>
+      <div class="focus-grid" id="focusItems"></div>
     </div>
-    <div class="head-side">
-      <div class="status" id="statusBadge"><span class="dot"></span><span id="statusText">Loading</span></div>
-      <div class="meta">
-        <div>Source: <em id="sourceName">Loading...</em></div>
-        <div>Last build (SAST): <em id="generatedAt">Loading...</em></div>
-        <div>Workbook updated: <em id="sourceUpdated">Loading...</em></div>
+    <div class="hero-side">
+      <div class="top-meta">
+        <div class="status" id="statusBadge"><span class="dot"></span><span id="statusText">Loading</span></div>
+        <div class="meta">
+          <div>Mode: <em id="dataMode">Loading...</em></div>
+          <div>Report month: <em id="reportMonth">Loading...</em></div>
+          <div>Workbook: <em id="sourceName">Loading...</em></div>
+          <div>Last build (SAST): <em id="generatedAt">Loading...</em></div>
+          <div>Workbook updated: <em id="sourceUpdated">Loading...</em></div>
+        </div>
+      </div>
+      <div class="score-shell">
+        <div class="score-ring" id="scoreRing">
+          <div class="score-core">
+            <div>
+              <div class="score-number" id="scoreValue">0</div>
+              <div class="score-label" id="scoreLabel">Health Score</div>
+            </div>
+          </div>
+        </div>
+        <div class="pillars" id="pillarScores"></div>
       </div>
       <div class="actions">
         <button class="btn" id="refreshBtn" onclick="manualRefresh()">Refresh Now</button>
@@ -88,40 +146,51 @@ tr:nth-child(even) td{background:rgba(235,226,211,.22)}
   </header>
 
   <section class="section">
-    <div class="label">At A Glance</div>
+    <div class="label">Board Summary</div>
     <div class="cards" id="summaryCards"></div>
   </section>
 
   <section class="section split">
     <div class="surface">
-      <div class="label">Cash And Reserves</div>
-      <div class="stack" id="cashStack"></div>
+      <div class="label">Operating Model</div>
+      <div class="bar-list" id="performanceRows"></div>
     </div>
     <div class="surface">
-      <div class="label">Credit And Debt</div>
-      <div class="stack" id="debtStack"></div>
+      <div class="label">Capital Stack</div>
+      <div class="bar-list" id="capitalStack"></div>
+    </div>
+  </section>
+
+  <section class="section split">
+    <div class="surface">
+      <div class="label">Top Monthly Cost Drivers</div>
+      <div class="bar-list" id="topCosts"></div>
+    </div>
+    <div class="surface">
+      <div class="label">Watchlist</div>
+      <div class="bar-list" id="watchlist"></div>
     </div>
   </section>
 
   <section class="section split">
     <div class="table-shell">
-      <div class="label">Monthly Commitments</div>
-      <div class="table-wrap"><table id="costTable"></table></div>
+      <div class="label">Cash, Reserves, And Float</div>
+      <div class="table-wrap"><table id="cashTable"></table></div>
     </div>
     <div class="table-shell">
-      <div class="label">Investments And Retirement</div>
+      <div class="label">Investment And Retirement Capital</div>
       <div class="table-wrap"><table id="investmentTable"></table></div>
     </div>
   </section>
 
   <section class="section split">
     <div class="table-shell">
-      <div class="label">Income Lines</div>
-      <div class="table-wrap"><table id="incomeTable"></table></div>
+      <div class="label">Debt Profile</div>
+      <div class="table-wrap"><table id="debtTable"></table></div>
     </div>
     <div class="table-shell">
-      <div class="label">Excluded Or Historical Items</div>
-      <div class="table-wrap"><table id="excludedTable"></table></div>
+      <div class="label">Monthly Operating Lines</div>
+      <div class="table-wrap"><table id="operatingTable"></table></div>
     </div>
   </section>
 
@@ -140,10 +209,11 @@ let countdownTimer = null;
 let countdownValue = 60;
 
 function esc(v){return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
-function fmtMoney(v,currency='ZAR'){if(v===null||v===undefined||v==='') return '-'; if(currency==='USD') return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2}).format(Number(v)); return new Intl.NumberFormat('en-ZA',{style:'currency',currency:'ZAR',maximumFractionDigits:2}).format(Number(v));}
-function fmtRange(min,max){if(min===null&&max===null) return '-'; if(min===max || max===null || max===undefined || max==='') return fmtMoney(min); return `${fmtMoney(min)} - ${fmtMoney(max)}`;}
+function fmtMoney(v,currency='ZAR'){if(v===null||v===undefined||v==='') return '-'; if(String(currency).toUpperCase()==='USD'){return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2}).format(Number(v))} return new Intl.NumberFormat('en-ZA',{style:'currency',currency:'ZAR',maximumFractionDigits:2}).format(Number(v))}
+function fmtPct(v){if(v===null||v===undefined||v==='') return '-'; return `${(Number(v)*100).toFixed(1)}%`}
 function fmtDateTime(v){if(!v) return '-'; try{return new Intl.DateTimeFormat('en-ZA',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZone:'Africa/Johannesburg'}).format(new Date(v))}catch{return v}}
 function toneClass(t){return ['good','warn','bad','info'].includes(t) ? t : 'info'}
+function moneyOrDash(v,currency='ZAR'){return v===null||v===undefined||v==='' ? '-' : fmtMoney(v,currency)}
 
 function setStatus(kind,label){
   const badge = document.getElementById('statusBadge');
@@ -175,7 +245,7 @@ function setRefreshBusy(isBusy){
   updateCountdown();
 }
 
-function renderSummary(){
+function renderSummaryCards(){
   const host = document.getElementById('summaryCards');
   const items = dashboard?.summaryCards || [];
   if(!items.length){host.innerHTML='<div class="empty">No summary data available.</div>';return;}
@@ -188,18 +258,61 @@ function renderSummary(){
   `).join('');
 }
 
-function renderStack(hostId, items, formatter){
-  const host = document.getElementById(hostId);
-  if(!items.length){host.innerHTML='<div class="empty">Nothing captured yet.</div>';return;}
+function renderFocusItems(){
+  const host = document.getElementById('focusItems');
+  const items = dashboard?.focusItems || [];
+  if(!items.length){host.innerHTML='<div class="empty">No focus items yet.</div>';return;}
   host.innerHTML = items.map(item => `
-    <div class="row-item">
-      <div>
-        <strong>${esc(item.label)}</strong>
-        <div class="row-meta">${esc(item.meta || '')}</div>
-      </div>
-      <div class="amt">${formatter(item)}</div>
+    <div class="focus ${toneClass(item.tone)}">
+      <h4>${esc(item.title)}</h4>
+      <p>${esc(item.detail)}</p>
     </div>
   `).join('');
+}
+
+function renderScore(){
+  const score = Number(dashboard?.healthScore || 0);
+  document.getElementById('scoreValue').textContent = score;
+  document.getElementById('scoreLabel').textContent = `${dashboard?.health?.label || 'Health'} Score`;
+  document.getElementById('scoreRing').style.background = `conic-gradient(var(--emerald) ${Math.max(0, Math.min(100, score)) * 3.6}deg, rgba(53,83,66,.12) 0deg)`;
+  const host = document.getElementById('pillarScores');
+  const items = dashboard?.pillarScores || [];
+  if(!items.length){host.innerHTML='<div class="empty">No score breakdown available.</div>';return;}
+  host.innerHTML = items.map(item => {
+    const width = item.outOf ? Math.max(0, Math.min(100, (Number(item.score) / Number(item.outOf)) * 100)) : 0;
+    return `
+      <div>
+        <div class="pillar-top">
+          <div class="pillar-name">${esc(item.label)}</div>
+          <div class="pill">${esc(String(item.score))}/${esc(String(item.outOf))}</div>
+        </div>
+        <div class="pillar-bar"><div class="pillar-fill" style="width:${width}%"></div></div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderBarList(hostId, items, options = {}){
+  const host = document.getElementById(hostId);
+  if(!items.length){host.innerHTML='<div class="empty">Nothing captured yet.</div>';return;}
+  const maxValue = options.maxValue || Math.max(...items.map(item => Math.abs(Number(options.value(item) || 0))), 1);
+  host.innerHTML = items.map(item => {
+    const value = Number(options.value(item) || 0);
+    const width = Math.max(6, Math.min(100, (Math.abs(value) / maxValue) * 100));
+    const tone = toneClass(options.tone ? options.tone(item) : item.tone);
+    return `
+      <div class="bar-row bar ${tone}">
+        <div class="bar-top">
+          <div>
+            <div class="bar-title">${esc(options.title ? options.title(item) : item.label)}</div>
+            <div class="bar-meta">${esc(options.meta ? options.meta(item) : (item.detail || ''))}</div>
+          </div>
+          <div class="bar-value">${esc(options.display ? options.display(item) : moneyOrDash(value))}</div>
+        </div>
+        <div class="track"><div class="fill ${tone}" style="width:${width}%"></div></div>
+      </div>
+    `;
+  }).join('');
 }
 
 function renderTable(tableId, headers, rows){
@@ -230,43 +343,92 @@ function renderOpenItems(){
 }
 
 function renderAll(){
-  document.getElementById('subtitle').textContent = dashboard?.subtitle || 'Single-workbook dashboard for cash, commitments, debt, and long-term assets.';
+  document.getElementById('subtitle').textContent = dashboard?.subtitle || 'Executive view of household cash, commitments, debt, and long-term capital.';
+  document.getElementById('executiveSummary').textContent = dashboard?.executiveSummary || 'No executive summary available yet.';
+  document.getElementById('dataMode').textContent = dashboard?.dataMode || '-';
+  document.getElementById('reportMonth').textContent = dashboard?.reportMonth || '-';
   document.getElementById('sourceName').textContent = dashboard?.sourceName || '-';
   document.getElementById('generatedAt').textContent = fmtDateTime(dashboard?.generatedAt);
   document.getElementById('sourceUpdated').textContent = fmtDateTime(dashboard?.sourceUpdatedAt);
-  setStatus('', 'Live');
-  renderSummary();
-  renderStack('cashStack', dashboard?.cashHighlights || [], item => fmtMoney(item.amount, item.currency || 'ZAR'));
-  renderStack('debtStack', dashboard?.debtHighlights || [], item => item.balance !== undefined ? `${fmtMoney(item.balance)} | ${fmtMoney(item.instalment)}/mo` : fmtMoney(item.amount));
-  renderTable('costTable', [
-    {label:'Item', key:'item'},
-    {label:'Category', key:'category'},
-    {label:'Monthly', render:r => fmtRange(r.monthlyMin, r.monthlyMax)},
-    {label:'Type', key:'treatment'}
-  ], dashboard?.costRows || []);
-  renderTable('investmentTable', [
-    {label:'Product', key:'product'},
+  setStatus(toneClass(dashboard?.health?.tone), dashboard?.health?.label || 'Live');
+  renderFocusItems();
+  renderScore();
+  renderSummaryCards();
+
+  renderBarList('performanceRows', dashboard?.performanceRows || [], {
+    value: item => item.actual,
+    title: item => item.label,
+    meta: item => `Budget ${fmtMoney(item.budget)} | Actual ${fmtMoney(item.actual)} | Variance ${fmtMoney(item.variance)}`,
+    display: item => fmtMoney(item.actual),
+    tone: item => item.tone
+  });
+
+  renderBarList('capitalStack', dashboard?.capitalStack || [], {
+    value: item => item.amount,
+    title: item => item.label,
+    meta: item => item.detail || '',
+    display: item => fmtMoney(item.amount),
+    tone: item => item.tone
+  });
+
+  renderBarList('topCosts', dashboard?.topCostRows || [], {
+    value: item => item.actual || item.budget,
+    title: item => item.item,
+    meta: item => {
+      const share = dashboard?.totals?.actualOutflows ? `${((Number(item.actual || item.budget) / Number(dashboard.totals.actualOutflows)) * 100).toFixed(1)}% of outflows` : item.group;
+      return `${item.group} | ${share}`;
+    },
+    display: item => fmtMoney(item.actual || item.budget),
+    tone: () => 'warn'
+  });
+
+  renderBarList('watchlist', dashboard?.watchlistRows || [], {
+    value: item => Math.abs(item.variance || item.actual || item.budget),
+    title: item => item.item,
+    meta: item => `${item.reason} | Owner: ${item.owner || 'Household'} | Budget ${fmtMoney(item.budget)} | Actual ${fmtMoney(item.actual)}`,
+    display: item => item.reason === 'Over budget' ? fmtMoney(item.variance) : fmtMoney(item.actual || item.budget),
+    tone: item => item.tone || 'warn'
+  });
+
+  renderTable('cashTable', [
+    {label:'Account', key:'item'},
     {label:'Owner', key:'owner'},
+    {label:'Type', key:'tag'},
     {label:'Balance', render:r => fmtMoney(r.balance, r.currency)},
-    {label:'Type', key:'treatment'}
-  ], dashboard?.investmentRows || []);
-  renderTable('incomeTable', [
-    {label:'Owner', key:'owner'},
-    {label:'Source', key:'source'},
-    {label:'Monthly', render:r => fmtRange(r.monthlyMin, r.monthlyMax)},
     {label:'Notes', key:'notes'}
-  ], dashboard?.incomeRows || []);
-  renderTable('excludedTable', [
+  ], dashboard?.cashAccounts || []);
+
+  renderTable('investmentTable', [
+    {label:'Product', key:'item'},
+    {label:'Owner', key:'owner'},
+    {label:'Class', key:'tag'},
+    {label:'Balance', render:r => fmtMoney(r.balance, r.currency)},
+    {label:'Notes', key:'notes'}
+  ], dashboard?.investmentRows || []);
+
+  renderTable('debtTable', [
+    {label:'Debt', key:'item'},
+    {label:'Outstanding', render:r => fmtMoney(r.balance)},
+    {label:'Monthly', render:r => fmtMoney(r.instalment)},
+    {label:'Timing', key:'timing'},
+    {label:'Notes', key:'notes'}
+  ], dashboard?.debtHighlights || []);
+
+  renderTable('operatingTable', [
+    {label:'Section', key:'section'},
     {label:'Item', key:'item'},
-    {label:'Reference', render:r => fmtMoney(r.referenceAmount)},
-    {label:'Reason', key:'reason'}
-  ], dashboard?.excludedRows || []);
+    {label:'Owner', key:'owner'},
+    {label:'Budget', render:r => fmtMoney(r.budget, r.currency)},
+    {label:'Actual', render:r => fmtMoney(r.actual, r.currency)},
+    {label:'Timing', key:'timing'}
+  ], dashboard?.operatingLines || []);
+
   renderOpenItems();
 }
 
-async function refreshData(showBusy=true){
-  if(showBusy) setRefreshBusy(true);
+async function refreshData(manual){
   try{
+    setRefreshBusy(true);
     const response = await fetch(`${API_URL}?t=${Date.now()}`, {cache:'no-store'});
     if(!response.ok) throw new Error(`HTTP ${response.status}`);
     dashboard = await response.json();
@@ -274,13 +436,16 @@ async function refreshData(showBusy=true){
     restartAutoRefresh();
   }catch(error){
     console.error(error);
-    setStatus('bad','Offline');
+    setStatus('bad', manual ? 'Refresh failed' : 'Offline');
   }finally{
-    if(showBusy) setRefreshBusy(false);
+    setRefreshBusy(false);
   }
 }
 
-function manualRefresh(){refreshData(true)}
+function manualRefresh(){
+  refreshData(true);
+}
+
 refreshData(false);
 </script>
 </body>

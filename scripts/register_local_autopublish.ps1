@@ -15,17 +15,17 @@ $triggerTime = (Get-Date).AddMinutes(1)
 if ($WorkbookPath) {
     $candidateWorkbook = (Resolve-Path $WorkbookPath).Path
 } else {
-    $candidateWorkbook = (Resolve-Path (Join-Path $PSScriptRoot "..\\..\\Finance_Input.xlsx")).Path
+    $candidateWorkbook = (Resolve-Path (Join-Path $PSScriptRoot "..\\..\\Finance.xlsx")).Path
 }
 
 $taskArgs = '"' + $runnerScriptPath + '" --workbook "' + $candidateWorkbook + '"'
 $action = New-ScheduledTaskAction -Execute $runnerExe -Argument $taskArgs -WorkingDirectory $PSScriptRoot
-$trigger = New-ScheduledTaskTrigger -Once -At $triggerTime -RepetitionInterval (New-TimeSpan -Minutes 1) -RepetitionDuration (New-TimeSpan -Days 3650)
+$trigger = New-ScheduledTaskTrigger -Once -At $triggerTime -RepetitionInterval (New-TimeSpan -Minutes 2) -RepetitionDuration (New-TimeSpan -Days 3650)
 $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew
 
-Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger -Settings $settings -Description "Publishes the family finance dashboard from the local workbook every minute." -Force | Out-Null
+Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger -Settings $settings -Description "Checks the family finance workbook and publishes the live dashboard when the data changes." -Force | Out-Null
 
 Write-Host "Scheduled task created:"
 Write-Host "  Name: $TaskName"
 Write-Host "  Workbook: $candidateWorkbook"
-Write-Host "  Runs every minute on this PC."
+Write-Host "  Checks every 2 minutes on this PC."

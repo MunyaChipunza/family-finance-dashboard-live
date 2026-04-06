@@ -13,7 +13,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 LOG_PATH = SCRIPT_DIR / "local_autopublish.log"
 sys.path.insert(0, str(SCRIPT_DIR))
 
-from publish_dashboard_data import find_default_workbook, push_dashboard  # noqa: E402
+from dashboard_publish import find_default_workbook, push_dashboard  # noqa: E402
 
 
 def parse_args() -> argparse.Namespace:
