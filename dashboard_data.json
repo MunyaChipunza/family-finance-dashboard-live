@@ -3,10 +3,15 @@
   "subtitle": "Executive view of household cash, commitments, debt, and long-term capital.",
   "reportMonth": "April 2026",
   "sourceName": "Finance.xlsx",
-  "generatedAt": "2026-04-06T16:00:59.296138+02:00",
-  "sourceUpdatedAt": "2026-04-06T15:57:50.583494+02:00",
-  "refreshSeconds": 60,
+  "generatedAt": "2026-04-06T19:38:37.317813+02:00",
+  "sourceUpdatedAt": "2026-04-06T19:28:44.476382+02:00",
+  "refreshSeconds": 120,
   "dataMode": "Budget-backed actuals",
+  "dataQuality": {
+    "label": "Budget-backed actuals",
+    "tone": "warn",
+    "detail": "Real spending has not been captured yet across 26 monthly lines, so the dashboard is using budget values as placeholder actuals. Structural risk signals are still useful, but variance is not yet real."
+  },
   "health": {
     "label": "Critical",
     "tone": "bad"
@@ -39,71 +44,77 @@
       "outOf": 10
     }
   ],
-  "executiveSummary": "April 2026: household health reads critical. Budget values are temporarily standing in as actuals. The current operating view shows a monthly deficit of R 9,582.95, with R 57,288.71 in liquid cash, R 15,284.67 in reserves, debt service at 17.8%, runway at 1.0 months, and tracked net worth at R -20,966.16. The largest active monthly drivers are Rent, Groceries, BMW X1 xDrive20d finance.",
+  "executiveSummary": "April 2026: household health reads critical. Actuals are still budget-backed. The current operating view implies a monthly deficit of R 9,582.95, with R 57,288.71 in transaction cash and R 15,284.67 in reserves. Vehicle load is 25.9%, tracked net worth is R -20,966.16, and the projected cash-zero date at the current burn rate is 22 Nov 2026.",
   "focusItems": [
     {
-      "title": "Close the monthly gap",
-      "detail": "Current actuals imply a deficit of R 9,582.95 per month.",
+      "title": "Break the monthly deficit",
+      "detail": "Close a gap of at least R 9,582.95 to stop cash from drifting down every month.",
       "tone": "bad"
     },
     {
-      "title": "Strengthen reserves",
-      "detail": "Liquid cash plus reserves cover about 1.0 months of core outflows.",
+      "title": "Protect the cash-zero date",
+      "detail": "At the current run-rate, liquid cash and reserves would be exhausted around 22 Nov 2026.",
+      "tone": "bad"
+    },
+    {
+      "title": "Decide the vehicle strategy",
+      "detail": "Vehicle finance plus fuel is consuming 25.9% of take-home income.",
       "tone": "warn"
     },
     {
-      "title": "Turn surplus into deliberate savings",
-      "detail": "Use the planned savings rows to track reserve or investment transfers as soon as they happen.",
-      "tone": "info"
-    },
-    {
-      "title": "Watch the pressure points",
-      "detail": "Priority lines right now: Rent, Groceries, BMW X1 xDrive20d finance.",
+      "title": "Restart real saving",
+      "detail": "Formal savings are effectively at zero, so the balance sheet is not strengthening month to month.",
       "tone": "warn"
     }
   ],
   "summaryCards": [
     {
-      "label": "Actual Income",
+      "label": "Take-home Income",
       "value": "R 61,839.84",
-      "detail": "Current month income run-rate",
+      "detail": "Current monthly income run-rate",
       "tone": "good"
     },
     {
-      "label": "Actual Outflows",
+      "label": "Monthly Outflows",
       "value": "R 71,422.79",
-      "detail": "Costs, debt, and savings allocations",
+      "detail": "Living costs, debt, and savings transfers",
       "tone": "warn"
     },
     {
-      "label": "Monthly Surplus",
+      "label": "Net Position",
       "value": "R -9,582.95",
-      "detail": "Income minus outflows",
+      "detail": "Income minus all monthly outflows",
       "tone": "bad"
     },
     {
-      "label": "Runway",
-      "value": "1.0 months",
-      "detail": "Liquid cash plus reserves vs core outflows",
-      "tone": "warn"
+      "label": "Cash Buffer",
+      "value": "R 72,573.38",
+      "detail": "Transaction cash plus reserves",
+      "tone": "info"
     },
     {
-      "label": "Debt Service",
-      "value": "17.8%",
-      "detail": "Debt payments as share of take-home",
-      "tone": "good"
+      "label": "Full-Outflow Runway",
+      "value": "1.0 months",
+      "detail": "Cash and reserves vs total monthly outflows",
+      "tone": "bad"
+    },
+    {
+      "label": "Cash-Zero Date",
+      "value": "22 Nov 2026",
+      "detail": "Date cash would hit zero at the current burn rate",
+      "tone": "bad"
+    },
+    {
+      "label": "Vehicle Load",
+      "value": "R 15,992.47",
+      "detail": "25.9% of take-home income",
+      "tone": "warn"
     },
     {
       "label": "Savings Rate",
       "value": "0.0%",
-      "detail": "Formal savings as share of income",
+      "detail": "Formal savings as a share of income",
       "tone": "bad"
-    },
-    {
-      "label": "Liquid Cash",
-      "value": "R 57,288.71",
-      "detail": "Current accounts only",
-      "tone": "info"
     },
     {
       "label": "Net Worth",
@@ -156,10 +167,10 @@
   ],
   "capitalStack": [
     {
-      "label": "Liquid Cash",
+      "label": "Transaction Cash",
       "amount": 57288.71,
       "tone": "info",
-      "detail": "Current transaction accounts"
+      "detail": "Current accounts available now"
     },
     {
       "label": "Emergency Reserves",
@@ -174,10 +185,10 @@
       "detail": "Momentum HealthSaver balance"
     },
     {
-      "label": "Working Float",
+      "label": "Card Float",
       "amount": 2299.44,
       "tone": "info",
-      "detail": "Usable card float currently tracked"
+      "detail": "Positive available card float"
     },
     {
       "label": "Investments",
@@ -199,7 +210,7 @@
     },
     {
       "label": "Net Worth",
-      "amount": -20966.159999999974,
+      "amount": -20966.159999999916,
       "tone": "bad",
       "detail": "Tracked assets less tracked liabilities"
     }
@@ -244,11 +255,11 @@
       "actual": 6299.18,
       "variance": 0.0,
       "currency": "ZAR",
-      "timing": "1st / 2nd of month",
+      "timing": "Around 1st/2nd",
       "auto": "Yes",
-      "tag": "Debt",
+      "tag": "Core",
       "priority": "Critical",
-      "notes": "Observed bank debit used for budgeting; instalment card showed R6,230.18."
+      "notes": "Vehicle finance debit seen in bank activity."
     },
     {
       "section": "Monthly Cost",
@@ -261,14 +272,14 @@
       "currency": "ZAR",
       "timing": "Auto debit",
       "auto": "Yes",
-      "tag": "Lifestyle",
+      "tag": "Core",
       "priority": "High",
       "notes": ""
     },
     {
       "section": "Debt Payment",
       "group": "Vehicle Finance",
-      "item": "Audi vehicle finance",
+      "item": "Audi finance",
       "owner": "Household",
       "budget": 4693.29,
       "actual": 4693.29,
@@ -276,8 +287,8 @@
       "currency": "ZAR",
       "timing": "Month-end",
       "auto": "Yes",
-      "tag": "Debt",
-      "priority": "High",
+      "tag": "Core",
+      "priority": "Critical",
       "notes": ""
     },
     {
@@ -291,7 +302,7 @@
       "currency": "ZAR",
       "timing": "Auto debit",
       "auto": "Yes",
-      "tag": "Education",
+      "tag": "Core",
       "priority": "Critical",
       "notes": ""
     },
@@ -308,7 +319,7 @@
       "auto": "No",
       "tag": "Core",
       "priority": "High",
-      "notes": "Estimated current average."
+      "notes": "Average monthly estimate."
     },
     {
       "section": "Monthly Cost",
@@ -321,91 +332,179 @@
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "No",
-      "tag": "Education",
+      "tag": "Core",
       "priority": "High",
       "notes": ""
     }
   ],
   "watchlistRows": [
     {
-      "item": "Rent",
+      "item": "Monthly burn gap",
       "owner": "Household",
-      "budget": 22000.0,
-      "actual": 22000.0,
-      "variance": 0.0,
-      "reason": "Core exposure",
+      "metric": "R 9,582.95",
+      "reason": "Total monthly outflows are above take-home income.",
+      "action": "Cut or reassign at least this amount to reach break-even.",
+      "tone": "bad"
+    },
+    {
+      "item": "Cash-zero date",
+      "owner": "Household",
+      "metric": "22 Nov 2026",
+      "reason": "At the current burn rate, cash and reserves would eventually be exhausted.",
+      "action": "Protect reserves and fix the monthly deficit before this date moves closer.",
+      "tone": "bad"
+    },
+    {
+      "item": "Runway coverage",
+      "owner": "Household",
+      "metric": "1.0 months",
+      "reason": "Cash plus reserves cover less than three months of full outflows.",
+      "action": "Treat reserve balances as protected and avoid optional leakage.",
+      "tone": "bad"
+    },
+    {
+      "item": "Vehicle exposure",
+      "owner": "Household",
+      "metric": "25.9% / R 15,992.47",
+      "reason": "Vehicle finance and fuel are taking a heavy share of take-home income.",
+      "action": "Decide whether to keep both cars, refinance, or lower transport load.",
       "tone": "warn"
     },
     {
-      "item": "Groceries",
+      "item": "Housing concentration",
       "owner": "Household",
-      "budget": 8000.0,
-      "actual": 8000.0,
-      "variance": 0.0,
-      "reason": "Core exposure",
+      "metric": "35.6%",
+      "reason": "Rent is absorbing a large share of monthly income.",
+      "action": "Hold the rest of the cost base tightly so housing does not crowd out recovery.",
       "tone": "warn"
     },
     {
-      "item": "BMW X1 xDrive20d finance",
+      "item": "Savings discipline",
       "owner": "Household",
-      "budget": 6299.18,
-      "actual": 6299.18,
-      "variance": 0.0,
-      "reason": "Core exposure",
+      "metric": "0.0%",
+      "reason": "No formal monthly saving is currently being captured.",
+      "action": "Restart even a small recurring transfer so progress becomes measurable.",
       "tone": "warn"
     },
     {
-      "item": "Tithe",
+      "item": "Balance sheet",
       "owner": "Household",
-      "budget": 6100.0,
-      "actual": 6100.0,
-      "variance": 0.0,
-      "reason": "Core exposure",
+      "metric": "R -20,966.16",
+      "reason": "Tracked liabilities still exceed tracked assets.",
+      "action": "Avoid new debt and use any upside to repair net worth.",
+      "tone": "bad"
+    }
+  ],
+  "decisionRows": [
+    {
+      "title": "Approve a break-even plan",
+      "owner": "Household",
+      "timeframe": "This month",
+      "impact": "High",
+      "detail": "Rework the monthly operating plan to remove at least R 9,582.95 of burn. Start with Rent, Groceries, BMW X1 xDrive20d finance.",
+      "tone": "bad"
+    },
+    {
+      "title": "Reset the vehicle strategy",
+      "owner": "Household",
+      "timeframe": "Next 30 days",
+      "impact": "High",
+      "detail": "BMW and Audi finance plus fuel are running at R 15,992.47 per month (25.9% of take-home). Decide whether both vehicles still make sense.",
       "tone": "warn"
     },
     {
-      "item": "Audi vehicle finance",
-      "owner": "Household",
-      "budget": 4693.29,
-      "actual": 4693.29,
-      "variance": 0.0,
-      "reason": "Core exposure",
+      "title": "Protect reserve accounts",
+      "owner": "Kuhle",
+      "timeframe": "Immediate",
+      "impact": "High",
+      "detail": "Keep at least R 15,284.67 ring-fenced in notice savings unless there is a genuine emergency.",
       "tone": "warn"
     },
     {
-      "item": "Anoona school fees",
+      "title": "Restart monthly saving",
       "owner": "Household",
-      "budget": 4135.0,
-      "actual": 4135.0,
-      "variance": 0.0,
-      "reason": "Core exposure",
+      "timeframe": "Next payday",
+      "impact": "Medium",
+      "detail": "Use the savings contribution rows in the workbook so the dashboard can start measuring real savings discipline again.",
+      "tone": "info"
+    },
+    {
+      "title": "Capture real actuals weekly",
+      "owner": "Household",
+      "timeframe": "Every week",
+      "impact": "High",
+      "detail": "Replace placeholder actuals with real spending so the watchlist can flag true overspends instead of only structural risks.",
+      "tone": "info"
+    }
+  ],
+  "projectionRows": [
+    {
+      "month": "Apr 2026",
+      "opening": 72573.38,
+      "movement": -9582.950000000012,
+      "closing": 62990.42999999999,
+      "tone": "warn"
+    },
+    {
+      "month": "May 2026",
+      "opening": 62990.42999999999,
+      "movement": -9582.950000000012,
+      "closing": 53407.47999999998,
+      "tone": "warn"
+    },
+    {
+      "month": "Jun 2026",
+      "opening": 53407.47999999998,
+      "movement": -9582.950000000012,
+      "closing": 43824.52999999997,
+      "tone": "warn"
+    },
+    {
+      "month": "Jul 2026",
+      "opening": 43824.52999999997,
+      "movement": -9582.950000000012,
+      "closing": 34241.57999999996,
+      "tone": "warn"
+    },
+    {
+      "month": "Aug 2026",
+      "opening": 34241.57999999996,
+      "movement": -9582.950000000012,
+      "closing": 24658.629999999946,
+      "tone": "warn"
+    },
+    {
+      "month": "Sep 2026",
+      "opening": 24658.629999999946,
+      "movement": -9582.950000000012,
+      "closing": 15075.679999999935,
       "tone": "warn"
     }
   ],
   "cashAccounts": [
     {
       "section": "Asset Balance",
-      "group": "Cash",
+      "group": "Bank",
       "item": "Discovery main account",
       "owner": "Kuhle",
       "balance": 55206.06,
       "currency": "ZAR",
-      "timing": "Current",
+      "timing": "As at 06 Apr 2026",
       "tag": "Cash",
-      "priority": "Critical",
-      "notes": "Operating cash."
+      "priority": "High",
+      "notes": "Day-to-day account."
     },
     {
       "section": "Asset Balance",
-      "group": "Medical",
+      "group": "Medical Saver",
       "item": "Momentum HealthSaver",
       "owner": "Kuhle",
       "balance": 15963.12,
       "currency": "ZAR",
-      "timing": "Current",
-      "tag": "Medical",
+      "timing": "As at 06 Apr 2026",
+      "tag": "Reserve",
       "priority": "High",
-      "notes": "Momentum medical aid itself is payroll deducted; only the savings pot is tracked here."
+      "notes": "Momentum medical aid contribution is payroll-deducted; only HealthSaver balance is tracked here."
     },
     {
       "section": "Asset Balance",
@@ -414,10 +513,10 @@
       "owner": "Kuhle",
       "balance": 10189.78,
       "currency": "ZAR",
-      "timing": "32-day notice",
+      "timing": "As at 06 Apr 2026",
       "tag": "Reserve",
       "priority": "High",
-      "notes": "Emergency reserve."
+      "notes": "32 day notice account."
     },
     {
       "section": "Asset Balance",
@@ -426,48 +525,48 @@
       "owner": "Kuhle",
       "balance": 5094.89,
       "currency": "ZAR",
-      "timing": "32-day notice",
+      "timing": "As at 06 Apr 2026",
       "tag": "Reserve",
       "priority": "High",
-      "notes": "Emergency reserve."
+      "notes": "32 day notice account."
     },
     {
       "section": "Asset Balance",
-      "group": "Working Float",
+      "group": "Card Float",
       "item": "Discovery Black Credit Card available balance",
       "owner": "Kuhle",
       "balance": 2299.44,
       "currency": "ZAR",
-      "timing": "1st monthly",
-      "tag": "Working-Float",
-      "priority": "Low",
-      "notes": "Card details captured separately in notes: current balance R5,746.01, pending -R4,446.57, limit R1,000."
+      "timing": "As at 06 Apr 2026",
+      "tag": "Float",
+      "priority": "Medium",
+      "notes": "Positive available balance, treated as usable float."
     },
     {
       "section": "Asset Balance",
-      "group": "Cash",
+      "group": "Bank",
       "item": "Standard Bank main account",
       "owner": "Kuhle",
       "balance": 2082.65,
       "currency": "ZAR",
-      "timing": "Current",
+      "timing": "As at 06 Apr 2026",
       "tag": "Cash",
       "priority": "High",
-      "notes": "As at 06 Apr 2026."
+      "notes": ""
     }
   ],
   "investmentRows": [
     {
       "section": "Asset Balance",
       "group": "Retirement",
-      "item": "Sanlam umbrella provident fund",
+      "item": "Sanlam provident fund",
       "owner": "Kuhle",
       "balance": 213257.01,
       "currency": "ZAR",
-      "timing": "Current",
+      "timing": "As at 30 Sep 2025",
       "tag": "Retirement",
       "priority": "Medium",
-      "notes": "Relevant for net worth, not monthly cash."
+      "notes": ""
     },
     {
       "section": "Asset Balance",
@@ -476,7 +575,7 @@
       "owner": "Munya",
       "balance": 54059.1,
       "currency": "ZAR",
-      "timing": "Current",
+      "timing": "As at 02 Apr 2026",
       "tag": "Retirement",
       "priority": "Medium",
       "notes": ""
@@ -488,10 +587,10 @@
       "owner": "Kuhle",
       "balance": 29899.02,
       "currency": "ZAR",
-      "timing": "Current",
+      "timing": "As at 30 Sep 2025",
       "tag": "Retirement",
       "priority": "Medium",
-      "notes": "Track with retirement assets, not operating cash."
+      "notes": ""
     },
     {
       "section": "Asset Balance",
@@ -500,7 +599,7 @@
       "owner": "Munya",
       "balance": 17406.35,
       "currency": "ZAR",
-      "timing": "Current",
+      "timing": "As at 02 Apr 2026",
       "tag": "Investment",
       "priority": "Medium",
       "notes": ""
@@ -512,28 +611,28 @@
       "owner": "Kuhle",
       "balance": 697.86,
       "currency": "ZAR",
-      "timing": "Current",
+      "timing": "As at 06 Apr 2026",
       "tag": "Investment",
       "priority": "Low",
-      "notes": "Count the total once; do not double count sub-accounts."
+      "notes": "Headline total; do not add subaccounts on top."
     }
   ],
   "debtHighlights": [
     {
-      "item": "BMW X1 xDrive20d finance",
+      "item": "BMW X1 xDrive20d outstanding loan",
       "owner": "Household",
       "balance": 274058.92,
-      "instalment": 6299.18,
-      "timing": "1st / 2nd of month",
-      "notes": "Observed bank debit used for budgeting; instalment card showed R6,230.18."
+      "instalment": 0.0,
+      "timing": "As at 06 Apr 2026",
+      "notes": "Outstanding including interest."
     },
     {
-      "item": "Audi vehicle finance",
+      "item": "Audi finance outstanding loan",
       "owner": "Household",
       "balance": 153062.52,
-      "instalment": 4693.29,
-      "timing": "Month-end",
-      "notes": "Outstanding vehicle balance."
+      "instalment": 0.0,
+      "timing": "As at 06 Apr 2026",
+      "notes": ""
     }
   ],
   "operatingLines": [
@@ -546,16 +645,16 @@
       "actual": 6299.18,
       "variance": 0.0,
       "currency": "ZAR",
-      "timing": "1st / 2nd of month",
+      "timing": "Around 1st/2nd",
       "auto": "Yes",
-      "tag": "Debt",
+      "tag": "Core",
       "priority": "Critical",
-      "notes": "Observed bank debit used for budgeting; instalment card showed R6,230.18."
+      "notes": "Vehicle finance debit seen in bank activity."
     },
     {
       "section": "Debt Payment",
       "group": "Vehicle Finance",
-      "item": "Audi vehicle finance",
+      "item": "Audi finance",
       "owner": "Household",
       "budget": 4693.29,
       "actual": 4693.29,
@@ -563,8 +662,8 @@
       "currency": "ZAR",
       "timing": "Month-end",
       "auto": "Yes",
-      "tag": "Debt",
-      "priority": "High",
+      "tag": "Core",
+      "priority": "Critical",
       "notes": ""
     },
     {
@@ -608,7 +707,7 @@
       "currency": "ZAR",
       "timing": "Auto debit",
       "auto": "Yes",
-      "tag": "Lifestyle",
+      "tag": "Core",
       "priority": "High",
       "notes": ""
     },
@@ -623,7 +722,7 @@
       "currency": "ZAR",
       "timing": "Auto debit",
       "auto": "Yes",
-      "tag": "Education",
+      "tag": "Core",
       "priority": "Critical",
       "notes": ""
     },
@@ -640,7 +739,7 @@
       "auto": "No",
       "tag": "Core",
       "priority": "High",
-      "notes": "Estimated current average."
+      "notes": "Average monthly estimate."
     },
     {
       "section": "Monthly Cost",
@@ -653,7 +752,7 @@
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "No",
-      "tag": "Education",
+      "tag": "Core",
       "priority": "High",
       "notes": ""
     },
@@ -668,7 +767,7 @@
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "No",
-      "tag": "Transport",
+      "tag": "Flexible",
       "priority": "Medium",
       "notes": ""
     },
@@ -683,7 +782,7 @@
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "No",
-      "tag": "Transport",
+      "tag": "Flexible",
       "priority": "Medium",
       "notes": ""
     },
@@ -691,16 +790,16 @@
       "section": "Monthly Cost",
       "group": "Insurance",
       "item": "Discovery insurance",
-      "owner": "Household",
+      "owner": "Kuhle",
       "budget": 2015.11,
       "actual": 2015.11,
       "variance": 0.0,
       "currency": "ZAR",
       "timing": "Auto debit",
       "auto": "Yes",
-      "tag": "Insurance",
-      "priority": "Medium",
-      "notes": "Separate from Momentum medical aid."
+      "tag": "Core",
+      "priority": "High",
+      "notes": "Insurance premium."
     },
     {
       "section": "Monthly Cost",
@@ -713,43 +812,43 @@
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "No",
-      "tag": "Education",
+      "tag": "Core",
       "priority": "Medium",
-      "notes": "Budgeted at the top end of the R1,900-R2,000 range."
+      "notes": ""
     },
     {
       "section": "Monthly Cost",
       "group": "Medical",
-      "item": "Dis-Chem insurance (Kuhle + kids)",
-      "owner": "Kuhle",
+      "item": "Dis-Chem insurance",
+      "owner": "Kuhle & kids",
       "budget": 1515.0,
       "actual": 1515.0,
       "variance": 0.0,
       "currency": "ZAR",
       "timing": "Auto debit",
       "auto": "Yes",
-      "tag": "Medical",
+      "tag": "Core",
       "priority": "High",
-      "notes": "Separate from Momentum medical aid."
+      "notes": "Separate cover from Momentum medical aid."
     },
     {
       "section": "Monthly Cost",
       "group": "Insurance",
       "item": "Discovery life cover",
-      "owner": "Household",
+      "owner": "Kuhle",
       "budget": 1001.09,
       "actual": 1001.09,
       "variance": 0.0,
       "currency": "ZAR",
       "timing": "Auto debit",
       "auto": "Yes",
-      "tag": "Insurance",
-      "priority": "Medium",
-      "notes": ""
+      "tag": "Core",
+      "priority": "High",
+      "notes": "Life cover premium."
     },
     {
       "section": "Monthly Cost",
-      "group": "Communications",
+      "group": "Connectivity",
       "item": "Telkom",
       "owner": "Household",
       "budget": 991.64,
@@ -760,56 +859,56 @@
       "auto": "Yes",
       "tag": "Core",
       "priority": "Medium",
-      "notes": ""
+      "notes": "Internet and telecoms."
     },
     {
       "section": "Monthly Cost",
-      "group": "Health",
+      "group": "Wellness",
       "item": "Virgin Active",
       "owner": "Household",
       "budget": 450.0,
       "actual": 450.0,
       "variance": 0.0,
       "currency": "ZAR",
-      "timing": "Auto debit",
+      "timing": "Monthly",
       "auto": "Yes",
-      "tag": "Lifestyle",
+      "tag": "Flexible",
       "priority": "Low",
       "notes": ""
     },
     {
       "section": "Monthly Cost",
-      "group": "Funeral",
+      "group": "Funeral Cover",
       "item": "Nyaradzo funeral cover",
       "owner": "Household",
       "budget": 288.0,
       "actual": 288.0,
       "variance": 0.0,
       "currency": "ZAR",
-      "timing": "Auto debit",
+      "timing": "Monthly",
       "auto": "Yes",
-      "tag": "Insurance",
-      "priority": "Low",
+      "tag": "Core",
+      "priority": "Medium",
       "notes": ""
     },
     {
       "section": "Monthly Cost",
-      "group": "Streaming",
+      "group": "Subscriptions",
       "item": "Netflix",
       "owner": "Household",
       "budget": 250.0,
       "actual": 250.0,
       "variance": 0.0,
       "currency": "ZAR",
-      "timing": "Auto debit",
+      "timing": "Monthly",
       "auto": "Yes",
-      "tag": "Lifestyle",
+      "tag": "Flexible",
       "priority": "Low",
       "notes": ""
     },
     {
       "section": "Monthly Cost",
-      "group": "Funeral",
+      "group": "Funeral Cover",
       "item": "Outsurance funeral cover",
       "owner": "Household",
       "budget": 222.0,
@@ -818,28 +917,28 @@
       "currency": "ZAR",
       "timing": "Auto debit",
       "auto": "Yes",
-      "tag": "Insurance",
-      "priority": "Low",
+      "tag": "Core",
+      "priority": "Medium",
       "notes": ""
     },
     {
       "section": "Monthly Cost",
-      "group": "Storage",
+      "group": "Subscriptions",
       "item": "Google One",
       "owner": "Household",
       "budget": 184.99,
       "actual": 184.99,
       "variance": 0.0,
       "currency": "ZAR",
-      "timing": "Auto debit",
+      "timing": "Monthly",
       "auto": "Yes",
-      "tag": "Lifestyle",
+      "tag": "Flexible",
       "priority": "Low",
       "notes": ""
     },
     {
       "section": "Monthly Cost",
-      "group": "Funeral",
+      "group": "Funeral Cover",
       "item": "Mukuru funeral cover",
       "owner": "Household",
       "budget": 182.5,
@@ -848,22 +947,22 @@
       "currency": "ZAR",
       "timing": "Auto debit",
       "auto": "Yes",
-      "tag": "Insurance",
-      "priority": "Low",
+      "tag": "Core",
+      "priority": "Medium",
       "notes": ""
     },
     {
       "section": "Monthly Cost",
-      "group": "Streaming",
+      "group": "Subscriptions",
       "item": "Spotify",
       "owner": "Household",
       "budget": 94.99,
       "actual": 94.99,
       "variance": 0.0,
       "currency": "ZAR",
-      "timing": "Auto debit",
+      "timing": "Monthly",
       "auto": "Yes",
-      "tag": "Lifestyle",
+      "tag": "Flexible",
       "priority": "Low",
       "notes": ""
     },
@@ -876,26 +975,26 @@
       "actual": 0.0,
       "variance": 0.0,
       "currency": "ZAR",
-      "timing": "Any time",
+      "timing": "Manual transfer",
       "auto": "No",
-      "tag": "Reserve",
-      "priority": "Medium",
-      "notes": "Use when you move extra money into Rainy Day or Very Rainy Day."
+      "tag": "Growth",
+      "priority": "High",
+      "notes": "Use when you start topping up savings monthly."
     },
     {
       "section": "Savings Contribution",
-      "group": "Investment",
+      "group": "Investing",
       "item": "Long-term investing top-up",
       "owner": "Household",
       "budget": 0.0,
       "actual": 0.0,
       "variance": 0.0,
       "currency": "ZAR",
-      "timing": "Any time",
+      "timing": "Manual transfer",
       "auto": "No",
-      "tag": "Investment",
-      "priority": "Low",
-      "notes": "Use for Allan Gray or EasyEquities top-ups."
+      "tag": "Growth",
+      "priority": "Medium",
+      "notes": "Use when monthly investing resumes."
     }
   ],
   "incomeRows": [
@@ -910,9 +1009,9 @@
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "Yes",
-      "tag": "Income",
+      "tag": "Core",
       "priority": "Critical",
-      "notes": "Statement range seen between R23,427.62 and R23,529.70. Update actual if needed."
+      "notes": "Net salary after payroll deductions."
     },
     {
       "section": "Income",
@@ -925,17 +1024,17 @@
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "Yes",
-      "tag": "Income",
+      "tag": "Core",
       "priority": "Critical",
-      "notes": "Confirmed from payslip."
+      "notes": "Net salary after payroll deductions."
     }
   ],
   "openItems": [
     {
       "area": "Timing",
       "question": "Exact debit dates",
-      "assumption": "Already automated",
-      "update": "Exact debit dates were not captured because the debits are already automated. Add them later only if timing becomes a cash-flow issue."
+      "assumption": "Major debits are automated",
+      "update": "Add exact calendar days later if needed for cash timing."
     }
   ],
   "totals": {
@@ -952,6 +1051,10 @@
     "retirement": 297215.13,
     "workingFloat": 2299.44,
     "debtBalances": 427121.43999999994,
-    "coverageRatio": 0.8658278401053779
+    "coverageRatio": 0.8658278401053779,
+    "vehicleLoad": 15992.470000000001,
+    "vehicleLoadRatio": 0.2586111154233258,
+    "housingRatio": 0.3557577121803679,
+    "netWorth": -20966.159999999916
   }
 }

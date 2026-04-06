@@ -72,6 +72,12 @@ linear-gradient(135deg,rgba(255,250,244,.98),rgba(244,230,214,.98) 54%,rgba(231,
 .card-d{margin-top:8px;color:#6c5848;font-size:12px}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .surface{padding:20px}
+.banner{padding:18px 20px;border-radius:20px;border:1px solid rgba(106,74,53,.12);background:rgba(255,250,244,.78)}
+.banner.good{background:rgba(166,128,96,.14)}
+.banner.warn{background:rgba(196,163,131,.16)}
+.banner.bad{background:rgba(143,95,64,.12)}
+.banner h3{font-size:18px}
+.banner p{margin-top:8px;color:#6f5b4b}
 .bar-list{display:grid;gap:12px}
 .bar-row{padding:14px 16px;border-radius:18px;background:rgba(255,252,247,.7);border:1px solid rgba(106,74,53,.10)}
 .bar-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
@@ -146,6 +152,10 @@ tr:nth-child(even) td{background:rgba(235,226,211,.22)}
   </header>
 
   <section class="section">
+    <div id="dataQuality"></div>
+  </section>
+
+  <section class="section">
     <div class="label">Board Summary</div>
     <div class="cards" id="summaryCards"></div>
   </section>
@@ -167,8 +177,19 @@ tr:nth-child(even) td{background:rgba(235,226,211,.22)}
       <div class="bar-list" id="topCosts"></div>
     </div>
     <div class="surface">
-      <div class="label">Watchlist</div>
+      <div class="label">Risk Watchlist</div>
       <div class="bar-list" id="watchlist"></div>
+    </div>
+  </section>
+
+  <section class="section split">
+    <div class="surface">
+      <div class="label">Decisions Required</div>
+      <div class="bar-list" id="decisionRows"></div>
+    </div>
+    <div class="table-shell">
+      <div class="label">6-Month Cash Projection</div>
+      <div class="table-wrap"><table id="projectionTable"></table></div>
     </div>
   </section>
 
@@ -256,6 +277,18 @@ function renderSummaryCards(){
       <div class="card-d">${esc(item.detail)}</div>
     </div>
   `).join('');
+}
+
+function renderDataQuality(){
+  const host = document.getElementById('dataQuality');
+  const item = dashboard?.dataQuality;
+  if(!item){host.innerHTML='';return;}
+  host.innerHTML = `
+    <div class="banner ${toneClass(item.tone)}">
+      <h3>${esc(item.label)}</h3>
+      <p>${esc(item.detail)}</p>
+    </div>
+  `;
 }
 
 function renderFocusItems(){
@@ -351,6 +384,7 @@ function renderAll(){
   document.getElementById('generatedAt').textContent = fmtDateTime(dashboard?.generatedAt);
   document.getElementById('sourceUpdated').textContent = fmtDateTime(dashboard?.sourceUpdatedAt);
   setStatus(toneClass(dashboard?.health?.tone), dashboard?.health?.label || 'Live');
+  renderDataQuality();
   renderFocusItems();
   renderScore();
   renderSummaryCards();
@@ -383,12 +417,28 @@ function renderAll(){
   });
 
   renderBarList('watchlist', dashboard?.watchlistRows || [], {
-    value: item => Math.abs(item.variance || item.actual || item.budget),
+    value: item => Math.max(String(item.metric || '').length, 1),
     title: item => item.item,
-    meta: item => `${item.reason} | Owner: ${item.owner || 'Household'} | Budget ${fmtMoney(item.budget)} | Actual ${fmtMoney(item.actual)}`,
-    display: item => item.reason === 'Over budget' ? fmtMoney(item.variance) : fmtMoney(item.actual || item.budget),
+    meta: item => `${item.reason} | ${item.action}`,
+    display: item => item.metric || '-',
     tone: item => item.tone || 'warn'
   });
+
+  renderBarList('decisionRows', dashboard?.decisionRows || [], {
+    value: item => ({High:3, Medium:2, Low:1}[item.impact] || 1),
+    title: item => item.title,
+    meta: item => `${item.owner || 'Household'} | ${item.impact || 'Medium'} impact | ${item.detail}`,
+    display: item => item.timeframe || '-',
+    tone: item => item.tone || 'info'
+  });
+
+  renderTable('projectionTable', [
+    {label:'Month', key:'month'},
+    {label:'Opening', render:r => fmtMoney(r.opening)},
+    {label:'Movement', render:r => fmtMoney(r.movement)},
+    {label:'Closing', render:r => fmtMoney(r.closing)},
+    {label:'Status', render:r => `<span class="pill ${toneClass(r.tone)}">${esc(r.tone || 'info')}</span>`}
+  ], dashboard?.projectionRows || []);
 
   renderTable('cashTable', [
     {label:'Account', key:'item'},

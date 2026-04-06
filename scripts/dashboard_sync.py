@@ -264,86 +264,100 @@ def health_signal(score: int) -> dict[str, str]:
     return {"label": "Critical", "tone": "bad"}
 
 
+def data_quality_card(using_budget_as_actuals: bool, monthly_line_count: int) -> dict[str, str]:
+    if using_budget_as_actuals:
+        return {
+            "label": "Budget-backed actuals",
+            "tone": "warn",
+            "detail": (
+                f"Real spending has not been captured yet across {monthly_line_count} monthly lines, so the dashboard is "
+                "using budget values as placeholder actuals. Structural risk signals are still useful, but variance is not yet real."
+            ),
+        }
+    return {
+        "label": "Actuals live",
+        "tone": "good",
+        "detail": "The workbook now contains real actuals, so the dashboard can flag overspends, variances, and trend changes with confidence.",
+    }
+
+
+def zero_date(starting_cash: float, monthly_surplus: float) -> dt.date | None:
+    if monthly_surplus >= 0 or starting_cash <= 0:
+        return None
+    months = starting_cash / abs(monthly_surplus)
+    days = round(months * 30.4)
+    return (dt.datetime.now(TIMEZONE) + dt.timedelta(days=days)).date()
+
+
 def build_executive_summary(
     report_month: str,
     signal: dict[str, str],
+    quality: dict[str, str],
     actual_surplus: float,
     liquid_cash: float,
     reserves: float,
-    debt_service_ratio: float | None,
-    runway_months: float | None,
+    zero_day: dt.date | None,
+    vehicle_load_ratio: float | None,
     net_worth: float,
-    top_cost_rows: list[dict[str, Any]],
-    using_budget_as_actuals: bool,
 ) -> str:
     direction = "surplus" if actual_surplus >= 0 else "deficit"
-    runway_label = f"{runway_months:.1f} months" if runway_months is not None else "not yet available"
-    top_names = ", ".join(row["item"] for row in top_cost_rows[:3]) if top_cost_rows else "no major lines yet"
-    source_note = "Budget values are temporarily standing in as actuals. " if using_budget_as_actuals else ""
+    zero_text = zero_day.strftime("%d %b %Y") if zero_day else "not at risk on the current run-rate"
+    quality_note = "Actuals are still budget-backed. " if quality["label"] == "Budget-backed actuals" else "Real actuals are now live. "
     return (
         f"{report_month}: household health reads {signal['label'].lower()}. "
-        f"{source_note}The current operating view shows a monthly {direction} of {fmt_money(abs(actual_surplus))}, "
-        f"with {fmt_money(liquid_cash)} in liquid cash, {fmt_money(reserves)} in reserves, "
-        f"debt service at {pct(debt_service_ratio)}, runway at {runway_label}, and tracked net worth at {fmt_money(net_worth)}. "
-        f"The largest active monthly drivers are {top_names}."
+        f"{quality_note}The current operating view implies a monthly {direction} of {fmt_money(abs(actual_surplus))}, "
+        f"with {fmt_money(liquid_cash)} in transaction cash and {fmt_money(reserves)} in reserves. "
+        f"Vehicle load is {pct(vehicle_load_ratio)}, tracked net worth is {fmt_money(net_worth)}, "
+        f"and the projected cash-zero date at the current burn rate is {zero_text}."
     )
 
 
 def build_focus_items(
     actual_surplus: float,
-    runway_months: float | None,
-    debt_service_ratio: float | None,
+    zero_day: dt.date | None,
+    vehicle_load_ratio: float | None,
     savings_rate: float | None,
-    watchlist_rows: list[dict[str, Any]],
-    top_cost_rows: list[dict[str, Any]],
+    using_budget_as_actuals: bool,
 ) -> list[dict[str, str]]:
     items: list[dict[str, str]] = []
     if actual_surplus < 0:
         items.append(
             {
-                "title": "Close the monthly gap",
-                "detail": f"Current actuals imply a deficit of {fmt_money(abs(actual_surplus))} per month.",
+                "title": "Break the monthly deficit",
+                "detail": f"Close a gap of at least {fmt_money(abs(actual_surplus))} to stop cash from drifting down every month.",
                 "tone": "bad",
             }
         )
-    if (runway_months or 0) < 3:
+    if zero_day is not None:
         items.append(
             {
-                "title": "Strengthen reserves",
-                "detail": f"Liquid cash plus reserves cover about {runway_months or 0:.1f} months of core outflows.",
+                "title": "Protect the cash-zero date",
+                "detail": f"At the current run-rate, liquid cash and reserves would be exhausted around {zero_day.strftime('%d %b %Y')}.",
+                "tone": "bad",
+            }
+        )
+    if (vehicle_load_ratio or 0.0) >= 0.20:
+        items.append(
+            {
+                "title": "Decide the vehicle strategy",
+                "detail": f"Vehicle finance plus fuel is consuming {pct(vehicle_load_ratio)} of take-home income.",
+                "tone": "warn" if (vehicle_load_ratio or 0.0) < 0.27 else "bad",
+            }
+        )
+    if (savings_rate or 0.0) <= 0.001:
+        items.append(
+            {
+                "title": "Restart real saving",
+                "detail": "Formal savings are effectively at zero, so the balance sheet is not strengthening month to month.",
                 "tone": "warn",
             }
         )
-    if (debt_service_ratio or 0) > 0.25:
+    if using_budget_as_actuals:
         items.append(
             {
-                "title": "Debt load is still heavy",
-                "detail": f"Debt payments are consuming {pct(debt_service_ratio)} of take-home income.",
-                "tone": "warn" if (debt_service_ratio or 0) <= 0.35 else "bad",
-            }
-        )
-    if (savings_rate or 0) == 0:
-        items.append(
-            {
-                "title": "Turn surplus into deliberate savings",
-                "detail": "Use the planned savings rows to track reserve or investment transfers as soon as they happen.",
+                "title": "Turn on real actuals",
+                "detail": "Replace placeholder actuals with what was truly spent so the dashboard becomes a decision engine instead of a dressed-up budget.",
                 "tone": "info",
-            }
-        )
-    if watchlist_rows:
-        items.append(
-            {
-                "title": "Watch the pressure points",
-                "detail": f"Priority lines right now: {', '.join(row['item'] for row in watchlist_rows[:3])}.",
-                "tone": "warn",
-            }
-        )
-    if not items and top_cost_rows:
-        items.append(
-            {
-                "title": "Operating model is under control",
-                "detail": f"Biggest monthly lines remain {', '.join(row['item'] for row in top_cost_rows[:3])}.",
-                "tone": "good",
             }
         )
     return items[:4]
@@ -399,10 +413,10 @@ def build_capital_stack(
     net_worth: float,
 ) -> list[dict[str, Any]]:
     return [
-        {"label": "Liquid Cash", "amount": liquid_cash, "tone": "info", "detail": "Current transaction accounts"},
+        {"label": "Transaction Cash", "amount": liquid_cash, "tone": "info", "detail": "Current accounts available now"},
         {"label": "Emergency Reserves", "amount": reserves, "tone": "good", "detail": "Notice savings set aside"},
         {"label": "Medical Saver", "amount": medical_saver, "tone": "info", "detail": "Momentum HealthSaver balance"},
-        {"label": "Working Float", "amount": working_float, "tone": "info", "detail": "Usable card float currently tracked"},
+        {"label": "Card Float", "amount": working_float, "tone": "info", "detail": "Positive available card float"},
         {"label": "Investments", "amount": investments, "tone": "good", "detail": "Tax-free and brokerage capital"},
         {"label": "Retirement", "amount": retirement, "tone": "good", "detail": "Long-term retirement assets"},
         {"label": "Liabilities", "amount": -debt_balances, "tone": "bad", "detail": "Tracked vehicle debt balances"},
@@ -423,35 +437,211 @@ def over_budget_lines(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return flagged
 
 
-def build_watchlist(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    flagged = over_budget_lines(rows)
-    if flagged:
-        return [
+def build_watchlist(
+    rows: list[dict[str, Any]],
+    actual_surplus: float,
+    runway_months: float | None,
+    savings_rate: float | None,
+    vehicle_load: float,
+    vehicle_load_ratio: float | None,
+    housing_ratio: float | None,
+    net_worth: float,
+    zero_day: dt.date | None,
+    using_budget_as_actuals: bool,
+) -> list[dict[str, Any]]:
+    watchlist: list[dict[str, Any]] = []
+
+    if not using_budget_as_actuals:
+        for row in over_budget_lines(rows)[:4]:
+            watchlist.append(
+                {
+                    "item": row["item"],
+                    "owner": row["owner"] or "Household",
+                    "metric": fmt_money(row["variance"]),
+                    "reason": "Actual spend is above budget on this line.",
+                    "action": "Investigate whether this was a once-off or a structural overrun.",
+                    "tone": "bad",
+                }
+            )
+
+    if actual_surplus < 0:
+        watchlist.append(
             {
-                "item": row["item"],
-                "owner": row["owner"],
-                "budget": row["budget"],
-                "actual": row["actual"],
-                "variance": row["variance"],
-                "reason": "Over budget",
+                "item": "Monthly burn gap",
+                "owner": "Household",
+                "metric": fmt_money(abs(actual_surplus)),
+                "reason": "Total monthly outflows are above take-home income.",
+                "action": "Cut or reassign at least this amount to reach break-even.",
                 "tone": "bad",
             }
-            for row in flagged[:8]
-        ]
+        )
+    if zero_day is not None:
+        watchlist.append(
+            {
+                "item": "Cash-zero date",
+                "owner": "Household",
+                "metric": zero_day.strftime("%d %b %Y"),
+                "reason": "At the current burn rate, cash and reserves would eventually be exhausted.",
+                "action": "Protect reserves and fix the monthly deficit before this date moves closer.",
+                "tone": "bad",
+            }
+        )
+    if (runway_months or 0.0) < 3.0:
+        watchlist.append(
+            {
+                "item": "Runway coverage",
+                "owner": "Household",
+                "metric": f"{runway_months or 0.0:.1f} months",
+                "reason": "Cash plus reserves cover less than three months of full outflows.",
+                "action": "Treat reserve balances as protected and avoid optional leakage.",
+                "tone": "warn" if (runway_months or 0.0) >= 1.5 else "bad",
+            }
+        )
+    if (vehicle_load_ratio or 0.0) >= 0.20:
+        watchlist.append(
+            {
+                "item": "Vehicle exposure",
+                "owner": "Household",
+                "metric": f"{pct(vehicle_load_ratio)} / {fmt_money(vehicle_load)}",
+                "reason": "Vehicle finance and fuel are taking a heavy share of take-home income.",
+                "action": "Decide whether to keep both cars, refinance, or lower transport load.",
+                "tone": "warn" if (vehicle_load_ratio or 0.0) < 0.27 else "bad",
+            }
+        )
+    if (housing_ratio or 0.0) >= 0.30:
+        watchlist.append(
+            {
+                "item": "Housing concentration",
+                "owner": "Household",
+                "metric": pct(housing_ratio),
+                "reason": "Rent is absorbing a large share of monthly income.",
+                "action": "Hold the rest of the cost base tightly so housing does not crowd out recovery.",
+                "tone": "warn",
+            }
+        )
+    if (savings_rate or 0.0) <= 0.001:
+        watchlist.append(
+            {
+                "item": "Savings discipline",
+                "owner": "Household",
+                "metric": pct(savings_rate),
+                "reason": "No formal monthly saving is currently being captured.",
+                "action": "Restart even a small recurring transfer so progress becomes measurable.",
+                "tone": "warn",
+            }
+        )
+    if net_worth < 0:
+        watchlist.append(
+            {
+                "item": "Balance sheet",
+                "owner": "Household",
+                "metric": fmt_money(net_worth),
+                "reason": "Tracked liabilities still exceed tracked assets.",
+                "action": "Avoid new debt and use any upside to repair net worth.",
+                "tone": "bad",
+            }
+        )
 
-    candidates = [row for row in top_monthly_lines(rows) if row["priority"] in {"Critical", "High"}]
-    return [
+    deduped: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for item in watchlist:
+        key = item["item"].lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(item)
+    return deduped[:8]
+
+
+def build_decision_rows(
+    actual_surplus: float,
+    vehicle_load: float,
+    vehicle_load_ratio: float | None,
+    reserves: float,
+    savings_rate: float | None,
+    using_budget_as_actuals: bool,
+    top_cost_rows: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    largest_names = ", ".join(row["item"] for row in top_cost_rows[:3]) if top_cost_rows else "the biggest monthly lines"
+    decisions: list[dict[str, Any]] = []
+    if actual_surplus < 0:
+        decisions.append(
+            {
+                "title": "Approve a break-even plan",
+                "owner": "Household",
+                "timeframe": "This month",
+                "impact": "High",
+                "detail": f"Rework the monthly operating plan to remove at least {fmt_money(abs(actual_surplus))} of burn. Start with {largest_names}.",
+                "tone": "bad",
+            }
+        )
+    if (vehicle_load_ratio or 0.0) >= 0.20:
+        decisions.append(
+            {
+                "title": "Reset the vehicle strategy",
+                "owner": "Household",
+                "timeframe": "Next 30 days",
+                "impact": "High",
+                "detail": f"BMW and Audi finance plus fuel are running at {fmt_money(vehicle_load)} per month ({pct(vehicle_load_ratio)} of take-home). Decide whether both vehicles still make sense.",
+                "tone": "warn" if (vehicle_load_ratio or 0.0) < 0.27 else "bad",
+            }
+        )
+    decisions.append(
         {
-            "item": row["item"],
-            "owner": row["owner"],
-            "budget": row["budget"],
-            "actual": row["actual"],
-            "variance": row["variance"],
-            "reason": "Core exposure",
+            "title": "Protect reserve accounts",
+            "owner": "Kuhle",
+            "timeframe": "Immediate",
+            "impact": "High",
+            "detail": f"Keep at least {fmt_money(reserves)} ring-fenced in notice savings unless there is a genuine emergency.",
             "tone": "warn",
         }
-        for row in candidates[:6]
-    ]
+    )
+    if (savings_rate or 0.0) <= 0.001:
+        decisions.append(
+            {
+                "title": "Restart monthly saving",
+                "owner": "Household",
+                "timeframe": "Next payday",
+                "impact": "Medium",
+                "detail": "Use the savings contribution rows in the workbook so the dashboard can start measuring real savings discipline again.",
+                "tone": "info",
+            }
+        )
+    if using_budget_as_actuals:
+        decisions.append(
+            {
+                "title": "Capture real actuals weekly",
+                "owner": "Household",
+                "timeframe": "Every week",
+                "impact": "High",
+                "detail": "Replace placeholder actuals with real spending so the watchlist can flag true overspends instead of only structural risks.",
+                "tone": "info",
+            }
+        )
+    return decisions[:5]
+
+
+def build_projection_rows(starting_cash: float, monthly_surplus: float, months: int = 6) -> list[dict[str, Any]]:
+    today = dt.date.today().replace(day=1)
+    rows: list[dict[str, Any]] = []
+    opening = starting_cash
+    for offset in range(months):
+        month_index = today.month - 1 + offset
+        year = today.year + month_index // 12
+        month = month_index % 12 + 1
+        label = dt.date(year, month, 1).strftime("%b %Y")
+        closing = opening + monthly_surplus
+        rows.append(
+            {
+                "month": label,
+                "opening": opening,
+                "movement": monthly_surplus,
+                "closing": closing,
+                "tone": "good" if closing >= 0 and monthly_surplus >= 0 else "warn" if closing >= 0 else "bad",
+            }
+        )
+        opening = closing
+    return rows
 
 
 def build_debt_highlights(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -622,20 +812,45 @@ def refresh_dashboard_data(workbook: str | None = None, output: str | Path = DEF
     surplus_budget = income_budget - outflows_budget
     surplus_actual = income_actual - outflows_actual
 
+    report_month = clean_text(ws["B4"].value) or clean_text(ws["B5"].value) or dt.datetime.now(TIMEZONE).strftime("%B %Y")
+    quality = data_quality_card(using_budget_as_actuals, len(monthly_rows(rows, MONTHLY_SECTIONS)))
+
     liquid_cash = sum_balances(rows, "Asset Balance", {"cash"})
-    reserves = sum_balances(rows, "Asset Balance", {"reserve"})
-    medical_saver = sum_balances(rows, "Asset Balance", {"medical"})
+    reserves = sum(
+        balance_amount(row)
+        for row in rows_for_section(rows, "Asset Balance")
+        if tag_name(row) == "reserve" and "healthsaver" not in clean_text(row.get("Item")).lower()
+    )
+    medical_saver = sum(
+        balance_amount(row)
+        for row in rows_for_section(rows, "Asset Balance")
+        if "healthsaver" in clean_text(row.get("Item")).lower() or clean_text(row.get("Group")).lower() == "medical saver"
+    )
     investments = sum_balances(rows, "Asset Balance", {"investment"})
     retirement = sum_balances(rows, "Asset Balance", {"retirement"})
-    working_float = sum_balances(rows, "Asset Balance", {"working-float"})
+    working_float = sum_balances(rows, "Asset Balance", {"float", "working-float"})
     debt_balances = sum_balances(rows, "Liability Balance")
-    net_worth = liquid_cash + reserves + medical_saver + investments + retirement + working_float - debt_balances
+    total_assets = sum_balances(rows, "Asset Balance")
+    net_worth = total_assets - debt_balances
 
     debt_service_ratio = (debt_actual / income_actual) if income_actual else None
     savings_rate = (savings_actual / income_actual) if income_actual else None
-    core_outflows = costs_actual + debt_actual
-    runway_months = ((liquid_cash + reserves) / core_outflows) if core_outflows else None
+    runway_months = ((liquid_cash + reserves) / outflows_actual) if outflows_actual else None
     coverage_ratio = (income_actual / outflows_actual) if outflows_actual else None
+    zero_day = zero_date(liquid_cash + reserves, surplus_actual)
+
+    vehicle_debt_service = sum(
+        row["actual"] for row in monthly_rows(rows, ("Debt Payment",)) if "vehicle" in row["group"].lower()
+    )
+    fuel_spend = sum(
+        row["actual"] for row in monthly_rows(rows, ("Monthly Cost",)) if "fuel" in row["item"].lower()
+    )
+    vehicle_load = vehicle_debt_service + fuel_spend
+    vehicle_load_ratio = (vehicle_load / income_actual) if income_actual else None
+    housing_ratio = None
+    rent_line = next((row for row in monthly_rows(rows, ("Monthly Cost",)) if row["item"].lower() == "rent"), None)
+    if rent_line and income_actual:
+        housing_ratio = rent_line["actual"] / income_actual
 
     score, pillar_scores = build_scorecard(
         income_actual=income_actual,
@@ -650,37 +865,38 @@ def refresh_dashboard_data(workbook: str | None = None, output: str | Path = DEF
     operating_lines = monthly_rows(rows, ("Monthly Cost", "Debt Payment", "Savings Contribution"))
     operating_lines.sort(key=lambda row: (row["section"], -(row["actual"] if row["actual"] else row["budget"])))
     top_cost_rows = top_monthly_lines(rows)
-    watchlist_rows = build_watchlist(rows)
-    report_month = clean_text(ws["B5"].value) or dt.datetime.now(TIMEZONE).strftime("%B %Y")
+    watchlist_rows = build_watchlist(
+        rows=rows,
+        actual_surplus=surplus_actual,
+        runway_months=runway_months,
+        savings_rate=savings_rate,
+        vehicle_load=vehicle_load,
+        vehicle_load_ratio=vehicle_load_ratio,
+        housing_ratio=housing_ratio,
+        net_worth=net_worth,
+        zero_day=zero_day,
+        using_budget_as_actuals=using_budget_as_actuals,
+    )
+    decision_rows = build_decision_rows(
+        actual_surplus=surplus_actual,
+        vehicle_load=vehicle_load,
+        vehicle_load_ratio=vehicle_load_ratio,
+        reserves=reserves,
+        savings_rate=savings_rate,
+        using_budget_as_actuals=using_budget_as_actuals,
+        top_cost_rows=top_cost_rows,
+    )
+    projection_rows = build_projection_rows(liquid_cash + reserves, surplus_actual, months=6)
 
     summary_cards = [
-        {"label": "Actual Income", "value": fmt_money(income_actual), "detail": "Current month income run-rate", "tone": "good"},
-        {"label": "Actual Outflows", "value": fmt_money(outflows_actual), "detail": "Costs, debt, and savings allocations", "tone": "warn"},
-        {
-            "label": "Monthly Surplus",
-            "value": fmt_money(surplus_actual),
-            "detail": "Income minus outflows",
-            "tone": "good" if surplus_actual >= 0 else "bad",
-        },
-        {
-            "label": "Runway",
-            "value": f"{runway_months:.1f} months" if runway_months is not None else "-",
-            "detail": "Liquid cash plus reserves vs core outflows",
-            "tone": "good" if (runway_months or 0) >= 3 else "warn" if (runway_months or 0) >= 1 else "bad",
-        },
-        {
-            "label": "Debt Service",
-            "value": pct(debt_service_ratio),
-            "detail": "Debt payments as share of take-home",
-            "tone": "good" if (debt_service_ratio or 0) <= 0.20 else "warn" if (debt_service_ratio or 0) <= 0.35 else "bad",
-        },
-        {
-            "label": "Savings Rate",
-            "value": pct(savings_rate),
-            "detail": "Formal savings as share of income",
-            "tone": "good" if (savings_rate or 0) >= 0.15 else "warn" if (savings_rate or 0) > 0 else "bad",
-        },
-        {"label": "Liquid Cash", "value": fmt_money(liquid_cash), "detail": "Current accounts only", "tone": "info"},
+        {"label": "Take-home Income", "value": fmt_money(income_actual), "detail": "Current monthly income run-rate", "tone": "good"},
+        {"label": "Monthly Outflows", "value": fmt_money(outflows_actual), "detail": "Living costs, debt, and savings transfers", "tone": "warn"},
+        {"label": "Net Position", "value": fmt_money(surplus_actual), "detail": "Income minus all monthly outflows", "tone": "good" if surplus_actual >= 0 else "bad"},
+        {"label": "Cash Buffer", "value": fmt_money(liquid_cash + reserves), "detail": "Transaction cash plus reserves", "tone": "info"},
+        {"label": "Full-Outflow Runway", "value": f"{runway_months:.1f} months" if runway_months is not None else "-", "detail": "Cash and reserves vs total monthly outflows", "tone": "good" if (runway_months or 0) >= 6 else "warn" if (runway_months or 0) >= 3 else "bad"},
+        {"label": "Cash-Zero Date", "value": zero_day.strftime("%d %b %Y") if zero_day else "Protected", "detail": "Date cash would hit zero at the current burn rate", "tone": "bad" if zero_day else "good"},
+        {"label": "Vehicle Load", "value": fmt_money(vehicle_load), "detail": f"{pct(vehicle_load_ratio)} of take-home income", "tone": "bad" if (vehicle_load_ratio or 0) >= 0.27 else "warn" if (vehicle_load_ratio or 0) >= 0.20 else "good"},
+        {"label": "Savings Rate", "value": pct(savings_rate), "detail": "Formal savings as a share of income", "tone": "bad" if (savings_rate or 0) <= 0.001 else "good"},
         {"label": "Net Worth", "value": fmt_money(net_worth), "detail": "Tracked assets less tracked liabilities", "tone": "good" if net_worth >= 0 else "bad"},
     ]
 
@@ -691,30 +907,29 @@ def refresh_dashboard_data(workbook: str | None = None, output: str | Path = DEF
         "sourceName": workbook_path.name,
         "generatedAt": iso_datetime(dt.datetime.now(TIMEZONE)),
         "sourceUpdatedAt": iso_datetime(dt.datetime.fromtimestamp(workbook_path.stat().st_mtime, tz=TIMEZONE)),
-        "refreshSeconds": 60,
-        "dataMode": "Budget-backed actuals" if using_budget_as_actuals else "Live actuals",
+        "refreshSeconds": 120,
+        "dataMode": quality["label"],
+        "dataQuality": quality,
         "health": signal,
         "healthScore": score,
         "pillarScores": pillar_scores,
         "executiveSummary": build_executive_summary(
             report_month=report_month,
             signal=signal,
+            quality=quality,
             actual_surplus=surplus_actual,
             liquid_cash=liquid_cash,
             reserves=reserves,
-            debt_service_ratio=debt_service_ratio,
-            runway_months=runway_months,
+            zero_day=zero_day,
+            vehicle_load_ratio=vehicle_load_ratio,
             net_worth=net_worth,
-            top_cost_rows=top_cost_rows,
-            using_budget_as_actuals=using_budget_as_actuals,
         ),
         "focusItems": build_focus_items(
             actual_surplus=surplus_actual,
-            runway_months=runway_months,
-            debt_service_ratio=debt_service_ratio,
+            zero_day=zero_day,
+            vehicle_load_ratio=vehicle_load_ratio,
             savings_rate=savings_rate,
-            watchlist_rows=watchlist_rows,
-            top_cost_rows=top_cost_rows,
+            using_budget_as_actuals=using_budget_as_actuals,
         ),
         "summaryCards": summary_cards,
         "performanceRows": build_performance_rows(
@@ -739,7 +954,9 @@ def refresh_dashboard_data(workbook: str | None = None, output: str | Path = DEF
         ),
         "topCostRows": top_cost_rows,
         "watchlistRows": watchlist_rows,
-        "cashAccounts": balance_rows(rows, "Asset Balance", {"cash", "reserve", "medical", "working-float"}),
+        "decisionRows": decision_rows,
+        "projectionRows": projection_rows,
+        "cashAccounts": balance_rows(rows, "Asset Balance", {"cash", "reserve", "medical", "float", "working-float"}),
         "investmentRows": balance_rows(rows, "Asset Balance", {"investment", "retirement"}),
         "debtHighlights": build_debt_highlights(rows),
         "operatingLines": operating_lines,
@@ -760,6 +977,10 @@ def refresh_dashboard_data(workbook: str | None = None, output: str | Path = DEF
             "workingFloat": working_float,
             "debtBalances": debt_balances,
             "coverageRatio": coverage_ratio,
+            "vehicleLoad": vehicle_load,
+            "vehicleLoadRatio": vehicle_load_ratio,
+            "housingRatio": housing_ratio,
+            "netWorth": net_worth,
         },
     }
 
@@ -767,7 +988,6 @@ def refresh_dashboard_data(workbook: str | None = None, output: str | Path = DEF
     if not output_path.is_absolute():
         output_path = (BUNDLE_DIR / output_path).resolve()
     output_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-    write_local_snapshot(payload)
     return output_path
 
 
