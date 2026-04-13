@@ -3,7 +3,7 @@
   "subtitle": "Executive view of household cash, commitments, debt, and long-term capital.",
   "reportMonth": "April 2026",
   "sourceName": "Finance.xlsx",
-  "generatedAt": "2026-04-13T16:52:44.318961+02:00",
+  "generatedAt": "2026-04-13T16:56:48.978421+02:00",
   "sourceUpdatedAt": "2026-04-13T16:26:45.414441+02:00",
   "refreshSeconds": 300,
   "dataMode": "Actuals live",
@@ -1062,7 +1062,7 @@
   "history": [
     {
       "reportMonth": "April 2026",
-      "generatedAt": "2026-04-13T16:52:44.318961+02:00",
+      "generatedAt": "2026-04-13T16:56:48.978421+02:00",
       "sourceUpdatedAt": "2026-04-13T16:26:45.414441+02:00",
       "incomeActual": 61839.84,
       "outflowsActual": 72276.79000000001,
