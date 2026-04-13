@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import argparse
+import ctypes
 import json
 import os
 import shutil
 import subprocess
 from pathlib import Path
+from ctypes import wintypes
 
 from dashboard_sync import DEFAULT_OUTPUT, DEFAULT_STATE, DEFAULT_WORKBOOK, refresh_dashboard_data
 
@@ -160,6 +162,25 @@ def finalize_state(workbook_path: Path, output_path: Path) -> None:
 
 
 def workbook_is_busy(workbook_path: Path) -> bool:
+    if os.name == "nt":
+        desired_access = 0x80000000 | 0x40000000
+        share_mode = 0
+        creation_disposition = 3
+        flags_and_attributes = 0x80
+        handle = ctypes.windll.kernel32.CreateFileW(
+            str(workbook_path),
+            desired_access,
+            share_mode,
+            None,
+            creation_disposition,
+            flags_and_attributes,
+            None,
+        )
+        invalid_handle = wintypes.HANDLE(-1).value
+        if handle == invalid_handle:
+            return ctypes.GetLastError() in {5, 32, 33}
+        ctypes.windll.kernel32.CloseHandle(handle)
+        return False
     try:
         with workbook_path.open("rb") as handle:
             handle.read(1)
@@ -198,7 +219,11 @@ def push_dashboard(workbook_path: Path | None, output_path: Path, commit_message
         print("Skipped auto-publish because the dashboard repo has unrelated local changes.")
         return False
 
-    sync_repo()
+    try:
+        sync_repo()
+    except RuntimeError as exc:
+        print(f"Skipped auto-publish because repo sync is temporarily unavailable: {exc}")
+        return False
     try:
         refresh_dashboard_data(workbook=str(workbook_path), output=output_path)
     except RuntimeError as exc:
