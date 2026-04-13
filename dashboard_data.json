@@ -3,14 +3,14 @@
   "subtitle": "Executive view of household cash, commitments, debt, and long-term capital.",
   "reportMonth": "April 2026",
   "sourceName": "Finance.xlsx",
-  "generatedAt": "2026-04-06T19:46:49.767471+02:00",
-  "sourceUpdatedAt": "2026-04-06T19:28:44+02:00",
+  "generatedAt": "2026-04-13T16:29:53.633523+02:00",
+  "sourceUpdatedAt": "2026-04-13T16:26:45.414441+02:00",
   "refreshSeconds": 120,
-  "dataMode": "Budget-backed actuals",
+  "dataMode": "Actuals live",
   "dataQuality": {
-    "label": "Budget-backed actuals",
-    "tone": "warn",
-    "detail": "Real spending has not been captured yet across 26 monthly lines, so the dashboard is using budget values as placeholder actuals. Structural risk signals are still useful, but variance is not yet real."
+    "label": "Actuals live",
+    "tone": "good",
+    "detail": "The workbook now contains real actuals, so the dashboard can flag overspends, variances, and trend changes with confidence."
   },
   "health": {
     "label": "Critical",
@@ -44,16 +44,16 @@
       "outOf": 10
     }
   ],
-  "executiveSummary": "April 2026: household health reads critical. Actuals are still budget-backed. The current operating view implies a monthly deficit of R 9,582.95, with R 57,288.71 in transaction cash and R 15,284.67 in reserves. Vehicle load is 25.9%, tracked net worth is R -20,966.16, and the projected cash-zero date at the current burn rate is 22 Nov 2026.",
+  "executiveSummary": "April 2026: household health reads critical. Real actuals are now live. The current operating view implies a monthly deficit of R 10,436.95, with R 57,288.71 in transaction cash and R 15,284.67 in reserves. Vehicle load is 25.9%, tracked net worth is R -20,966.16, and the projected cash-zero date at the current burn rate is 10 Nov 2026.",
   "focusItems": [
     {
       "title": "Break the monthly deficit",
-      "detail": "Close a gap of at least R 9,582.95 to stop cash from drifting down every month.",
+      "detail": "Close a gap of at least R 10,436.95 to stop cash from drifting down every month.",
       "tone": "bad"
     },
     {
       "title": "Protect the cash-zero date",
-      "detail": "At the current run-rate, liquid cash and reserves would be exhausted around 22 Nov 2026.",
+      "detail": "At the current run-rate, liquid cash and reserves would be exhausted around 10 Nov 2026.",
       "tone": "bad"
     },
     {
@@ -76,13 +76,13 @@
     },
     {
       "label": "Monthly Outflows",
-      "value": "R 71,422.79",
+      "value": "R 72,276.79",
       "detail": "Living costs, debt, and savings transfers",
       "tone": "warn"
     },
     {
       "label": "Net Position",
-      "value": "R -9,582.95",
+      "value": "R -10,436.95",
       "detail": "Income minus all monthly outflows",
       "tone": "bad"
     },
@@ -100,7 +100,7 @@
     },
     {
       "label": "Cash-Zero Date",
-      "value": "22 Nov 2026",
+      "value": "10 Nov 2026",
       "detail": "Date cash would hit zero at the current burn rate",
       "tone": "bad"
     },
@@ -134,11 +134,11 @@
     },
     {
       "label": "Core Costs",
-      "budget": 60430.32,
-      "actual": 60430.32,
-      "variance": 0.0,
-      "tone": "info",
-      "ratio": 1.0
+      "budget": 61330.32,
+      "actual": 61284.32,
+      "variance": -46.0,
+      "tone": "good",
+      "ratio": 0.9992499631503635
     },
     {
       "label": "Debt Service",
@@ -158,11 +158,11 @@
     },
     {
       "label": "Net Position",
-      "budget": -9582.950000000012,
-      "actual": -9582.950000000012,
-      "variance": 0.0,
+      "budget": -10482.950000000012,
+      "actual": -10436.950000000012,
+      "variance": 46.0,
       "tone": "bad",
-      "ratio": 1.0
+      "ratio": 0.9956119222165516
     }
   ],
   "capitalStack": [
@@ -341,7 +341,7 @@
     {
       "item": "Monthly burn gap",
       "owner": "Household",
-      "metric": "R 9,582.95",
+      "metric": "R 10,436.95",
       "reason": "Total monthly outflows are above take-home income.",
       "action": "Cut or reassign at least this amount to reach break-even.",
       "tone": "bad"
@@ -349,7 +349,7 @@
     {
       "item": "Cash-zero date",
       "owner": "Household",
-      "metric": "22 Nov 2026",
+      "metric": "10 Nov 2026",
       "reason": "At the current burn rate, cash and reserves would eventually be exhausted.",
       "action": "Protect reserves and fix the monthly deficit before this date moves closer.",
       "tone": "bad"
@@ -401,7 +401,7 @@
       "owner": "Household",
       "timeframe": "This month",
       "impact": "High",
-      "detail": "Rework the monthly operating plan to remove at least R 9,582.95 of burn. Start with Rent, Groceries, BMW X1 xDrive20d finance.",
+      "detail": "Rework the monthly operating plan to remove at least R 10,436.95 of burn. Start with Rent, Groceries, BMW X1 xDrive20d finance.",
       "tone": "bad"
     },
     {
@@ -427,57 +427,49 @@
       "impact": "Medium",
       "detail": "Use the savings contribution rows in the workbook so the dashboard can start measuring real savings discipline again.",
       "tone": "info"
-    },
-    {
-      "title": "Capture real actuals weekly",
-      "owner": "Household",
-      "timeframe": "Every week",
-      "impact": "High",
-      "detail": "Replace placeholder actuals with real spending so the watchlist can flag true overspends instead of only structural risks.",
-      "tone": "info"
     }
   ],
   "projectionRows": [
     {
       "month": "Apr 2026",
       "opening": 72573.38,
-      "movement": -9582.950000000012,
-      "closing": 62990.42999999999,
+      "movement": -10436.950000000012,
+      "closing": 62136.42999999999,
       "tone": "warn"
     },
     {
       "month": "May 2026",
-      "opening": 62990.42999999999,
-      "movement": -9582.950000000012,
-      "closing": 53407.47999999998,
+      "opening": 62136.42999999999,
+      "movement": -10436.950000000012,
+      "closing": 51699.47999999998,
       "tone": "warn"
     },
     {
       "month": "Jun 2026",
-      "opening": 53407.47999999998,
-      "movement": -9582.950000000012,
-      "closing": 43824.52999999997,
+      "opening": 51699.47999999998,
+      "movement": -10436.950000000012,
+      "closing": 41262.52999999997,
       "tone": "warn"
     },
     {
       "month": "Jul 2026",
-      "opening": 43824.52999999997,
-      "movement": -9582.950000000012,
-      "closing": 34241.57999999996,
+      "opening": 41262.52999999997,
+      "movement": -10436.950000000012,
+      "closing": 30825.579999999958,
       "tone": "warn"
     },
     {
       "month": "Aug 2026",
-      "opening": 34241.57999999996,
-      "movement": -9582.950000000012,
-      "closing": 24658.629999999946,
+      "opening": 30825.579999999958,
+      "movement": -10436.950000000012,
+      "closing": 20388.629999999946,
       "tone": "warn"
     },
     {
       "month": "Sep 2026",
-      "opening": 24658.629999999946,
-      "movement": -9582.950000000012,
-      "closing": 15075.679999999935,
+      "opening": 20388.629999999946,
+      "movement": -10436.950000000012,
+      "closing": 9951.679999999935,
       "tone": "warn"
     }
   ],
@@ -863,12 +855,27 @@
     },
     {
       "section": "Monthly Cost",
+      "group": "Subscriptions",
+      "item": "Internet",
+      "owner": "Household",
+      "budget": 800.0,
+      "actual": 795.0,
+      "variance": -5.0,
+      "currency": "ZAR",
+      "timing": "Auto debit",
+      "auto": "Yes",
+      "tag": "Core",
+      "priority": "Critical",
+      "notes": ""
+    },
+    {
+      "section": "Monthly Cost",
       "group": "Wellness",
       "item": "Virgin Active",
       "owner": "Household",
       "budget": 450.0,
-      "actual": 450.0,
-      "variance": 0.0,
+      "actual": 429.0,
+      "variance": -21.0,
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "Yes",
@@ -967,6 +974,21 @@
       "notes": ""
     },
     {
+      "section": "Monthly Cost",
+      "group": "Funeral Cover",
+      "item": "Capitec Funeral Cover",
+      "owner": "Household",
+      "budget": 100.0,
+      "actual": 80.0,
+      "variance": -20.0,
+      "currency": "ZAR",
+      "timing": "Auto debit",
+      "auto": "Yes",
+      "tag": "Core",
+      "priority": "Medium",
+      "notes": ""
+    },
+    {
       "section": "Savings Contribution",
       "group": "Reserve",
       "item": "Emergency reserve top-up",
@@ -1040,10 +1062,10 @@
   "totals": {
     "budgetIncome": 61839.84,
     "actualIncome": 61839.84,
-    "budgetOutflows": 71422.79000000001,
-    "actualOutflows": 71422.79000000001,
-    "budgetSurplus": -9582.950000000012,
-    "actualSurplus": -9582.950000000012,
+    "budgetOutflows": 72322.79000000001,
+    "actualOutflows": 72276.79000000001,
+    "budgetSurplus": -10482.950000000012,
+    "actualSurplus": -10436.950000000012,
     "liquidCash": 57288.71,
     "reserves": 15284.670000000002,
     "medicalSaver": 15963.12,
@@ -1051,7 +1073,7 @@
     "retirement": 297215.13,
     "workingFloat": 2299.44,
     "debtBalances": 427121.43999999994,
-    "coverageRatio": 0.8658278401053779,
+    "coverageRatio": 0.8555974884883514,
     "vehicleLoad": 15992.470000000001,
     "vehicleLoadRatio": 0.2586111154233258,
     "housingRatio": 0.3557577121803679,
