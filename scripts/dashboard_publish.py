@@ -18,6 +18,7 @@ IGNORED_DIRTY_PATHS = {
     "scripts/.sync_state.json",
     "scripts/local_autopublish.log",
 }
+WORKBOOK_BUSY_MARKERS = ("Permission denied", "mid-write")
 
 
 def parse_args() -> argparse.Namespace:
@@ -158,6 +159,17 @@ def finalize_state(workbook_path: Path, output_path: Path) -> None:
     )
 
 
+def workbook_is_busy(workbook_path: Path) -> bool:
+    try:
+        with workbook_path.open("rb") as handle:
+            handle.read(1)
+        return False
+    except PermissionError:
+        return True
+    except OSError as exc:
+        return exc.winerror in {32, 33} if getattr(exc, "winerror", None) is not None else False
+
+
 def push_dashboard(workbook_path: Path | None, output_path: Path, commit_message: str, force: bool = False) -> bool:
     if workbook_path is None:
         raise FileNotFoundError("No workbook was found for dashboard publishing.")
@@ -166,8 +178,18 @@ def push_dashboard(workbook_path: Path | None, output_path: Path, commit_message
         print("No workbook changes detected.")
         return False
 
+    if workbook_is_busy(workbook_path):
+        print("Workbook is busy; skipping refresh.")
+        return False
+
     if not is_git_repo() or not has_origin():
-        refresh_dashboard_data(workbook=str(workbook_path), output=output_path)
+        try:
+            refresh_dashboard_data(workbook=str(workbook_path), output=output_path)
+        except RuntimeError as exc:
+            if any(marker in str(exc) for marker in WORKBOOK_BUSY_MARKERS):
+                print("Workbook is busy; skipping refresh.")
+                return False
+            raise
         finalize_state(workbook_path, output_path)
         print("Dashboard data refreshed locally.")
         return False
@@ -177,7 +199,13 @@ def push_dashboard(workbook_path: Path | None, output_path: Path, commit_message
         return False
 
     sync_repo()
-    refresh_dashboard_data(workbook=str(workbook_path), output=output_path)
+    try:
+        refresh_dashboard_data(workbook=str(workbook_path), output=output_path)
+    except RuntimeError as exc:
+        if any(marker in str(exc) for marker in WORKBOOK_BUSY_MARKERS):
+            print("Workbook is busy; skipping refresh.")
+            return False
+        raise
 
     if not output_changed(output_path):
         finalize_state(workbook_path, output_path)

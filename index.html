@@ -70,6 +70,14 @@ linear-gradient(135deg,rgba(255,250,244,.98),rgba(244,230,214,.98) 54%,rgba(231,
 .card.bad .card-v{color:var(--coral)}
 .card.info .card-v{color:var(--aqua)}
 .card-d{margin-top:8px;color:#6c5848;font-size:12px}
+.trend-delta{margin-top:10px;font:11px 'IBM Plex Mono',monospace;color:#6c5848}
+.spark-shell{margin-top:12px;height:54px;border-radius:14px;background:rgba(240,228,214,.55);padding:6px}
+.spark{width:100%;height:100%}
+.spark polyline{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.spark.good polyline{stroke:var(--emerald)}
+.spark.warn polyline{stroke:var(--gold)}
+.spark.bad polyline{stroke:var(--coral)}
+.spark.info polyline{stroke:var(--aqua)}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .surface{padding:20px}
 .banner{padding:18px 20px;border-radius:20px;border:1px solid rgba(106,74,53,.12);background:rgba(255,250,244,.78)}
@@ -160,6 +168,11 @@ tr:nth-child(even) td{background:rgba(235,226,211,.22)}
     <div class="cards" id="summaryCards"></div>
   </section>
 
+  <section class="section">
+    <div class="label">Trend View</div>
+    <div class="cards" id="trendCards"></div>
+  </section>
+
   <section class="section split">
     <div class="surface">
       <div class="label">Operating Model</div>
@@ -219,6 +232,13 @@ tr:nth-child(even) td{background:rgba(235,226,211,.22)}
     <div class="label">Open Items</div>
     <div class="note-grid" id="openItems"></div>
   </section>
+
+  <section class="section">
+    <div class="label">Update History</div>
+    <div class="table-shell">
+      <div class="table-wrap"><table id="historyTable"></table></div>
+    </div>
+  </section>
 </div>
 
 <script>
@@ -235,6 +255,20 @@ function fmtPct(v){if(v===null||v===undefined||v==='') return '-'; return `${(Nu
 function fmtDateTime(v){if(!v) return '-'; try{return new Intl.DateTimeFormat('en-ZA',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZone:'Africa/Johannesburg'}).format(new Date(v))}catch{return v}}
 function toneClass(t){return ['good','warn','bad','info'].includes(t) ? t : 'info'}
 function moneyOrDash(v,currency='ZAR'){return v===null||v===undefined||v==='' ? '-' : fmtMoney(v,currency)}
+
+function sparklineSvg(values, tone='info'){
+  const nums = (values || []).map(Number).filter(v => Number.isFinite(v));
+  if(!nums.length) return '';
+  const min = Math.min(...nums);
+  const max = Math.max(...nums);
+  const span = (max - min) || 1;
+  const points = nums.map((value, index) => {
+    const x = nums.length === 1 ? 50 : (index / (nums.length - 1)) * 100;
+    const y = 100 - (((value - min) / span) * 84 + 8);
+    return `${x},${y}`;
+  }).join(' ');
+  return `<div class="spark-shell"><svg viewBox="0 0 100 100" preserveAspectRatio="none" class="spark ${toneClass(tone)}"><polyline points="${points}"></polyline></svg></div>`;
+}
 
 function setStatus(kind,label){
   const badge = document.getElementById('statusBadge');
@@ -289,6 +323,43 @@ function renderDataQuality(){
       <p>${esc(item.detail)}</p>
     </div>
   `;
+}
+
+function renderTrendCards(){
+  const host = document.getElementById('trendCards');
+  const history = dashboard?.history || [];
+  if(!history.length){host.innerHTML='<div class="empty">Trend history will build up as the workbook is refreshed over time.</div>';return;}
+  const metrics = [
+    {label:'Net Position', key:'surplusActual', formatter:v => fmtMoney(v), tone:v => v >= 0 ? 'good' : 'bad'},
+    {label:'Cash Buffer', key:'cashBuffer', formatter:v => fmtMoney(v), tone:() => 'info'},
+    {label:'Net Worth', key:'netWorth', formatter:v => fmtMoney(v), tone:v => v >= 0 ? 'good' : 'bad'},
+    {label:'Savings Rate', key:'savingsRate', formatter:v => fmtPct(v), tone:v => (Number(v) || 0) > 0 ? 'good' : 'bad'}
+  ];
+  host.innerHTML = metrics.map(metric => {
+    const series = history.map(item => Number(item[metric.key] ?? 0));
+    const latest = history[history.length - 1] || {};
+    const previous = history.length > 1 ? history[history.length - 2] : null;
+    const currentValue = latest[metric.key];
+    const delta = previous ? Number(currentValue ?? 0) - Number(previous[metric.key] ?? 0) : null;
+    const tone = metric.tone(currentValue);
+    let deltaText = 'First captured update';
+    if(delta !== null){
+      if(metric.key === 'savingsRate'){
+        deltaText = `Change vs last update: ${(delta * 100).toFixed(1)} pts`;
+      }else{
+        deltaText = `Change vs last update: ${fmtMoney(delta)}`;
+      }
+    }
+    return `
+      <div class="card ${toneClass(tone)}">
+        <div class="card-k">${esc(metric.label)}</div>
+        <div class="card-v">${esc(metric.formatter(currentValue))}</div>
+        <div class="card-d">${esc(`${history.length} captured update${history.length === 1 ? '' : 's'}`)}</div>
+        <div class="trend-delta">${esc(deltaText)}</div>
+        ${sparklineSvg(series, tone)}
+      </div>
+    `;
+  }).join('');
 }
 
 function renderFocusItems(){
@@ -388,6 +459,7 @@ function renderAll(){
   renderFocusItems();
   renderScore();
   renderSummaryCards();
+  renderTrendCards();
 
   renderBarList('performanceRows', dashboard?.performanceRows || [], {
     value: item => item.actual,
@@ -472,6 +544,16 @@ function renderAll(){
     {label:'Actual', render:r => fmtMoney(r.actual, r.currency)},
     {label:'Timing', key:'timing'}
   ], dashboard?.operatingLines || []);
+
+  renderTable('historyTable', [
+    {label:'Captured', render:r => fmtDateTime(r.generatedAt)},
+    {label:'Workbook Saved', render:r => fmtDateTime(r.sourceUpdatedAt)},
+    {label:'Income', render:r => fmtMoney(r.incomeActual)},
+    {label:'Outflows', render:r => fmtMoney(r.outflowsActual)},
+    {label:'Net Position', render:r => fmtMoney(r.surplusActual)},
+    {label:'Cash Buffer', render:r => fmtMoney(r.cashBuffer)},
+    {label:'Net Worth', render:r => fmtMoney(r.netWorth)}
+  ], [...(dashboard?.history || [])].reverse());
 
   renderOpenItems();
 }

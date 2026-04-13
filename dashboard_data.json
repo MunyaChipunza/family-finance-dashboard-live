@@ -3,9 +3,9 @@
   "subtitle": "Executive view of household cash, commitments, debt, and long-term capital.",
   "reportMonth": "April 2026",
   "sourceName": "Finance.xlsx",
-  "generatedAt": "2026-04-13T16:29:53.633523+02:00",
+  "generatedAt": "2026-04-13T16:52:44.318961+02:00",
   "sourceUpdatedAt": "2026-04-13T16:26:45.414441+02:00",
-  "refreshSeconds": 120,
+  "refreshSeconds": 300,
   "dataMode": "Actuals live",
   "dataQuality": {
     "label": "Actuals live",
@@ -1057,6 +1057,22 @@
       "question": "Exact debit dates",
       "assumption": "Major debits are automated",
       "update": "Add exact calendar days later if needed for cash timing."
+    }
+  ],
+  "history": [
+    {
+      "reportMonth": "April 2026",
+      "generatedAt": "2026-04-13T16:52:44.318961+02:00",
+      "sourceUpdatedAt": "2026-04-13T16:26:45.414441+02:00",
+      "incomeActual": 61839.84,
+      "outflowsActual": 72276.79000000001,
+      "surplusActual": -10436.950000000012,
+      "cashBuffer": 72573.38,
+      "netWorth": -20966.159999999916,
+      "vehicleLoad": 15992.470000000001,
+      "savingsRate": 0.0,
+      "runwayMonths": 1.0041035303311063,
+      "debtServiceRatio": 0.1777570899277877
     }
   ],
   "totals": {

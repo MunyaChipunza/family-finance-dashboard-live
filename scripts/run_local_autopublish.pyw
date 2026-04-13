@@ -42,7 +42,12 @@ def resolve_workbook_path(candidate: str | None) -> Path:
 def main() -> int:
     args = parse_args()
     workbook_path = resolve_workbook_path(args.workbook)
-    push_dashboard(workbook_path=workbook_path, output_path=SCRIPT_DIR.parent / "dashboard_data.json", commit_message="Refresh family finance dashboard data")
+    changed = push_dashboard(
+        workbook_path=workbook_path,
+        output_path=SCRIPT_DIR.parent / "dashboard_data.json",
+        commit_message="Refresh family finance dashboard data",
+    )
+    log("Published finance dashboard update." if changed else "Checked finance workbook; no publish needed.")
     return 0
 
 

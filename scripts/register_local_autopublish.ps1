@@ -20,7 +20,7 @@ if ($WorkbookPath) {
 
 $taskArgs = '"' + $runnerScriptPath + '" --workbook "' + $candidateWorkbook + '"'
 $action = New-ScheduledTaskAction -Execute $runnerExe -Argument $taskArgs -WorkingDirectory $PSScriptRoot
-$trigger = New-ScheduledTaskTrigger -Once -At $triggerTime -RepetitionInterval (New-TimeSpan -Minutes 2) -RepetitionDuration (New-TimeSpan -Days 3650)
+$trigger = New-ScheduledTaskTrigger -Once -At $triggerTime -RepetitionInterval (New-TimeSpan -Minutes 5) -RepetitionDuration (New-TimeSpan -Days 3650)
 $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew
 
 Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger -Settings $settings -Description "Checks the family finance workbook and publishes the live dashboard when the data changes." -Force | Out-Null
@@ -28,4 +28,4 @@ Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger -Se
 Write-Host "Scheduled task created:"
 Write-Host "  Name: $TaskName"
 Write-Host "  Workbook: $candidateWorkbook"
-Write-Host "  Checks every 2 minutes on this PC."
+Write-Host "  Checks every 5 minutes on this PC."

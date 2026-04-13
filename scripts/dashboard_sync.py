@@ -15,6 +15,7 @@ DEFAULT_WORKBOOK = (BUNDLE_DIR.parent / "Finance.xlsx").resolve()
 DEFAULT_OUTPUT = (BUNDLE_DIR / "dashboard_data.json").resolve()
 DEFAULT_LOCAL_SNAPSHOT = (BUNDLE_DIR.parent / "Finance_Executive_Dashboard.html").resolve()
 DEFAULT_STATE = (SCRIPT_DIR / ".sync_state.json").resolve()
+HISTORY_LIMIT = 180
 TIMEZONE = dt.timezone(dt.timedelta(hours=2), name="SAST")
 HEADER_SENTINEL = ("Status", "Section", "Group", "Item")
 MONTHLY_SECTIONS = ("Income", "Monthly Cost", "Debt Payment", "Savings Contribution")
@@ -680,6 +681,58 @@ def build_open_items(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return result
 
 
+def load_existing_history(output_path: Path) -> list[dict[str, Any]]:
+    if not output_path.exists():
+        return []
+    try:
+        payload = json.loads(output_path.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+    history = payload.get("history", [])
+    if not isinstance(history, list):
+        return []
+    return [item for item in history if isinstance(item, dict)]
+
+
+def history_snapshot(
+    report_month: str,
+    generated_at: str | None,
+    source_updated_at: str | None,
+    income_actual: float,
+    outflows_actual: float,
+    surplus_actual: float,
+    cash_buffer: float,
+    net_worth: float,
+    vehicle_load: float,
+    savings_rate: float | None,
+    runway_months: float | None,
+    debt_service_ratio: float | None,
+) -> dict[str, Any]:
+    return {
+        "reportMonth": report_month,
+        "generatedAt": generated_at,
+        "sourceUpdatedAt": source_updated_at,
+        "incomeActual": income_actual,
+        "outflowsActual": outflows_actual,
+        "surplusActual": surplus_actual,
+        "cashBuffer": cash_buffer,
+        "netWorth": net_worth,
+        "vehicleLoad": vehicle_load,
+        "savingsRate": savings_rate,
+        "runwayMonths": runway_months,
+        "debtServiceRatio": debt_service_ratio,
+    }
+
+
+def append_history(history: list[dict[str, Any]], snapshot: dict[str, Any], limit: int = HISTORY_LIMIT) -> list[dict[str, Any]]:
+    cleaned = [item for item in history if item.get("sourceUpdatedAt")]
+    if cleaned and cleaned[-1].get("sourceUpdatedAt") == snapshot.get("sourceUpdatedAt"):
+        cleaned[-1] = snapshot
+    else:
+        cleaned.append(snapshot)
+    return cleaned[-limit:]
+
+
 def render_local_snapshot(payload: dict[str, Any]) -> str:
     data_blob = json.dumps(payload)
     return f"""<!DOCTYPE html>
@@ -797,6 +850,9 @@ def refresh_dashboard_data(workbook: str | None = None, output: str | Path = DEF
     header_row = find_header_row(ws)
     raw_rows = [row for row in workbook_rows(ws, header_row) if include_row(row)]
     rows, using_budget_as_actuals = normalize_actuals(raw_rows)
+    output_path = Path(output).expanduser()
+    if not output_path.is_absolute():
+        output_path = (BUNDLE_DIR / output_path).resolve()
 
     income_budget = sum_monthly(rows, "Income", "Budget Monthly")
     income_actual = sum_monthly(rows, "Income", "Actual This Month")
@@ -900,14 +956,34 @@ def refresh_dashboard_data(workbook: str | None = None, output: str | Path = DEF
         {"label": "Net Worth", "value": fmt_money(net_worth), "detail": "Tracked assets less tracked liabilities", "tone": "good" if net_worth >= 0 else "bad"},
     ]
 
+    generated_at = iso_datetime(dt.datetime.now(TIMEZONE))
+    source_updated_at = iso_datetime(dt.datetime.fromtimestamp(workbook_path.stat().st_mtime, tz=TIMEZONE))
+    history = append_history(
+        load_existing_history(output_path),
+        history_snapshot(
+            report_month=report_month,
+            generated_at=generated_at,
+            source_updated_at=source_updated_at,
+            income_actual=income_actual,
+            outflows_actual=outflows_actual,
+            surplus_actual=surplus_actual,
+            cash_buffer=liquid_cash + reserves,
+            net_worth=net_worth,
+            vehicle_load=vehicle_load,
+            savings_rate=savings_rate,
+            runway_months=runway_months,
+            debt_service_ratio=debt_service_ratio,
+        ),
+    )
+
     payload = {
         "title": "Family Finance Command Deck",
         "subtitle": "Executive view of household cash, commitments, debt, and long-term capital.",
         "reportMonth": report_month,
         "sourceName": workbook_path.name,
-        "generatedAt": iso_datetime(dt.datetime.now(TIMEZONE)),
-        "sourceUpdatedAt": iso_datetime(dt.datetime.fromtimestamp(workbook_path.stat().st_mtime, tz=TIMEZONE)),
-        "refreshSeconds": 120,
+        "generatedAt": generated_at,
+        "sourceUpdatedAt": source_updated_at,
+        "refreshSeconds": 300,
         "dataMode": quality["label"],
         "dataQuality": quality,
         "health": signal,
@@ -962,6 +1038,7 @@ def refresh_dashboard_data(workbook: str | None = None, output: str | Path = DEF
         "operatingLines": operating_lines,
         "incomeRows": monthly_rows(rows, ("Income",)),
         "openItems": build_open_items(rows),
+        "history": history,
         "totals": {
             "budgetIncome": income_budget,
             "actualIncome": income_actual,
@@ -984,9 +1061,6 @@ def refresh_dashboard_data(workbook: str | None = None, output: str | Path = DEF
         },
     }
 
-    output_path = Path(output).expanduser()
-    if not output_path.is_absolute():
-        output_path = (BUNDLE_DIR / output_path).resolve()
     output_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     return output_path
 
