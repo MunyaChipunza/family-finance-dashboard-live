@@ -3,8 +3,8 @@
   "subtitle": "Executive view of household cash, commitments, debt, and long-term capital.",
   "reportMonth": "April 2026",
   "sourceName": "Finance.xlsx",
-  "generatedAt": "2026-04-13T16:56:48.978421+02:00",
-  "sourceUpdatedAt": "2026-04-13T16:26:45.414441+02:00",
+  "generatedAt": "2026-04-15T15:37:38.501114+02:00",
+  "sourceUpdatedAt": "2026-04-15T15:34:36+02:00",
   "refreshSeconds": 300,
   "dataMode": "Actuals live",
   "dataQuality": {
@@ -44,7 +44,7 @@
       "outOf": 10
     }
   ],
-  "executiveSummary": "April 2026: household health reads critical. Real actuals are now live. The current operating view implies a monthly deficit of R 10,436.95, with R 57,288.71 in transaction cash and R 15,284.67 in reserves. Vehicle load is 25.9%, tracked net worth is R -20,966.16, and the projected cash-zero date at the current burn rate is 10 Nov 2026.",
+  "executiveSummary": "April 2026: household health reads critical. Real actuals are now live. The current operating view implies a monthly deficit of R 10,436.95, with R 57,288.71 in transaction cash and R 15,284.67 in reserves. Vehicle load is 25.9%, tracked net worth is R -20,966.16, and the projected cash-zero date at the current burn rate is 12 Nov 2026.",
   "focusItems": [
     {
       "title": "Break the monthly deficit",
@@ -53,7 +53,7 @@
     },
     {
       "title": "Protect the cash-zero date",
-      "detail": "At the current run-rate, liquid cash and reserves would be exhausted around 10 Nov 2026.",
+      "detail": "At the current run-rate, liquid cash and reserves would be exhausted around 12 Nov 2026.",
       "tone": "bad"
     },
     {
@@ -100,7 +100,7 @@
     },
     {
       "label": "Cash-Zero Date",
-      "value": "10 Nov 2026",
+      "value": "12 Nov 2026",
       "detail": "Date cash would hit zero at the current burn rate",
       "tone": "bad"
     },
@@ -126,11 +126,11 @@
   "performanceRows": [
     {
       "label": "Income",
-      "budget": 61839.84,
+      "budget": 65463.259999999995,
       "actual": 61839.84,
-      "variance": 0.0,
-      "tone": "good",
-      "ratio": 1.0
+      "variance": -3623.4199999999983,
+      "tone": "warn",
+      "ratio": 0.9446495637400276
     },
     {
       "label": "Core Costs",
@@ -158,11 +158,11 @@
     },
     {
       "label": "Net Position",
-      "budget": -10482.950000000012,
+      "budget": -6859.530000000013,
       "actual": -10436.950000000012,
-      "variance": 46.0,
+      "variance": -3577.4199999999983,
       "tone": "bad",
-      "ratio": 0.9956119222165516
+      "ratio": 1.521525527259155
     }
   ],
   "capitalStack": [
@@ -349,7 +349,7 @@
     {
       "item": "Cash-zero date",
       "owner": "Household",
-      "metric": "10 Nov 2026",
+      "metric": "12 Nov 2026",
       "reason": "At the current burn rate, cash and reserves would eventually be exhausted.",
       "action": "Protect reserves and fix the monthly deficit before this date moves closer.",
       "tone": "bad"
@@ -1040,9 +1040,9 @@
       "group": "Salary",
       "item": "Munya take-home pay",
       "owner": "Munya",
-      "budget": 38412.22,
+      "budget": 42035.64,
       "actual": 38412.22,
-      "variance": 0.0,
+      "variance": -3623.4199999999983,
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "Yes",
@@ -1073,14 +1073,28 @@
       "savingsRate": 0.0,
       "runwayMonths": 1.0041035303311063,
       "debtServiceRatio": 0.1777570899277877
+    },
+    {
+      "reportMonth": "April 2026",
+      "generatedAt": "2026-04-15T15:37:38.501114+02:00",
+      "sourceUpdatedAt": "2026-04-15T15:34:36+02:00",
+      "incomeActual": 61839.84,
+      "outflowsActual": 72276.79000000001,
+      "surplusActual": -10436.950000000012,
+      "cashBuffer": 72573.38,
+      "netWorth": -20966.159999999916,
+      "vehicleLoad": 15992.470000000001,
+      "savingsRate": 0.0,
+      "runwayMonths": 1.0041035303311063,
+      "debtServiceRatio": 0.1777570899277877
     }
   ],
   "totals": {
-    "budgetIncome": 61839.84,
+    "budgetIncome": 65463.259999999995,
     "actualIncome": 61839.84,
     "budgetOutflows": 72322.79000000001,
     "actualOutflows": 72276.79000000001,
-    "budgetSurplus": -10482.950000000012,
+    "budgetSurplus": -6859.530000000013,
     "actualSurplus": -10436.950000000012,
     "liquidCash": 57288.71,
     "reserves": 15284.670000000002,
