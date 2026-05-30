@@ -1,35 +1,42 @@
 from __future__ import annotations
 
 import argparse
-import ctypes
+import datetime as dt
 import json
 import os
 import shutil
 import subprocess
 from pathlib import Path
-from ctypes import wintypes
-
-from dashboard_sync import DEFAULT_OUTPUT, DEFAULT_STATE, DEFAULT_WORKBOOK, refresh_dashboard_data
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 BUNDLE_DIR = SCRIPT_DIR.parent
+DEFAULT_DATA = (BUNDLE_DIR / "dashboard_data.json").resolve()
+DEFAULT_STATE = SCRIPT_DIR / ".sync_state.json"
+LOG_PATH = SCRIPT_DIR / "local_autopublish.log"
 CREATE_NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
 IGNORED_DIRTY_PATHS = {
     "dashboard_data.json",
     "scripts/.sync_state.json",
     "scripts/local_autopublish.log",
 }
-WORKBOOK_BUSY_MARKERS = ("Permission denied", "mid-write")
+DEFAULT_COMMIT_PREFIX = "Update finance dashboard data"
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Refresh the finance dashboard JSON and push when workbook data changed.")
-    parser.add_argument("--workbook", help="Optional local workbook path.")
-    parser.add_argument("--output", default=str(DEFAULT_OUTPUT), help="Output path for dashboard JSON.")
-    parser.add_argument("--commit-message", default="Refresh finance dashboard data", help="Git commit message.")
-    parser.add_argument("--force", action="store_true", help="Refresh even if the workbook fingerprint has not changed.")
+    parser = argparse.ArgumentParser(description="Publish the finance dashboard when dashboard_data.json changes.")
+    parser.add_argument("--data", default=str(DEFAULT_DATA), help="Path to dashboard_data.json.")
+    parser.add_argument("--output", help=argparse.SUPPRESS)
+    parser.add_argument("--workbook", help=argparse.SUPPRESS)
+    parser.add_argument("--commit-message", help="Optional explicit Git commit message.")
+    parser.add_argument("--force", action="store_true", help="Publish even if the JSON fingerprint has not changed.")
     return parser.parse_args()
+
+
+def log(message: str) -> None:
+    timestamp = dt.datetime.now().astimezone().isoformat(timespec="seconds")
+    with LOG_PATH.open("a", encoding="utf-8") as handle:
+        handle.write(f"{timestamp} {message.rstrip()}\n")
 
 
 def git_executable() -> str:
@@ -58,8 +65,20 @@ def run_git(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
     )
 
 
-def find_default_workbook() -> Path | None:
-    return DEFAULT_WORKBOOK if DEFAULT_WORKBOOK.exists() else None
+def default_data_path() -> Path:
+    return DEFAULT_DATA
+
+
+def find_default_workbook() -> None:
+    """Retained for old runner imports; Excel is no longer a publish source."""
+    return None
+
+
+def resolve_data_path(candidate: str | Path | None) -> Path:
+    path = Path(candidate).expanduser() if candidate else DEFAULT_DATA
+    if not path.is_absolute():
+        path = (BUNDLE_DIR / path).resolve()
+    return path.resolve()
 
 
 def is_git_repo() -> bool:
@@ -90,10 +109,10 @@ def sync_repo() -> None:
         raise RuntimeError(rebase.stderr.strip() or rebase.stdout.strip() or "Could not rebase onto origin/main.")
 
 
-def workbook_fingerprint(workbook_path: Path) -> dict[str, int | str]:
-    stat = workbook_path.stat()
+def data_fingerprint(data_path: Path) -> dict[str, int | str]:
+    stat = data_path.stat()
     return {
-        "path": str(workbook_path),
+        "path": str(data_path),
         "size": stat.st_size,
         "mtime_ns": stat.st_mtime_ns,
     }
@@ -112,14 +131,37 @@ def save_state(payload: dict[str, object]) -> None:
     DEFAULT_STATE.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
-def needs_refresh(workbook_path: Path, output_path: Path, force: bool = False) -> bool:
-    if force or not output_path.exists():
+def load_dashboard_data(data_path: Path) -> dict[str, object]:
+    try:
+        with data_path.open("r", encoding="utf-8") as handle:
+            payload = json.load(handle)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"dashboard_data.json is not valid JSON yet: {exc}") from exc
+    except OSError as exc:
+        raise RuntimeError(f"dashboard_data.json could not be read: {exc}") from exc
+
+    if not isinstance(payload, dict):
+        raise RuntimeError("dashboard_data.json must contain a JSON object.")
+    return payload
+
+
+def report_month(payload: dict[str, object]) -> str:
+    value = payload.get("reportMonth")
+    return str(value).strip() if value else "unknown month"
+
+
+def commit_message_for(payload: dict[str, object], explicit: str | None = None) -> str:
+    if explicit:
+        return explicit
+    return f"{DEFAULT_COMMIT_PREFIX} — {report_month(payload)}"
+
+
+def needs_publish(data_path: Path, force: bool = False) -> bool:
+    if force:
         return True
-    current = workbook_fingerprint(workbook_path)
+    current = data_fingerprint(data_path)
     state = load_state()
-    if state.get("workbook") != current:
-        return True
-    return output_path.stat().st_mtime_ns < workbook_path.stat().st_mtime_ns
+    return state.get("data") != current
 
 
 def dirty_paths() -> list[str]:
@@ -128,10 +170,11 @@ def dirty_paths() -> list[str]:
     for line in result.stdout.splitlines():
         if not line.strip():
             continue
-        path = line[3:].strip()
-        path = path.replace("\\", "/")
-        if path.startswith("\"") and path.endswith("\""):
+        path = line[3:].strip().replace("\\", "/")
+        if path.startswith('"') and path.endswith('"'):
             path = path[1:-1]
+        if " -> " in path:
+            path = path.split(" -> ", 1)[1]
         paths.append(path)
     return paths
 
@@ -143,117 +186,112 @@ def has_unrelated_changes() -> bool:
     return False
 
 
-def output_changed(output_path: Path) -> bool:
-    rel = output_path.relative_to(BUNDLE_DIR).as_posix()
+def data_changed_in_git(data_path: Path) -> bool:
+    rel = data_path.relative_to(BUNDLE_DIR).as_posix()
     status = run_git("status", "--short", "--", rel, check=False)
     return bool(status.stdout.strip())
 
 
-def finalize_state(workbook_path: Path, output_path: Path) -> None:
+def finalize_state(data_path: Path) -> None:
     save_state(
         {
-            "workbook": workbook_fingerprint(workbook_path),
-            "output": {
-                "path": str(output_path),
-                "mtime_ns": output_path.stat().st_mtime_ns if output_path.exists() else None,
-            },
+            "data": data_fingerprint(data_path),
+            "publishedAt": dt.datetime.now().astimezone().isoformat(timespec="seconds"),
         }
     )
 
 
-def workbook_is_busy(workbook_path: Path) -> bool:
-    if os.name == "nt":
-        desired_access = 0x80000000 | 0x40000000
-        share_mode = 0
-        creation_disposition = 3
-        flags_and_attributes = 0x80
-        handle = ctypes.windll.kernel32.CreateFileW(
-            str(workbook_path),
-            desired_access,
-            share_mode,
-            None,
-            creation_disposition,
-            flags_and_attributes,
-            None,
-        )
-        invalid_handle = wintypes.HANDLE(-1).value
-        if handle == invalid_handle:
-            return ctypes.GetLastError() in {5, 32, 33}
-        ctypes.windll.kernel32.CloseHandle(handle)
-        return False
+def push_dashboard(
+    data_path: Path | str | None = None,
+    commit_message: str | None = None,
+    force: bool = False,
+    **legacy_kwargs: object,
+) -> bool:
+    # Compatibility for the retired Excel runner signature:
+    # push_dashboard(workbook_path=..., output_path=..., commit_message=...)
+    if data_path is None:
+        data_path = legacy_kwargs.get("output_path") or DEFAULT_DATA
+    data_path = resolve_data_path(data_path)
+
+    if not data_path.exists():
+        raise FileNotFoundError(f"dashboard_data.json was not found: {data_path}")
+
     try:
-        with workbook_path.open("rb") as handle:
-            handle.read(1)
-        return False
-    except PermissionError:
-        return True
-    except OSError as exc:
-        return exc.winerror in {32, 33} if getattr(exc, "winerror", None) is not None else False
-
-
-def push_dashboard(workbook_path: Path | None, output_path: Path, commit_message: str, force: bool = False) -> bool:
-    if workbook_path is None:
-        raise FileNotFoundError("No workbook was found for dashboard publishing.")
-
-    if not needs_refresh(workbook_path, output_path, force=force):
-        print("No workbook changes detected.")
+        payload = load_dashboard_data(data_path)
+    except RuntimeError as exc:
+        message = f"Skipped auto-publish because {exc}"
+        print(message)
+        log(message)
         return False
 
-    if workbook_is_busy(workbook_path):
-        print("Workbook is busy; skipping refresh.")
+    if not needs_publish(data_path, force=force):
+        message = "No dashboard_data.json changes detected."
+        print(message)
+        log(message)
         return False
+
+    message = commit_message_for(payload, explicit=commit_message)
 
     if not is_git_repo() or not has_origin():
-        try:
-            refresh_dashboard_data(workbook=str(workbook_path), output=output_path)
-        except RuntimeError as exc:
-            if any(marker in str(exc) for marker in WORKBOOK_BUSY_MARKERS):
-                print("Workbook is busy; skipping refresh.")
-                return False
-            raise
-        finalize_state(workbook_path, output_path)
-        print("Dashboard data refreshed locally.")
+        finalize_state(data_path)
+        notice = "Detected dashboard_data.json changes, but no Git origin is configured; state recorded locally."
+        print(notice)
+        log(notice)
         return False
 
     if has_unrelated_changes():
-        print("Skipped auto-publish because the dashboard repo has unrelated local changes.")
+        notice = "Skipped auto-publish because the dashboard repo has unrelated local changes."
+        print(notice)
+        log(notice)
+        return False
+
+    if not data_changed_in_git(data_path):
+        finalize_state(data_path)
+        notice = "dashboard_data.json fingerprint changed, but Git content is already up to date."
+        print(notice)
+        log(notice)
+        return False
+
+    ensure_identity()
+    rel = data_path.relative_to(BUNDLE_DIR).as_posix()
+    run_git("add", "--", rel)
+    commit = run_git("commit", "-m", message, check=False)
+    if commit.returncode != 0:
+        notice = commit.stderr.strip() or commit.stdout.strip() or "Git commit failed."
+        print(notice)
+        log(f"Skipped auto-publish because {notice}")
         return False
 
     try:
         sync_repo()
     except RuntimeError as exc:
-        print(f"Skipped auto-publish because repo sync is temporarily unavailable: {exc}")
-        return False
-    try:
-        refresh_dashboard_data(workbook=str(workbook_path), output=output_path)
-    except RuntimeError as exc:
-        if any(marker in str(exc) for marker in WORKBOOK_BUSY_MARKERS):
-            print("Workbook is busy; skipping refresh.")
-            return False
-        raise
-
-    if not output_changed(output_path):
-        finalize_state(workbook_path, output_path)
-        print("Dashboard data is already up to date.")
+        notice = f"Committed dashboard_data.json locally, but skipped push because repo sync failed: {exc}"
+        print(notice)
+        log(notice)
         return False
 
-    ensure_identity()
-    rel = output_path.relative_to(BUNDLE_DIR).as_posix()
-    run_git("add", "--", rel)
-    run_git("commit", "-m", commit_message)
-    run_git("push", "-u", "origin", "main")
-    finalize_state(workbook_path, output_path)
-    print("Dashboard data refreshed and pushed.")
+    push = run_git("push", "-u", "origin", "main", check=False)
+    if push.returncode != 0:
+        notice = push.stderr.strip() or push.stdout.strip() or "Git push failed."
+        print(notice)
+        log(f"Committed dashboard_data.json locally, but push failed: {notice}")
+        return False
+
+    finalize_state(data_path)
+    notice = f"Published dashboard_data.json with commit: {message}"
+    print(notice)
+    log(notice)
     return True
 
 
 def main() -> None:
     args = parse_args()
-    workbook_path = Path(args.workbook).expanduser().resolve() if args.workbook else find_default_workbook()
-    output_path = Path(args.output).expanduser()
-    if not output_path.is_absolute():
-        output_path = (BUNDLE_DIR / output_path).resolve()
-    push_dashboard(workbook_path=workbook_path, output_path=output_path, commit_message=args.commit_message, force=args.force)
+    data_arg = args.data
+    if args.output:
+        data_arg = args.output
+    if args.workbook:
+        log(f"Ignoring retired workbook argument: {args.workbook}")
+    push_dashboard(data_path=data_arg, commit_message=args.commit_message, force=args.force)
 
 
 if __name__ == "__main__":

@@ -1,28 +1,39 @@
-﻿# Family Finance Live Dashboard
+# Family Finance Live Dashboard
 
-Live dashboard bundle for the family finance workbook.
+Static dashboard bundle for the family finance command deck.
 
 ## What is here
 
-- `index.html` renders the finance dashboard.
-- `dashboard_data.json` is the published data payload that the page reads.
-- `scripts/refresh_dashboard_data.py` converts the workbook into `dashboard_data.json`.
-- `scripts/publish_dashboard_data.py` refreshes the JSON and pushes it when the folder is inside a Git repo with an `origin`.
-- `scripts/register_local_autopublish.ps1` creates a Windows scheduled task that republishes the dashboard every minute from this PC.
+- `index.html` renders the live dashboard.
+- `dashboard_data.json` is the single source of truth for the dashboard.
+- `scripts/dashboard_publish.py` watches `dashboard_data.json`, commits changed data, and pushes to `origin main`.
+- `scripts/run_local_autopublish.pyw` runs the publisher silently for the Windows scheduled task.
+- `scripts/register_local_autopublish.ps1` creates or updates the Windows scheduled task.
 
-## Source workbook
+## Publishing flow
 
-The dashboard reads from:
+1. Generate a ready `dashboard_data.json`.
+2. Drop it into this folder, replacing the previous file.
+3. The scheduled task checks every 5 minutes.
+4. If the JSON file changed, the publisher commits it with the report month and pushes to GitHub.
+5. Netlify deploys from `main`.
 
-- `../Finance_Input.xlsx`
+The retired Excel workbook is no longer used by the live publish workflow.
 
-## Typical local flow
+## Manual publish
 
-1. Update `Finance_Input.xlsx`
-2. Run `python scripts/refresh_dashboard_data.py`
-3. Open `index.html` locally to preview
-4. Run `python scripts/publish_dashboard_data.py` to refresh the JSON and push it
+Double-click:
+
+```text
+scripts/run_local_autopublish.pyw
+```
+
+Or run:
+
+```text
+python scripts/dashboard_publish.py
+```
 
 ## Privacy note
 
-This dashboard contains personal finance data. Treat the repo and any published URL as sensitive. If you decide to publish it publicly, first confirm exactly what data should remain visible.
+This dashboard contains personal finance data. Treat the repo and published URL as sensitive.

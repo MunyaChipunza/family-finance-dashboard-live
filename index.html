@@ -1,584 +1,1562 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Family Finance Command Deck</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#f6efe7;--bg2:#ede0d1;--panel:#fff8f0;--line:#d9c3ad;--ink:#2f2219;--muted:#7e6957;--emerald:#6a4a35;--moss:#86624a;--gold:#b08662;--coral:#8f5f40;--aqua:#c09b79;--cream:#fffaf4;--shadow:0 24px 60px rgba(72,49,33,.14)}
-*{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;background:
-radial-gradient(circle at top left,rgba(176,134,98,.18),transparent 28%),
-radial-gradient(circle at top right,rgba(106,74,53,.16),transparent 22%),
-linear-gradient(180deg,#f9f1e8,#ecdfcf 58%,#f5e9db);color:var(--ink);font:14px/1.5 'Space Grotesk',sans-serif}
-.shell{max-width:1520px;margin:0 auto;padding:28px 20px 40px}
-.panel,.card,.surface,.table-shell,.note{background:linear-gradient(180deg,rgba(255,252,246,.98),rgba(255,247,238,.98));border:1px solid rgba(106,74,53,.16);border-radius:24px;box-shadow:var(--shadow)}
-.hero{padding:28px;display:grid;grid-template-columns:1.15fr .85fr;gap:22px;position:relative;overflow:hidden;background:
-linear-gradient(135deg,rgba(255,250,244,.98),rgba(244,230,214,.98) 54%,rgba(231,214,195,.98))}
-.hero:after{content:"";position:absolute;right:-64px;top:-82px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(106,74,53,.14),transparent 70%)}
-.eyebrow{font:11px 'IBM Plex Mono',monospace;letter-spacing:1.8px;text-transform:uppercase;color:var(--moss);margin-bottom:10px}
-.title{font:56px/1 'Fraunces',serif;letter-spacing:-.04em}
-.title span{color:var(--coral)}
-.subtitle{margin-top:10px;max-width:760px;color:#5a4637;font-size:16px}
-.exec{margin-top:18px;font-size:15px;color:#4d392b;max-width:800px}
-.focus-grid{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-.focus{padding:16px;border-radius:18px;border:1px solid rgba(106,74,53,.10);background:rgba(255,252,247,.7)}
-.focus.good{background:rgba(166,128,96,.14)}
-.focus.warn{background:rgba(196,163,131,.16)}
-.focus.bad{background:rgba(143,95,64,.12)}
-.focus h4{font-size:16px}
-.focus p{margin-top:8px;color:#6a5849}
-.hero-side{display:flex;flex-direction:column;gap:16px;align-items:stretch;position:relative;z-index:1}
-.top-meta{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap}
-.status{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(106,74,53,.20);background:rgba(106,74,53,.10);font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:1px;color:var(--emerald)}
-.status.warn{border-color:rgba(176,134,98,.30);background:rgba(176,134,98,.14);color:#805b3b}
-.status.bad{border-color:rgba(182,94,67,.28);background:rgba(182,94,67,.12);color:var(--coral)}
-.dot{width:9px;height:9px;border-radius:50%;background:currentColor;animation:pulse 1.4s ease-in-out infinite}
-@keyframes pulse{0%{transform:scale(1);opacity:1}50%{transform:scale(1.22);opacity:.45}100%{transform:scale(1);opacity:1}}
-.meta{font:11px/1.8 'IBM Plex Mono',monospace;color:#725e4d;text-align:right}
-.meta em{font-style:normal;color:var(--emerald)}
-.actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}
-.btn{padding:10px 14px;border-radius:12px;border:1px solid rgba(106,74,53,.18);background:linear-gradient(135deg,rgba(106,74,53,.10),rgba(176,134,98,.14));color:var(--ink);font:600 12px 'IBM Plex Mono',monospace;cursor:pointer}
-.btn:hover{transform:translateY(-1px)}
-.btn[disabled]{opacity:.65;cursor:wait}
-.count{font:11px 'IBM Plex Mono',monospace;color:#69756f}
-.score-shell{display:grid;grid-template-columns:210px 1fr;gap:18px;align-items:center;padding:18px;border-radius:22px;background:rgba(255,250,244,.72);border:1px solid rgba(106,74,53,.10)}
-.score-ring{width:180px;height:180px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--emerald) 0deg,rgba(106,74,53,.12) 0deg);padding:16px;margin:0 auto}
-.score-core{width:100%;height:100%;border-radius:50%;background:linear-gradient(180deg,#fffdf8,#f3e7d9);display:grid;place-items:center;text-align:center;border:1px solid rgba(106,74,53,.10)}
-.score-number{font:700 44px/1 'Fraunces',serif}
-.score-label{margin-top:6px;font:12px 'IBM Plex Mono',monospace;color:#705846;text-transform:uppercase}
-.pillars{display:grid;gap:12px}
-.pillar-name{font:11px 'IBM Plex Mono',monospace;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
-.pillar-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.pillar-bar{margin-top:6px;height:10px;border-radius:999px;background:#e9dac8;overflow:hidden}
-.pillar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--emerald),var(--aqua))}
-.section{margin-top:22px}
-.label{font:11px 'IBM Plex Mono',monospace;letter-spacing:1.4px;text-transform:uppercase;color:var(--emerald);margin-bottom:12px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
-.card{padding:16px;border-top:4px solid rgba(106,74,53,.18)}
-.card.good{border-top-color:var(--emerald)}
-.card.warn{border-top-color:var(--gold)}
-.card.bad{border-top-color:var(--coral)}
-.card.info{border-top-color:var(--aqua)}
-.card-k{font:10px 'IBM Plex Mono',monospace;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
-.card-v{margin-top:8px;font-size:30px;font-weight:700;line-height:1}
-.card.good .card-v{color:var(--emerald)}
-.card.warn .card-v{color:#8f6a1b}
-.card.bad .card-v{color:var(--coral)}
-.card.info .card-v{color:var(--aqua)}
-.card-d{margin-top:8px;color:#6c5848;font-size:12px}
-.trend-delta{margin-top:10px;font:11px 'IBM Plex Mono',monospace;color:#6c5848}
-.spark-shell{margin-top:12px;height:54px;border-radius:14px;background:rgba(240,228,214,.55);padding:6px}
-.spark{width:100%;height:100%}
-.spark polyline{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-.spark.good polyline{stroke:var(--emerald)}
-.spark.warn polyline{stroke:var(--gold)}
-.spark.bad polyline{stroke:var(--coral)}
-.spark.info polyline{stroke:var(--aqua)}
-.split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.surface{padding:20px}
-.banner{padding:18px 20px;border-radius:20px;border:1px solid rgba(106,74,53,.12);background:rgba(255,250,244,.78)}
-.banner.good{background:rgba(166,128,96,.14)}
-.banner.warn{background:rgba(196,163,131,.16)}
-.banner.bad{background:rgba(143,95,64,.12)}
-.banner h3{font-size:18px}
-.banner p{margin-top:8px;color:#6f5b4b}
-.bar-list{display:grid;gap:12px}
-.bar-row{padding:14px 16px;border-radius:18px;background:rgba(255,252,247,.7);border:1px solid rgba(106,74,53,.10)}
-.bar-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
-.bar-title{font-size:16px;font-weight:700}
-.bar-meta{margin-top:5px;color:#6e5948;font-size:12px}
-.bar-value{font:700 18px 'IBM Plex Mono',monospace;white-space:nowrap}
-.bar.good .bar-value{color:var(--emerald)}
-.bar.warn .bar-value{color:#8f6a1b}
-.bar.bad .bar-value{color:var(--coral)}
-.bar.info .bar-value{color:var(--aqua)}
-.track{margin-top:12px;height:10px;border-radius:999px;background:#ead9c7;overflow:hidden}
-.fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--emerald),var(--aqua))}
-.fill.warn{background:linear-gradient(90deg,var(--gold),#caa17e)}
-.fill.bad{background:linear-gradient(90deg,var(--coral),#b88461)}
-.table-shell{padding:18px}
-.table-wrap{overflow:auto;border:1px solid rgba(106,74,53,.10);border-radius:18px}
-table{width:100%;border-collapse:collapse;min-width:760px}
-th,td{padding:12px 14px;border-bottom:1px solid rgba(106,74,53,.08);text-align:left}
-th{position:sticky;top:0;background:#f2e4d3;color:#725c4a;font:11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:1px}
-td{color:#2f241d}
-tr:nth-child(even) td{background:rgba(235,226,211,.22)}
-.pill{display:inline-block;padding:4px 10px;border-radius:999px;font:11px 'IBM Plex Mono',monospace;background:rgba(106,74,53,.08);color:var(--emerald)}
-.pill.warn{background:rgba(176,134,98,.12);color:#805b3b}
-.pill.bad{background:rgba(182,94,67,.12);color:var(--coral)}
-.note-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
-.note{padding:16px}
-.note h4{font-size:16px}
-.note p{margin-top:8px;color:#6f5b4b}
-.empty{padding:24px;text-align:center;color:var(--muted);font:12px 'IBM Plex Mono',monospace}
-@media (max-width:1120px){.hero{grid-template-columns:1fr}.score-shell{grid-template-columns:1fr}.meta{text-align:left}.actions{justify-content:flex-start}}
-@media (max-width:920px){.split{grid-template-columns:1fr}}
-@media (max-width:720px){.shell{padding:18px 14px 32px}.hero,.surface,.table-shell{padding:18px}.title{font-size:40px}.score-ring{width:160px;height:160px}}
-</style>
-</head>
-<body>
-<div class="shell">
-  <header class="hero panel">
-    <div>
-      <div class="eyebrow">Live Household CFO Console</div>
-      <div class="title">Family Finance <span>Command Deck</span></div>
-      <p class="subtitle" id="subtitle">Executive view of household cash, commitments, debt, and long-term capital.</p>
-      <p class="exec" id="executiveSummary">Loading...</p>
-      <div class="focus-grid" id="focusItems"></div>
-    </div>
-    <div class="hero-side">
-      <div class="top-meta">
-        <div class="status" id="statusBadge"><span class="dot"></span><span id="statusText">Loading</span></div>
-        <div class="meta">
-          <div>Mode: <em id="dataMode">Loading...</em></div>
-          <div>Report month: <em id="reportMonth">Loading...</em></div>
-          <div>Workbook: <em id="sourceName">Loading...</em></div>
-          <div>Last build (SAST): <em id="generatedAt">Loading...</em></div>
-          <div>Workbook updated: <em id="sourceUpdated">Loading...</em></div>
-        </div>
-      </div>
-      <div class="score-shell">
-        <div class="score-ring" id="scoreRing">
-          <div class="score-core">
-            <div>
-              <div class="score-number" id="scoreValue">0</div>
-              <div class="score-label" id="scoreLabel">Health Score</div>
-            </div>
-          </div>
-        </div>
-        <div class="pillars" id="pillarScores"></div>
-      </div>
-      <div class="actions">
-        <button class="btn" id="refreshBtn" onclick="manualRefresh()">Refresh Now</button>
-        <span class="count" id="countdown">Next check in 60s</span>
-      </div>
-    </div>
-  </header>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Family Finance Command Deck</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23080b0f'/%3E%3Cpath d='M14 42h36M14 32h26M14 22h18' stroke='%2361a8ff' stroke-width='6' stroke-linecap='square'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080b0f;
+      --bg-2: #0c1118;
+      --panel: #111821;
+      --panel-2: #151f2b;
+      --panel-3: #0d141d;
+      --line: #243141;
+      --line-strong: #34465a;
+      --text: #eef4f5;
+      --muted: #9aa9b8;
+      --faint: #657688;
+      --good: #2bd98f;
+      --good-soft: rgba(43, 217, 143, 0.13);
+      --warn: #f0b84f;
+      --warn-soft: rgba(240, 184, 79, 0.15);
+      --bad: #f25f69;
+      --bad-soft: rgba(242, 95, 105, 0.14);
+      --info: #61a8ff;
+      --info-soft: rgba(97, 168, 255, 0.14);
+      --neutral: #93a4b7;
+      --neutral-soft: rgba(147, 164, 183, 0.12);
+      --shadow: 0 20px 70px rgba(0, 0, 0, 0.32);
+      --radius: 8px;
+      --mono: "DM Mono", ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      --body: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --heading: "Syne", var(--body);
+    }
 
-  <section class="section">
-    <div id="dataQuality"></div>
-  </section>
+    * {
+      box-sizing: border-box;
+    }
 
-  <section class="section">
-    <div class="label">Board Summary</div>
-    <div class="cards" id="summaryCards"></div>
-  </section>
+    html {
+      min-width: 320px;
+      background: var(--bg);
+    }
 
-  <section class="section">
-    <div class="label">Trend View</div>
-    <div class="cards" id="trendCards"></div>
-  </section>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px) 0 0 / 80px 80px,
+        linear-gradient(180deg, rgba(255,255,255,0.018) 1px, transparent 1px) 0 0 / 80px 80px,
+        linear-gradient(180deg, #090d12 0%, #0b1118 44%, #080b0f 100%);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.45;
+    }
 
-  <section class="section split">
-    <div class="surface">
-      <div class="label">Operating Model</div>
-      <div class="bar-list" id="performanceRows"></div>
-    </div>
-    <div class="surface">
-      <div class="label">Capital Stack</div>
-      <div class="bar-list" id="capitalStack"></div>
-    </div>
-  </section>
+    button {
+      font: inherit;
+    }
 
-  <section class="section split">
-    <div class="surface">
-      <div class="label">Top Monthly Cost Drivers</div>
-      <div class="bar-list" id="topCosts"></div>
-    </div>
-    <div class="surface">
-      <div class="label">Risk Watchlist</div>
-      <div class="bar-list" id="watchlist"></div>
-    </div>
-  </section>
+    .app-shell {
+      width: min(1480px, 100%);
+      margin: 0 auto;
+      padding: 24px;
+    }
 
-  <section class="section split">
-    <div class="surface">
-      <div class="label">Decisions Required</div>
-      <div class="bar-list" id="decisionRows"></div>
-    </div>
-    <div class="table-shell">
-      <div class="label">6-Month Cash Projection</div>
-      <div class="table-wrap"><table id="projectionTable"></table></div>
-    </div>
-  </section>
+    .command-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 18px;
+    }
 
-  <section class="section split">
-    <div class="table-shell">
-      <div class="label">Cash, Reserves, And Float</div>
-      <div class="table-wrap"><table id="cashTable"></table></div>
-    </div>
-    <div class="table-shell">
-      <div class="label">Investment And Retirement Capital</div>
-      <div class="table-wrap"><table id="investmentTable"></table></div>
-    </div>
-  </section>
+    .header-main,
+    .score-card,
+    .section-block,
+    .metric-card,
+    .focus-card,
+    .decision-card,
+    .risk-card,
+    .stack-row,
+    .projection-row {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(21, 31, 43, 0.92), rgba(13, 20, 29, 0.96));
+      box-shadow: var(--shadow);
+    }
 
-  <section class="section split">
-    <div class="table-shell">
-      <div class="label">Debt Profile</div>
-      <div class="table-wrap"><table id="debtTable"></table></div>
-    </div>
-    <div class="table-shell">
-      <div class="label">Monthly Operating Lines</div>
-      <div class="table-wrap"><table id="operatingTable"></table></div>
-    </div>
-  </section>
+    .header-main,
+    .score-card,
+    .section-block {
+      border-radius: var(--radius);
+      min-width: 0;
+    }
 
-  <section class="section">
-    <div class="label">Open Items</div>
-    <div class="note-grid" id="openItems"></div>
-  </section>
+    .header-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 20px;
+      min-height: 260px;
+      padding: 26px;
+      position: relative;
+      overflow: hidden;
+    }
 
-  <section class="section">
-    <div class="label">Update History</div>
-    <div class="table-shell">
-      <div class="table-wrap"><table id="historyTable"></table></div>
-    </div>
-  </section>
-</div>
+    .header-main::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--info), var(--good), var(--warn), var(--bad));
+      opacity: 0.72;
+    }
 
-<script>
-const API_URL = './dashboard_data.json';
-let dashboard = null;
-let refreshBusy = false;
-let refreshTimer = null;
-let countdownTimer = null;
-let countdownValue = 60;
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
 
-function esc(v){return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
-function fmtMoney(v,currency='ZAR'){if(v===null||v===undefined||v==='') return '-'; if(String(currency).toUpperCase()==='USD'){return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2}).format(Number(v))} return new Intl.NumberFormat('en-ZA',{style:'currency',currency:'ZAR',maximumFractionDigits:2}).format(Number(v))}
-function fmtPct(v){if(v===null||v===undefined||v==='') return '-'; return `${(Number(v)*100).toFixed(1)}%`}
-function fmtDateTime(v){if(!v) return '-'; try{return new Intl.DateTimeFormat('en-ZA',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZone:'Africa/Johannesburg'}).format(new Date(v))}catch{return v}}
-function toneClass(t){return ['good','warn','bad','info'].includes(t) ? t : 'info'}
-function moneyOrDash(v,currency='ZAR'){return v===null||v===undefined||v==='' ? '-' : fmtMoney(v,currency)}
+    h1,
+    h2,
+    h3 {
+      font-family: var(--heading);
+      letter-spacing: 0;
+    }
 
-function sparklineSvg(values, tone='info'){
-  const nums = (values || []).map(Number).filter(v => Number.isFinite(v));
-  if(!nums.length) return '';
-  const min = Math.min(...nums);
-  const max = Math.max(...nums);
-  const span = (max - min) || 1;
-  const points = nums.map((value, index) => {
-    const x = nums.length === 1 ? 50 : (index / (nums.length - 1)) * 100;
-    const y = 100 - (((value - min) / span) * 84 + 8);
-    return `${x},${y}`;
-  }).join(' ');
-  return `<div class="spark-shell"><svg viewBox="0 0 100 100" preserveAspectRatio="none" class="spark ${toneClass(tone)}"><polyline points="${points}"></polyline></svg></div>`;
-}
+    h1 {
+      max-width: 820px;
+      font-size: 3rem;
+      line-height: 1;
+      font-weight: 800;
+    }
 
-function setStatus(kind,label){
-  const badge = document.getElementById('statusBadge');
-  badge.className = `status${kind ? ` ${kind}` : ''}`;
-  document.getElementById('statusText').textContent = label;
-}
+    h2 {
+      font-size: 1.45rem;
+      line-height: 1.08;
+      font-weight: 700;
+    }
 
-function updateCountdown(){
-  document.getElementById('countdown').textContent = refreshBusy ? 'Checking now...' : `Next check in ${countdownValue}s`;
-}
+    h3 {
+      font-size: 1rem;
+      line-height: 1.18;
+      font-weight: 700;
+    }
 
-function restartAutoRefresh(){
-  countdownValue = Number(dashboard?.refreshSeconds || 60);
-  updateCountdown();
-  if(countdownTimer) clearInterval(countdownTimer);
-  if(refreshTimer) clearInterval(refreshTimer);
-  countdownTimer = setInterval(() => {
-    countdownValue = Math.max(0, countdownValue - 1);
-    updateCountdown();
-  }, 1000);
-  refreshTimer = setInterval(() => refreshData(false), (dashboard?.refreshSeconds || 60) * 1000);
-}
+    .subtitle {
+      max-width: 720px;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
 
-function setRefreshBusy(isBusy){
-  refreshBusy = isBusy;
-  const btn = document.getElementById('refreshBtn');
-  btn.disabled = isBusy;
-  btn.textContent = isBusy ? 'Refreshing...' : 'Refresh Now';
-  updateCountdown();
-}
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 22px;
+    }
 
-function renderSummaryCards(){
-  const host = document.getElementById('summaryCards');
-  const items = dashboard?.summaryCards || [];
-  if(!items.length){host.innerHTML='<div class="empty">No summary data available.</div>';return;}
-  host.innerHTML = items.map(item => `
-    <div class="card ${toneClass(item.tone)}">
-      <div class="card-k">${esc(item.label)}</div>
-      <div class="card-v">${esc(item.value)}</div>
-      <div class="card-d">${esc(item.detail)}</div>
-    </div>
-  `).join('');
-}
+    .refresh-button {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      gap: 9px;
+      padding: 0 14px;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      color: var(--text);
+      background: #172231;
+      cursor: pointer;
+    }
 
-function renderDataQuality(){
-  const host = document.getElementById('dataQuality');
-  const item = dashboard?.dataQuality;
-  if(!item){host.innerHTML='';return;}
-  host.innerHTML = `
-    <div class="banner ${toneClass(item.tone)}">
-      <h3>${esc(item.label)}</h3>
-      <p>${esc(item.detail)}</p>
-    </div>
-  `;
-}
+    .refresh-button:hover {
+      border-color: var(--info);
+      background: #1b2b3e;
+    }
 
-function renderTrendCards(){
-  const host = document.getElementById('trendCards');
-  const history = dashboard?.history || [];
-  if(!history.length){host.innerHTML='<div class="empty">Trend history will build up as the workbook is refreshed over time.</div>';return;}
-  const metrics = [
-    {label:'Net Position', key:'surplusActual', formatter:v => fmtMoney(v), tone:v => v >= 0 ? 'good' : 'bad'},
-    {label:'Cash Buffer', key:'cashBuffer', formatter:v => fmtMoney(v), tone:() => 'info'},
-    {label:'Net Worth', key:'netWorth', formatter:v => fmtMoney(v), tone:v => v >= 0 ? 'good' : 'bad'},
-    {label:'Savings Rate', key:'savingsRate', formatter:v => fmtPct(v), tone:v => (Number(v) || 0) > 0 ? 'good' : 'bad'}
-  ];
-  host.innerHTML = metrics.map(metric => {
-    const series = history.map(item => Number(item[metric.key] ?? 0));
-    const latest = history[history.length - 1] || {};
-    const previous = history.length > 1 ? history[history.length - 2] : null;
-    const currentValue = latest[metric.key];
-    const delta = previous ? Number(currentValue ?? 0) - Number(previous[metric.key] ?? 0) : null;
-    const tone = metric.tone(currentValue);
-    let deltaText = 'First captured update';
-    if(delta !== null){
-      if(metric.key === 'savingsRate'){
-        deltaText = `Change vs last update: ${(delta * 100).toFixed(1)} pts`;
-      }else{
-        deltaText = `Change vs last update: ${fmtMoney(delta)}`;
+    .refresh-button:focus-visible {
+      outline: 2px solid var(--info);
+      outline-offset: 2px;
+    }
+
+    .refresh-button svg {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 auto;
+    }
+
+    .refresh-button[disabled] {
+      cursor: wait;
+      opacity: 0.68;
+    }
+
+    .status-line {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+    }
+
+    .metadata-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(120px, 1fr));
+      gap: 10px;
+      align-self: end;
+      min-width: 410px;
+    }
+
+    .metadata-cell {
+      min-width: 0;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 6px;
+      padding: 11px 12px;
+      background: rgba(8, 12, 17, 0.44);
+    }
+
+    .label {
+      display: block;
+      color: var(--faint);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .metadata-cell strong,
+    .data-value {
+      display: block;
+      margin-top: 5px;
+      overflow-wrap: anywhere;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .score-card {
+      display: grid;
+      align-content: space-between;
+      min-height: 260px;
+      padding: 24px;
+    }
+
+    .score-top {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .score-meter {
+      --score-deg: 0deg;
+      display: grid;
+      place-items: center;
+      width: 142px;
+      height: 142px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at center, #101823 0 56%, transparent 57%),
+        conic-gradient(var(--score-color) var(--score-deg), #273443 0);
+      box-shadow: inset 0 0 28px rgba(255, 255, 255, 0.04);
+    }
+
+    .score-meter strong {
+      font-family: var(--mono);
+      font-size: 2.25rem;
+      line-height: 1;
+    }
+
+    .score-good {
+      --score-color: var(--good);
+    }
+
+    .score-warn {
+      --score-color: var(--warn);
+    }
+
+    .score-bad {
+      --score-color: var(--bad);
+    }
+
+    .score-copy {
+      min-width: 0;
+    }
+
+    .score-copy p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .chip {
+      display: inline-flex;
+      min-height: 28px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 9px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.04);
+      font-family: var(--mono);
+      font-size: 0.73rem;
+    }
+
+    .tone-good {
+      color: var(--good);
+      border-color: rgba(43, 217, 143, 0.36);
+      background: var(--good-soft);
+    }
+
+    .tone-warn {
+      color: var(--warn);
+      border-color: rgba(240, 184, 79, 0.4);
+      background: var(--warn-soft);
+    }
+
+    .tone-bad {
+      color: var(--bad);
+      border-color: rgba(242, 95, 105, 0.42);
+      background: var(--bad-soft);
+    }
+
+    .tone-info {
+      color: var(--info);
+      border-color: rgba(97, 168, 255, 0.38);
+      background: var(--info-soft);
+    }
+
+    .tone-neutral {
+      color: var(--neutral);
+      border-color: rgba(147, 164, 183, 0.3);
+      background: var(--neutral-soft);
+    }
+
+    main {
+      display: grid;
+      gap: 18px;
+      min-width: 0;
+    }
+
+    .section-block {
+      padding: 20px;
+    }
+
+    .section-heading {
+      display: flex;
+      gap: 16px;
+      align-items: start;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .section-index {
+      color: var(--faint);
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.92fr);
+      gap: 14px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .pillar-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .pillar {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: rgba(8, 12, 17, 0.48);
+    }
+
+    .pillar-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .pillar-name {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .pillar-score {
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.88rem;
+    }
+
+    .track {
+      width: 100%;
+      height: 9px;
+      margin-top: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #263240;
+    }
+
+    .fill {
+      width: var(--fill, 0%);
+      height: 100%;
+      border-radius: inherit;
+      background: var(--fill-color, var(--info));
+    }
+
+    .pillar-meta {
+      margin-top: 9px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.76rem;
+    }
+
+    .executive-copy {
+      min-height: 100%;
+      border-left: 3px solid var(--info);
+      padding: 4px 0 4px 16px;
+      color: #dce7ec;
+      font-size: 1.04rem;
+    }
+
+    .focus-grid,
+    .decision-grid,
+    .risk-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .focus-card,
+    .decision-card,
+    .risk-card {
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: none;
+    }
+
+    .focus-card h3,
+    .decision-card h3,
+    .risk-card h3 {
+      margin-bottom: 7px;
+    }
+
+    .focus-card p,
+    .decision-card p,
+    .risk-card p {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metric-card {
+      min-height: 138px;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: none;
+    }
+
+    .metric-card .metric-top {
+      display: flex;
+      gap: 10px;
+      align-items: start;
+      justify-content: space-between;
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .metric-value {
+      margin-top: 16px;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 1.55rem;
+      line-height: 1.05;
+      font-weight: 500;
+      overflow-wrap: anywhere;
+    }
+
+    .metric-detail {
+      margin-top: 10px;
+      color: var(--faint);
+      font-size: 0.84rem;
+    }
+
+    .table-wrap {
+      width: 100%;
+      min-width: 0;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(8, 12, 17, 0.4);
+    }
+
+    table {
+      width: 100%;
+      min-width: 780px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 12px 13px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--faint);
+      background: rgba(255,255,255,0.025);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    td {
+      color: #dbe5ea;
+      font-size: 0.9rem;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    tbody tr:hover td {
+      background: rgba(255,255,255,0.025);
+    }
+
+    .num {
+      font-family: var(--mono);
+      white-space: nowrap;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .small {
+      color: var(--faint);
+      font-size: 0.8rem;
+    }
+
+    .ratio-bar {
+      display: grid;
+      width: 130px;
+      height: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #263240;
+    }
+
+    .ratio-bar span {
+      width: var(--fill, 0%);
+      background: var(--fill-color, var(--info));
+    }
+
+    .capital-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .stack-row {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(220px, 2fr) minmax(120px, auto);
+      gap: 14px;
+      align-items: center;
+      border-radius: 8px;
+      padding: 12px;
+      box-shadow: none;
+    }
+
+    .stack-label strong,
+    .projection-label strong {
+      display: block;
+      font-weight: 700;
+    }
+
+    .stack-label span,
+    .projection-label span {
+      display: block;
+      margin-top: 3px;
+      color: var(--faint);
+      font-size: 0.8rem;
+    }
+
+    .stack-track,
+    .projection-track {
+      height: 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #263240;
+    }
+
+    .stack-track span,
+    .projection-track span {
+      display: block;
+      width: var(--fill, 0%);
+      height: 100%;
+      border-radius: inherit;
+      background: var(--fill-color, var(--info));
+    }
+
+    .stack-amount,
+    .projection-value {
+      font-family: var(--mono);
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .watch-metric,
+    .decision-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    .decision-meta .chip,
+    .watch-metric .chip {
+      border-radius: 6px;
+    }
+
+    .projection-chart {
+      display: grid;
+      gap: 11px;
+    }
+
+    .projection-row {
+      display: grid;
+      grid-template-columns: 150px minmax(180px, 1fr) 150px;
+      gap: 14px;
+      align-items: center;
+      border-radius: 8px;
+      padding: 13px;
+      box-shadow: none;
+    }
+
+    .projection-movement {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+    }
+
+    .empty-state {
+      border: 1px dashed var(--line-strong);
+      border-radius: 8px;
+      padding: 16px;
+      color: var(--muted);
+      background: rgba(8, 12, 17, 0.38);
+    }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 10;
+      max-width: min(440px, calc(100vw - 40px));
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: var(--text);
+      background: #111923;
+      box-shadow: var(--shadow);
+      font-size: 0.9rem;
+    }
+
+    .toast[hidden] {
+      display: none;
+    }
+
+    @media (max-width: 1180px) {
+      .command-header,
+      .header-main,
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .metadata-grid {
+        min-width: 0;
+      }
+
+      .pillar-grid,
+      .grid-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
-    return `
-      <div class="card ${toneClass(tone)}">
-        <div class="card-k">${esc(metric.label)}</div>
-        <div class="card-v">${esc(metric.formatter(currentValue))}</div>
-        <div class="card-d">${esc(`${history.length} captured update${history.length === 1 ? '' : 's'}`)}</div>
-        <div class="trend-delta">${esc(deltaText)}</div>
-        ${sparklineSvg(series, tone)}
-      </div>
-    `;
-  }).join('');
-}
 
-function renderFocusItems(){
-  const host = document.getElementById('focusItems');
-  const items = dashboard?.focusItems || [];
-  if(!items.length){host.innerHTML='<div class="empty">No focus items yet.</div>';return;}
-  host.innerHTML = items.map(item => `
-    <div class="focus ${toneClass(item.tone)}">
-      <h4>${esc(item.title)}</h4>
-      <p>${esc(item.detail)}</p>
-    </div>
-  `).join('');
-}
+    @media (max-width: 820px) {
+      .app-shell {
+        padding: 14px;
+      }
 
-function renderScore(){
-  const score = Number(dashboard?.healthScore || 0);
-  document.getElementById('scoreValue').textContent = score;
-  document.getElementById('scoreLabel').textContent = `${dashboard?.health?.label || 'Health'} Score`;
-  document.getElementById('scoreRing').style.background = `conic-gradient(var(--emerald) ${Math.max(0, Math.min(100, score)) * 3.6}deg, rgba(106,74,53,.12) 0deg)`;
-  const host = document.getElementById('pillarScores');
-  const items = dashboard?.pillarScores || [];
-  if(!items.length){host.innerHTML='<div class="empty">No score breakdown available.</div>';return;}
-  host.innerHTML = items.map(item => {
-    const width = item.outOf ? Math.max(0, Math.min(100, (Number(item.score) / Number(item.outOf)) * 100)) : 0;
-    return `
-      <div>
-        <div class="pillar-top">
-          <div class="pillar-name">${esc(item.label)}</div>
-          <div class="pill">${esc(String(item.score))}/${esc(String(item.outOf))}</div>
-        </div>
-        <div class="pillar-bar"><div class="pillar-fill" style="width:${width}%"></div></div>
-      </div>
-    `;
-  }).join('');
-}
+      h1 {
+        font-size: 2.25rem;
+      }
 
-function renderBarList(hostId, items, options = {}){
-  const host = document.getElementById(hostId);
-  if(!items.length){host.innerHTML='<div class="empty">Nothing captured yet.</div>';return;}
-  const maxValue = options.maxValue || Math.max(...items.map(item => Math.abs(Number(options.value(item) || 0))), 1);
-  host.innerHTML = items.map(item => {
-    const value = Number(options.value(item) || 0);
-    const width = Math.max(6, Math.min(100, (Math.abs(value) / maxValue) * 100));
-    const tone = toneClass(options.tone ? options.tone(item) : item.tone);
-    return `
-      <div class="bar-row bar ${tone}">
-        <div class="bar-top">
-          <div>
-            <div class="bar-title">${esc(options.title ? options.title(item) : item.label)}</div>
-            <div class="bar-meta">${esc(options.meta ? options.meta(item) : (item.detail || ''))}</div>
+      .header-main,
+      .score-card,
+      .section-block {
+        padding: 16px;
+      }
+
+      .metadata-grid,
+      .metric-grid,
+      .grid-3,
+      .pillar-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .score-top {
+        align-items: start;
+      }
+
+      .score-meter {
+        width: 118px;
+        height: 118px;
+      }
+
+      .score-meter strong {
+        font-size: 1.9rem;
+      }
+
+      .stack-row,
+      .projection-row {
+        grid-template-columns: 1fr;
+      }
+
+      .stack-amount,
+      .projection-value {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 560px) {
+      h1 {
+        font-size: 1.9rem;
+      }
+
+      h2 {
+        font-size: 1.22rem;
+      }
+
+      .score-top,
+      .section-heading {
+        flex-direction: column;
+      }
+
+      .metric-value {
+        font-size: 1.32rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="command-header">
+      <div class="header-main">
+        <div>
+          <h1 id="dashboardTitle">Family Finance Command Deck</h1>
+          <p class="subtitle" id="dashboardSubtitle">Executive view of household cash, commitments, debt, and long-term capital.</p>
+          <div class="header-actions">
+            <button class="refresh-button" id="refreshButton" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12a9 9 0 0 1-15.5 6.3"></path>
+                <path d="M3 12A9 9 0 0 1 18.5 5.7"></path>
+                <path d="M18 2v4h4"></path>
+                <path d="M6 22v-4H2"></path>
+              </svg>
+              <span>Refresh Now</span>
+            </button>
+            <span class="status-line" id="refreshStatus">Loading dashboard data...</span>
           </div>
-          <div class="bar-value">${esc(options.display ? options.display(item) : moneyOrDash(value))}</div>
         </div>
-        <div class="track"><div class="fill ${tone}" style="width:${width}%"></div></div>
+        <div class="metadata-grid" aria-label="Dashboard metadata">
+          <div class="metadata-cell">
+            <span class="label">Report Month</span>
+            <strong id="reportMonth">-</strong>
+          </div>
+          <div class="metadata-cell">
+            <span class="label">Last Updated</span>
+            <strong id="generatedAt">-</strong>
+          </div>
+          <div class="metadata-cell">
+            <span class="label">Source Updated</span>
+            <strong id="sourceUpdatedAt">-</strong>
+          </div>
+          <div class="metadata-cell">
+            <span class="label">Data Mode</span>
+            <strong id="dataMode">-</strong>
+          </div>
+          <div class="metadata-cell">
+            <span class="label">Source</span>
+            <strong id="sourceName">-</strong>
+          </div>
+          <div class="metadata-cell">
+            <span class="label">Next Refresh</span>
+            <strong id="countdown">-</strong>
+          </div>
+        </div>
       </div>
-    `;
-  }).join('');
-}
 
-function renderTable(tableId, headers, rows){
-  const table = document.getElementById(tableId);
-  if(!rows.length){table.innerHTML='<tbody><tr><td class="empty">No rows available.</td></tr></tbody>';return;}
-  table.innerHTML = `
-    <thead><tr>${headers.map(h => `<th>${esc(h.label)}</th>`).join('')}</tr></thead>
-    <tbody>
-      ${rows.map(row => `
-        <tr>${headers.map(h => `<td>${h.render ? h.render(row) : esc(row[h.key] ?? '')}</td>`).join('')}</tr>
-      `).join('')}
-    </tbody>
-  `;
-}
+      <aside class="score-card" aria-label="Health score">
+        <div class="score-top">
+          <div class="score-meter score-bad" id="scoreMeter">
+            <strong id="healthScore">0</strong>
+          </div>
+          <div class="score-copy">
+            <span class="label">Health Score</span>
+            <h2 id="healthLabel">Loading</h2>
+            <p id="healthCopy">Score is evaluated against liquidity, margin, leverage, discipline, and balance sheet strength.</p>
+          </div>
+        </div>
+        <div class="chip-row">
+          <span class="chip" id="healthTone">Health pending</span>
+          <span class="chip" id="qualityLabel">Data pending</span>
+        </div>
+      </aside>
+    </header>
 
-function renderOpenItems(){
-  const host = document.getElementById('openItems');
-  const items = dashboard?.openItems || [];
-  if(!items.length){host.innerHTML='<div class="empty">No open items logged.</div>';return;}
-  host.innerHTML = items.map(item => `
-    <div class="note">
-      <h4>${esc(item.area)}</h4>
-      <p>${esc(item.question)}</p>
-      <p><span class="pill">Current</span> ${esc(item.assumption || '-')}</p>
-      <p><span class="pill">Update</span> ${esc(item.update || '-')}</p>
-    </div>
-  `).join('');
-}
+    <main>
+      <section class="section-block" aria-labelledby="pillarsTitle">
+        <div class="section-heading">
+          <div>
+            <span class="section-index">01 / Health Pillars</span>
+            <h2 id="pillarsTitle">Health Pillars</h2>
+          </div>
+          <p>Weighted contribution to the household finance score.</p>
+        </div>
+        <div class="pillar-grid" id="pillarGrid"></div>
+      </section>
 
-function renderAll(){
-  document.getElementById('subtitle').textContent = dashboard?.subtitle || 'Executive view of household cash, commitments, debt, and long-term capital.';
-  document.getElementById('executiveSummary').textContent = dashboard?.executiveSummary || 'No executive summary available yet.';
-  document.getElementById('dataMode').textContent = dashboard?.dataMode || '-';
-  document.getElementById('reportMonth').textContent = dashboard?.reportMonth || '-';
-  document.getElementById('sourceName').textContent = dashboard?.sourceName || '-';
-  document.getElementById('generatedAt').textContent = fmtDateTime(dashboard?.generatedAt);
-  document.getElementById('sourceUpdated').textContent = fmtDateTime(dashboard?.sourceUpdatedAt);
-  setStatus(toneClass(dashboard?.health?.tone), dashboard?.health?.label || 'Live');
-  renderDataQuality();
-  renderFocusItems();
-  renderScore();
-  renderSummaryCards();
-  renderTrendCards();
+      <section class="section-block" aria-labelledby="summaryTitle">
+        <div class="section-heading">
+          <div>
+            <span class="section-index">02 / Executive Summary</span>
+            <h2 id="summaryTitle">Executive Summary</h2>
+          </div>
+          <p id="dataQualityDetail"></p>
+        </div>
+        <div class="grid-2">
+          <p class="executive-copy" id="executiveSummary">No executive summary available.</p>
+          <div class="focus-grid" id="focusGrid"></div>
+        </div>
+      </section>
 
-  renderBarList('performanceRows', dashboard?.performanceRows || [], {
-    value: item => item.actual,
-    title: item => item.label,
-    meta: item => `Budget ${fmtMoney(item.budget)} | Actual ${fmtMoney(item.actual)} | Variance ${fmtMoney(item.variance)}`,
-    display: item => fmtMoney(item.actual),
-    tone: item => item.tone
-  });
+      <section class="section-block" aria-labelledby="boardTitle">
+        <div class="section-heading">
+          <div>
+            <span class="section-index">03 / Board Summary</span>
+            <h2 id="boardTitle">Board Summary</h2>
+          </div>
+          <p>Key measures from income, outflows, runway, vehicle load, savings, and net worth.</p>
+        </div>
+        <div class="metric-grid" id="summaryCards"></div>
+      </section>
 
-  renderBarList('capitalStack', dashboard?.capitalStack || [], {
-    value: item => item.amount,
-    title: item => item.label,
-    meta: item => item.detail || '',
-    display: item => fmtMoney(item.amount),
-    tone: item => item.tone
-  });
+      <section class="section-block" aria-labelledby="operatingTitle">
+        <div class="section-heading">
+          <div>
+            <span class="section-index">04 / Operating Model</span>
+            <h2 id="operatingTitle">Operating Model</h2>
+          </div>
+          <p>Budget versus actual performance for the current reporting month.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Line</th>
+                <th>Budget</th>
+                <th>Actual</th>
+                <th>Variance</th>
+                <th>Execution</th>
+              </tr>
+            </thead>
+            <tbody id="performanceRows"></tbody>
+          </table>
+        </div>
+      </section>
 
-  renderBarList('topCosts', dashboard?.topCostRows || [], {
-    value: item => item.actual || item.budget,
-    title: item => item.item,
-    meta: item => {
-      const share = dashboard?.totals?.actualOutflows ? `${((Number(item.actual || item.budget) / Number(dashboard.totals.actualOutflows)) * 100).toFixed(1)}% of outflows` : item.group;
-      return `${item.group} | ${share}`;
-    },
-    display: item => fmtMoney(item.actual || item.budget),
-    tone: () => 'warn'
-  });
+      <section class="section-block" aria-labelledby="capitalTitle">
+        <div class="section-heading">
+          <div>
+            <span class="section-index">05 / Capital Stack</span>
+            <h2 id="capitalTitle">Capital Stack</h2>
+          </div>
+          <p>Assets, float, liabilities, and tracked net worth.</p>
+        </div>
+        <div class="capital-list" id="capitalStack"></div>
+      </section>
 
-  renderBarList('watchlist', dashboard?.watchlistRows || [], {
-    value: item => Math.max(String(item.metric || '').length, 1),
-    title: item => item.item,
-    meta: item => `${item.reason} | ${item.action}`,
-    display: item => item.metric || '-',
-    tone: item => item.tone || 'warn'
-  });
+      <section class="section-block" aria-labelledby="costTitle">
+        <div class="section-heading">
+          <div>
+            <span class="section-index">06 / Top Cost Drivers</span>
+            <h2 id="costTitle">Top Cost Drivers</h2>
+          </div>
+          <p>Largest committed or variable rows requiring management attention.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Cost Driver</th>
+                <th>Owner</th>
+                <th>Budget</th>
+                <th>Actual</th>
+                <th>Variance</th>
+                <th>Timing</th>
+                <th>Priority</th>
+              </tr>
+            </thead>
+            <tbody id="topCostRows"></tbody>
+          </table>
+        </div>
+      </section>
 
-  renderBarList('decisionRows', dashboard?.decisionRows || [], {
-    value: item => ({High:3, Medium:2, Low:1}[item.impact] || 1),
-    title: item => item.title,
-    meta: item => `${item.owner || 'Household'} | ${item.impact || 'Medium'} impact | ${item.detail}`,
-    display: item => item.timeframe || '-',
-    tone: item => item.tone || 'info'
-  });
+      <section class="section-block" aria-labelledby="watchTitle">
+        <div class="section-heading">
+          <div>
+            <span class="section-index">07 / Risk Watchlist</span>
+            <h2 id="watchTitle">Risk Watchlist</h2>
+          </div>
+          <p>Tone-coded issues where cash leakage, leverage, or discipline risk is visible.</p>
+        </div>
+        <div class="risk-grid grid-3" id="watchlistRows"></div>
+      </section>
 
-  renderTable('projectionTable', [
-    {label:'Month', key:'month'},
-    {label:'Opening', render:r => fmtMoney(r.opening)},
-    {label:'Movement', render:r => fmtMoney(r.movement)},
-    {label:'Closing', render:r => fmtMoney(r.closing)},
-    {label:'Status', render:r => `<span class="pill ${toneClass(r.tone)}">${esc(r.tone || 'info')}</span>`}
-  ], dashboard?.projectionRows || []);
+      <section class="section-block" aria-labelledby="decisionTitle">
+        <div class="section-heading">
+          <div>
+            <span class="section-index">08 / Decisions Required</span>
+            <h2 id="decisionTitle">Decisions Required</h2>
+          </div>
+          <p>Management actions with owner, timeframe, and expected impact.</p>
+        </div>
+        <div class="decision-grid grid-3" id="decisionRows"></div>
+      </section>
 
-  renderTable('cashTable', [
-    {label:'Account', key:'item'},
-    {label:'Owner', key:'owner'},
-    {label:'Type', key:'tag'},
-    {label:'Balance', render:r => fmtMoney(r.balance, r.currency)},
-    {label:'Notes', key:'notes'}
-  ], dashboard?.cashAccounts || []);
+      <section class="section-block" aria-labelledby="projectionTitle">
+        <div class="section-heading">
+          <div>
+            <span class="section-index">09 / 6-Month Projection</span>
+            <h2 id="projectionTitle">6-Month Projection</h2>
+          </div>
+          <p>Projected cash path using the current monthly movement.</p>
+        </div>
+        <div class="projection-chart" id="projectionRows"></div>
+      </section>
 
-  renderTable('investmentTable', [
-    {label:'Product', key:'item'},
-    {label:'Owner', key:'owner'},
-    {label:'Class', key:'tag'},
-    {label:'Balance', render:r => fmtMoney(r.balance, r.currency)},
-    {label:'Notes', key:'notes'}
-  ], dashboard?.investmentRows || []);
+      <section class="section-block" aria-labelledby="cashTitle">
+        <div class="section-heading">
+          <div>
+            <span class="section-index">10 / Cash & Reserves</span>
+            <h2 id="cashTitle">Cash &amp; Reserves</h2>
+          </div>
+          <p>Transaction cash, notice savings, and reserve accounts.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Account</th>
+                <th>Owner</th>
+                <th>Balance</th>
+                <th>Tag</th>
+                <th>As At</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="cashAccounts"></tbody>
+          </table>
+        </div>
+      </section>
 
-  renderTable('debtTable', [
-    {label:'Debt', key:'item'},
-    {label:'Outstanding', render:r => fmtMoney(r.balance)},
-    {label:'Monthly', render:r => fmtMoney(r.instalment)},
-    {label:'Timing', key:'timing'},
-    {label:'Notes', key:'notes'}
-  ], dashboard?.debtHighlights || []);
+      <section class="section-block" aria-labelledby="investTitle">
+        <div class="section-heading">
+          <div>
+            <span class="section-index">11 / Investments & Retirement</span>
+            <h2 id="investTitle">Investments &amp; Retirement</h2>
+          </div>
+          <p>Long-term capital, tax-free investments, and brokerage balances.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Asset</th>
+                <th>Owner</th>
+                <th>Balance</th>
+                <th>Tag</th>
+                <th>As At</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="investmentRows"></tbody>
+          </table>
+        </div>
+      </section>
 
-  renderTable('operatingTable', [
-    {label:'Section', key:'section'},
-    {label:'Item', key:'item'},
-    {label:'Owner', key:'owner'},
-    {label:'Budget', render:r => fmtMoney(r.budget, r.currency)},
-    {label:'Actual', render:r => fmtMoney(r.actual, r.currency)},
-    {label:'Timing', key:'timing'}
-  ], dashboard?.operatingLines || []);
+      <section class="section-block" aria-labelledby="debtTitle">
+        <div class="section-heading">
+          <div>
+            <span class="section-index">12 / Debt Summary</span>
+            <h2 id="debtTitle">Debt Summary</h2>
+          </div>
+          <p>Tracked debt balances and monthly instalment load.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Debt</th>
+                <th>Owner</th>
+                <th>Balance</th>
+                <th>Instalment</th>
+                <th>As At</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="debtHighlights"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
 
-  renderTable('historyTable', [
-    {label:'Captured', render:r => fmtDateTime(r.generatedAt)},
-    {label:'Workbook Saved', render:r => fmtDateTime(r.sourceUpdatedAt)},
-    {label:'Income', render:r => fmtMoney(r.incomeActual)},
-    {label:'Outflows', render:r => fmtMoney(r.outflowsActual)},
-    {label:'Net Position', render:r => fmtMoney(r.surplusActual)},
-    {label:'Cash Buffer', render:r => fmtMoney(r.cashBuffer)},
-    {label:'Net Worth', render:r => fmtMoney(r.netWorth)}
-  ], [...(dashboard?.history || [])].reverse());
+  <div class="toast" id="toast" hidden></div>
 
-  renderOpenItems();
-}
+  <script>
+    const DATA_URL = "./dashboard_data.json";
+    const SAST_TIMEZONE = "Africa/Johannesburg";
+    const DEFAULT_REFRESH_SECONDS = 300;
+    const state = {
+      dashboard: null,
+      loading: false,
+      refreshTimeout: null,
+      countdownTimer: null,
+      nextRefreshAt: null
+    };
 
-async function refreshData(manual){
-  try{
-    setRefreshBusy(true);
-    const response = await fetch(`${API_URL}?t=${Date.now()}`, {cache:'no-store'});
-    if(!response.ok) throw new Error(`HTTP ${response.status}`);
-    dashboard = await response.json();
-    renderAll();
-    restartAutoRefresh();
-  }catch(error){
-    console.error(error);
-    setStatus('bad', manual ? 'Refresh failed' : 'Offline');
-  }finally{
-    setRefreshBusy(false);
-  }
-}
+    const ids = [
+      "dashboardTitle",
+      "dashboardSubtitle",
+      "refreshButton",
+      "refreshStatus",
+      "reportMonth",
+      "generatedAt",
+      "sourceUpdatedAt",
+      "dataMode",
+      "sourceName",
+      "countdown",
+      "scoreMeter",
+      "healthScore",
+      "healthLabel",
+      "healthCopy",
+      "healthTone",
+      "qualityLabel",
+      "pillarGrid",
+      "executiveSummary",
+      "dataQualityDetail",
+      "focusGrid",
+      "summaryCards",
+      "performanceRows",
+      "capitalStack",
+      "topCostRows",
+      "watchlistRows",
+      "decisionRows",
+      "projectionRows",
+      "cashAccounts",
+      "investmentRows",
+      "debtHighlights",
+      "toast"
+    ];
 
-function manualRefresh(){
-  refreshData(true);
-}
+    const el = Object.fromEntries(ids.map((id) => [id, document.getElementById(id)]));
 
-refreshData(false);
-</script>
+    function esc(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function toNumber(value) {
+      if (value === null || value === undefined || value === "") return null;
+      const numeric = Number(value);
+      return Number.isFinite(numeric) ? numeric : null;
+    }
+
+    function fmtMoney(value) {
+      if (typeof value === "string" && value.trim()) return value;
+      const numeric = toNumber(value);
+      if (numeric === null) return "-";
+      const sign = numeric < 0 ? "-" : "";
+      const amount = Math.abs(numeric).toLocaleString("en-ZA", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+      return `R ${sign}${amount}`;
+    }
+
+    function fmtPlainNumber(value, digits = 1) {
+      const numeric = toNumber(value);
+      if (numeric === null) return "-";
+      return numeric.toLocaleString("en-ZA", {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits
+      });
+    }
+
+    function fmtDateTime(value) {
+      if (!value) return "-";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return String(value);
+      return new Intl.DateTimeFormat("en-ZA", {
+        timeZone: SAST_TIMEZONE,
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+      }).format(date) + " SAST";
+    }
+
+    function toneName(value) {
+      return ["good", "warn", "bad", "info"].includes(value) ? value : "neutral";
+    }
+
+    function scoreTone(score) {
+      if (score < 40) return "bad";
+      if (score <= 70) return "warn";
+      return "good";
+    }
+
+    function toneColor(tone) {
+      return {
+        good: "var(--good)",
+        warn: "var(--warn)",
+        bad: "var(--bad)",
+        info: "var(--info)",
+        neutral: "var(--neutral)"
+      }[toneName(tone)];
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function setText(node, value) {
+      node.textContent = value ?? "-";
+    }
+
+    function setToneClass(node, tone, baseClass = "chip") {
+      node.className = `${baseClass} tone-${toneName(tone)}`;
+    }
+
+    function emptyMarkup(message) {
+      return `<div class="empty-state">${esc(message)}</div>`;
+    }
+
+    function showToast(message, tone = "info") {
+      el.toast.textContent = message;
+      el.toast.className = `toast tone-${toneName(tone)}`;
+      el.toast.hidden = false;
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => {
+        el.toast.hidden = true;
+      }, 5200);
+    }
+
+    function setLoading(isLoading) {
+      state.loading = isLoading;
+      el.refreshButton.disabled = isLoading;
+      el.refreshButton.querySelector("span").textContent = isLoading ? "Refreshing" : "Refresh Now";
+    }
+
+    function scheduleRefresh(seconds) {
+      const refreshSeconds = Math.max(30, Number(seconds) || DEFAULT_REFRESH_SECONDS);
+      window.clearTimeout(state.refreshTimeout);
+      window.clearInterval(state.countdownTimer);
+      state.nextRefreshAt = Date.now() + refreshSeconds * 1000;
+      updateCountdown();
+      state.countdownTimer = window.setInterval(updateCountdown, 1000);
+      state.refreshTimeout = window.setTimeout(() => loadDashboard(false), refreshSeconds * 1000);
+    }
+
+    function updateCountdown() {
+      if (!state.nextRefreshAt) {
+        setText(el.countdown, "-");
+        return;
+      }
+      const secondsLeft = Math.max(0, Math.ceil((state.nextRefreshAt - Date.now()) / 1000));
+      const minutes = Math.floor(secondsLeft / 60);
+      const seconds = secondsLeft % 60;
+      setText(el.countdown, `${minutes}:${String(seconds).padStart(2, "0")}`);
+    }
+
+    function ratioCell(ratio, tone) {
+      const numeric = toNumber(ratio);
+      const percent = numeric === null ? 0 : clamp(Math.abs(numeric) * 100, 0, 140);
+      return `
+        <div class="ratio-bar" aria-hidden="true">
+          <span style="--fill:${percent}%; --fill-color:${toneColor(tone)}"></span>
+        </div>
+        <span class="small">${numeric === null ? "Not applicable" : `${fmtPlainNumber(numeric * 100, 1)}%`}</span>
+      `;
+    }
+
+    function renderHeader(data) {
+      const healthScore = clamp(Number(data.healthScore || 0), 0, 100);
+      const scoreClass = scoreTone(healthScore);
+      const health = data.health || {};
+      const quality = data.dataQuality || {};
+
+      setText(el.dashboardTitle, data.title || "Family Finance Command Deck");
+      setText(el.dashboardSubtitle, data.subtitle || "Executive view of household cash, commitments, debt, and long-term capital.");
+      setText(el.reportMonth, data.reportMonth || "-");
+      setText(el.generatedAt, fmtDateTime(data.generatedAt));
+      setText(el.sourceUpdatedAt, fmtDateTime(data.sourceUpdatedAt));
+      setText(el.dataMode, data.dataMode || "-");
+      setText(el.sourceName, data.sourceName || "-");
+      setText(el.healthScore, String(Math.round(healthScore)));
+      setText(el.healthLabel, health.label || "Health pending");
+      setText(el.healthCopy, quality.detail || "Dashboard data is loaded from dashboard_data.json.");
+
+      el.scoreMeter.className = `score-meter score-${scoreClass}`;
+      el.scoreMeter.style.setProperty("--score-deg", `${healthScore * 3.6}deg`);
+      setToneClass(el.healthTone, scoreClass);
+      setText(el.healthTone, health.label || "Health pending");
+      setToneClass(el.qualityLabel, quality.tone || "info");
+      setText(el.qualityLabel, quality.label || data.dataMode || "Data live");
+      setText(el.dataQualityDetail, quality.detail || "");
+    }
+
+    function renderPillars(rows = []) {
+      if (!rows.length) {
+        el.pillarGrid.innerHTML = emptyMarkup("No pillar scores available.");
+        return;
+      }
+
+      el.pillarGrid.innerHTML = rows.map((item) => {
+        const score = Number(item.score || 0);
+        const outOf = Number(item.outOf || 0);
+        const percent = outOf ? clamp((score / outOf) * 100, 0, 100) : 0;
+        const tone = scoreTone(outOf ? (score / outOf) * 100 : 0);
+        return `
+          <article class="pillar">
+            <div class="pillar-head">
+              <span class="pillar-name">${esc(item.label || "Pillar")}</span>
+              <span class="pillar-score">${esc(score)}/${esc(outOf)}</span>
+            </div>
+            <div class="track" aria-hidden="true">
+              <div class="fill" style="--fill:${percent}%; --fill-color:${toneColor(tone)}"></div>
+            </div>
+            <div class="pillar-meta">${fmtPlainNumber(percent, 1)}% of allocated points</div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderExecutive(data) {
+      setText(el.executiveSummary, data.executiveSummary || "No executive summary available.");
+      const rows = data.focusItems || [];
+      if (!rows.length) {
+        el.focusGrid.innerHTML = emptyMarkup("No focus items available.");
+        return;
+      }
+      el.focusGrid.innerHTML = rows.map((item) => `
+        <article class="focus-card tone-${toneName(item.tone)}">
+          <h3>${esc(item.title || "Focus item")}</h3>
+          <p>${esc(item.detail || "")}</p>
+        </article>
+      `).join("");
+    }
+
+    function renderSummaryCards(rows = []) {
+      if (!rows.length) {
+        el.summaryCards.innerHTML = emptyMarkup("No KPI cards available.");
+        return;
+      }
+      el.summaryCards.innerHTML = rows.map((item) => `
+        <article class="metric-card tone-${toneName(item.tone)}">
+          <div class="metric-top">
+            <span class="metric-label">${esc(item.label || "Metric")}</span>
+            <span class="chip tone-${toneName(item.tone)}">${esc(toneName(item.tone).toUpperCase())}</span>
+          </div>
+          <div class="metric-value">${esc(item.value || "-")}</div>
+          <p class="metric-detail">${esc(item.detail || "")}</p>
+        </article>
+      `).join("");
+    }
+
+    function renderPerformanceRows(rows = []) {
+      if (!rows.length) {
+        el.performanceRows.innerHTML = `<tr><td colspan="5">${emptyMarkup("No operating model rows available.")}</td></tr>`;
+        return;
+      }
+      el.performanceRows.innerHTML = rows.map((row) => {
+        const tone = toneName(row.tone);
+        return `
+          <tr>
+            <td><strong>${esc(row.label || "-")}</strong></td>
+            <td class="num">${fmtMoney(row.budget)}</td>
+            <td class="num">${fmtMoney(row.actual)}</td>
+            <td class="num tone-${tone}">${fmtMoney(row.variance)}</td>
+            <td>${ratioCell(row.ratio, tone)}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function renderCapitalStack(rows = []) {
+      if (!rows.length) {
+        el.capitalStack.innerHTML = emptyMarkup("No capital stack rows available.");
+        return;
+      }
+      const maxAbs = Math.max(1, ...rows.map((item) => Math.abs(Number(item.amount || 0))));
+      el.capitalStack.innerHTML = rows.map((item) => {
+        const amount = Number(item.amount || 0);
+        const tone = toneName(item.tone || (amount < 0 ? "bad" : "info"));
+        const width = clamp(Math.abs(amount) / maxAbs * 100, 3, 100);
+        return `
+          <article class="stack-row tone-${tone}">
+            <div class="stack-label">
+              <strong>${esc(item.label || "-")}</strong>
+              <span>${esc(item.detail || "")}</span>
+            </div>
+            <div class="stack-track" aria-hidden="true">
+              <span style="--fill:${width}%; --fill-color:${toneColor(tone)}"></span>
+            </div>
+            <div class="stack-amount">${fmtMoney(amount)}</div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderTopCosts(rows = []) {
+      if (!rows.length) {
+        el.topCostRows.innerHTML = `<tr><td colspan="7">${emptyMarkup("No cost drivers available.")}</td></tr>`;
+        return;
+      }
+      el.topCostRows.innerHTML = rows.map((row) => {
+        const variance = Number(row.variance || 0);
+        const tone = variance > 0 ? "bad" : variance < 0 ? "good" : "info";
+        return `
+          <tr>
+            <td>
+              <strong>${esc(row.item || "-")}</strong>
+              <div class="small">${esc(row.section || "")}${row.group ? ` / ${esc(row.group)}` : ""}</div>
+            </td>
+            <td>${esc(row.owner || "-")}</td>
+            <td class="num">${fmtMoney(row.budget)}</td>
+            <td class="num">${fmtMoney(row.actual)}</td>
+            <td class="num tone-${tone}">${fmtMoney(row.variance)}</td>
+            <td>${esc(row.timing || "-")}</td>
+            <td>
+              <span class="chip tone-${row.priority === "Critical" ? "bad" : row.priority === "High" ? "warn" : "info"}">${esc(row.priority || "-")}</span>
+              <div class="small">${esc(row.tag || "")}</div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function renderWatchlist(rows = []) {
+      if (!rows.length) {
+        el.watchlistRows.innerHTML = emptyMarkup("No active watchlist items.");
+        return;
+      }
+      el.watchlistRows.innerHTML = rows.map((row) => `
+        <article class="risk-card tone-${toneName(row.tone)}">
+          <h3>${esc(row.item || "-")}</h3>
+          <div class="watch-metric">
+            <span class="chip tone-${toneName(row.tone)}">${esc(row.metric || "-")}</span>
+            <span class="chip">${esc(row.owner || "Household")}</span>
+          </div>
+          <p><strong>Reason:</strong> ${esc(row.reason || "")}</p>
+          <p><strong>Action:</strong> ${esc(row.action || "")}</p>
+        </article>
+      `).join("");
+    }
+
+    function renderDecisions(rows = []) {
+      if (!rows.length) {
+        el.decisionRows.innerHTML = emptyMarkup("No decisions required.");
+        return;
+      }
+      el.decisionRows.innerHTML = rows.map((row) => `
+        <article class="decision-card tone-${toneName(row.tone)}">
+          <h3>${esc(row.title || "-")}</h3>
+          <div class="decision-meta">
+            <span class="chip">${esc(row.owner || "Owner TBD")}</span>
+            <span class="chip tone-info">${esc(row.timeframe || "Timeframe TBD")}</span>
+            <span class="chip tone-${row.impact === "High" ? "bad" : row.impact === "Medium" ? "warn" : "info"}">${esc(row.impact || "Impact TBD")}</span>
+          </div>
+          <p>${esc(row.detail || "")}</p>
+        </article>
+      `).join("");
+    }
+
+    function renderProjection(rows = []) {
+      if (!rows.length) {
+        el.projectionRows.innerHTML = emptyMarkup("No projection rows available.");
+        return;
+      }
+      const maxClosing = Math.max(1, ...rows.map((row) => Math.abs(Number(row.closing || 0))));
+      el.projectionRows.innerHTML = rows.map((row) => {
+        const closing = Number(row.closing || 0);
+        const movement = Number(row.movement || 0);
+        const tone = toneName(row.tone || (movement < 0 ? "bad" : "good"));
+        const width = clamp(Math.abs(closing) / maxClosing * 100, 3, 100);
+        return `
+          <article class="projection-row tone-${tone}">
+            <div class="projection-label">
+              <strong>${esc(row.month || "-")}</strong>
+              <span>Opening ${fmtMoney(row.opening)}</span>
+            </div>
+            <div>
+              <div class="projection-track" aria-hidden="true">
+                <span style="--fill:${width}%; --fill-color:${toneColor(tone)}"></span>
+              </div>
+              <div class="projection-movement">Movement ${fmtMoney(movement)}</div>
+            </div>
+            <div class="projection-value">${fmtMoney(closing)}</div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderAccountRows(target, rows = [], emptyMessage = "No rows available.") {
+      if (!rows.length) {
+        target.innerHTML = `<tr><td colspan="6">${emptyMarkup(emptyMessage)}</td></tr>`;
+        return;
+      }
+      target.innerHTML = rows.map((row) => `
+        <tr>
+          <td><strong>${esc(row.item || "-")}</strong></td>
+          <td>${esc(row.owner || "-")}</td>
+          <td class="num">${fmtMoney(row.balance)}</td>
+          <td><span class="chip">${esc(row.tag || "-")}</span></td>
+          <td>${esc(row.timing || "-")}</td>
+          <td class="muted">${esc(row.notes || "")}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderDebtRows(rows = []) {
+      if (!rows.length) {
+        el.debtHighlights.innerHTML = `<tr><td colspan="6">${emptyMarkup("No debt rows available.")}</td></tr>`;
+        return;
+      }
+      el.debtHighlights.innerHTML = rows.map((row) => `
+        <tr>
+          <td><strong>${esc(row.item || "-")}</strong></td>
+          <td>${esc(row.owner || "-")}</td>
+          <td class="num tone-bad">${fmtMoney(row.balance)}</td>
+          <td class="num">${fmtMoney(row.instalment)}</td>
+          <td>${esc(row.timing || "-")}</td>
+          <td class="muted">${esc(row.notes || "")}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderDashboard(data) {
+      renderHeader(data);
+      renderPillars(data.pillarScores || []);
+      renderExecutive(data);
+      renderSummaryCards(data.summaryCards || []);
+      renderPerformanceRows(data.performanceRows || []);
+      renderCapitalStack(data.capitalStack || []);
+      renderTopCosts(data.topCostRows || []);
+      renderWatchlist(data.watchlistRows || []);
+      renderDecisions(data.decisionRows || []);
+      renderProjection(data.projectionRows || []);
+      renderAccountRows(el.cashAccounts, data.cashAccounts || [], "No cash accounts available.");
+      renderAccountRows(el.investmentRows, data.investmentRows || [], "No investment rows available.");
+      renderDebtRows(data.debtHighlights || []);
+    }
+
+    async function loadDashboard(manual = false) {
+      if (state.loading) return;
+      setLoading(true);
+      setText(el.refreshStatus, manual ? "Manual refresh in progress..." : "Checking dashboard_data.json...");
+
+      try {
+        const response = await fetch(`${DATA_URL}?v=${Date.now()}`, { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error(`dashboard_data.json returned HTTP ${response.status}`);
+        }
+        const data = await response.json();
+        state.dashboard = data;
+        renderDashboard(data);
+        scheduleRefresh(data.refreshSeconds || DEFAULT_REFRESH_SECONDS);
+        setText(el.refreshStatus, `Live from dashboard_data.json at ${fmtDateTime(new Date().toISOString())}`);
+        if (manual) showToast("Dashboard data refreshed.", "good");
+      } catch (error) {
+        console.error(error);
+        setText(el.refreshStatus, "Unable to load dashboard_data.json.");
+        showToast(`Could not load dashboard_data.json. ${error.message}`, "bad");
+        scheduleRefresh(state.dashboard?.refreshSeconds || DEFAULT_REFRESH_SECONDS);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    el.refreshButton.addEventListener("click", () => loadDashboard(true));
+    loadDashboard(false);
+  </script>
 </body>
 </html>
