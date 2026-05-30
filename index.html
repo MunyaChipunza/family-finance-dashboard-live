@@ -4,38 +4,37 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Family Finance Command Deck</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23080b0f'/%3E%3Cpath d='M14 42h36M14 32h26M14 22h18' stroke='%2361a8ff' stroke-width='6' stroke-linecap='square'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23fff8ef'/%3E%3Cpath d='M13 44h38M13 33h26M13 22h18' stroke='%231d232b' stroke-width='6' stroke-linecap='round'/%3E%3Ccircle cx='49' cy='20' r='5' fill='%23f25f69'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      color-scheme: dark;
-      --bg: #080b0f;
-      --bg-2: #0c1118;
-      --panel: #111821;
-      --panel-2: #151f2b;
-      --panel-3: #0d141d;
-      --line: #243141;
-      --line-strong: #34465a;
-      --text: #eef4f5;
-      --muted: #9aa9b8;
-      --faint: #657688;
-      --good: #2bd98f;
-      --good-soft: rgba(43, 217, 143, 0.13);
-      --warn: #f0b84f;
-      --warn-soft: rgba(240, 184, 79, 0.15);
-      --bad: #f25f69;
-      --bad-soft: rgba(242, 95, 105, 0.14);
-      --info: #61a8ff;
-      --info-soft: rgba(97, 168, 255, 0.14);
-      --neutral: #93a4b7;
-      --neutral-soft: rgba(147, 164, 183, 0.12);
-      --shadow: 0 20px 70px rgba(0, 0, 0, 0.32);
-      --radius: 8px;
-      --mono: "DM Mono", ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      color-scheme: light;
+      --bg: #f4efe5;
+      --bg-2: #eadfce;
+      --ink: #1d232b;
+      --muted: #5d6672;
+      --soft: #8a929c;
+      --panel: rgba(255, 250, 244, 0.9);
+      --panel-strong: #fffaf2;
+      --line: rgba(43, 58, 73, 0.13);
+      --line-strong: rgba(43, 58, 73, 0.22);
+      --shadow: 0 22px 52px rgba(34, 43, 54, 0.13);
+      --good: #36d7a0;
+      --good-deep: #087a55;
+      --warn: #f7b955;
+      --warn-deep: #8a5607;
+      --bad: #ff6875;
+      --bad-deep: #9d1b2d;
+      --info: #35c8ff;
+      --info-deep: #156785;
+      --neutral: #7b8490;
+      --neutral-deep: #414a55;
+      --radius: 24px;
       --body: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --heading: "Syne", var(--body);
+      --mono: "DM Mono", ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
     }
 
     * {
@@ -50,11 +49,11 @@
     body {
       margin: 0;
       min-height: 100vh;
-      color: var(--text);
+      color: var(--ink);
       background:
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px) 0 0 / 80px 80px,
-        linear-gradient(180deg, rgba(255,255,255,0.018) 1px, transparent 1px) 0 0 / 80px 80px,
-        linear-gradient(180deg, #090d12 0%, #0b1118 44%, #080b0f 100%);
+        radial-gradient(circle at top left, rgba(53, 200, 255, 0.16), transparent 30%),
+        radial-gradient(circle at top right, rgba(255, 104, 117, 0.12), transparent 32%),
+        linear-gradient(180deg, #f8f2ea 0%, #efe3d2 100%);
       font-family: var(--body);
       font-size: 16px;
       line-height: 1.45;
@@ -64,468 +63,592 @@
       font: inherit;
     }
 
-    .app-shell {
-      width: min(1480px, 100%);
+    .wrap {
+      width: min(1540px, 100%);
       margin: 0 auto;
-      padding: 24px;
+      padding: 30px 22px;
     }
 
-    .command-header {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
-      gap: 18px;
-      align-items: stretch;
-      margin-bottom: 18px;
-    }
-
-    .header-main,
-    .score-card,
-    .section-block,
-    .metric-card,
-    .focus-card,
-    .decision-card,
-    .risk-card,
-    .stack-row,
-    .projection-row {
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(21, 31, 43, 0.92), rgba(13, 20, 29, 0.96));
-      box-shadow: var(--shadow);
-    }
-
-    .header-main,
-    .score-card,
-    .section-block {
-      border-radius: var(--radius);
-      min-width: 0;
-    }
-
-    .header-main {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
+    .topline {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
       gap: 20px;
-      min-height: 260px;
-      padding: 26px;
-      position: relative;
-      overflow: hidden;
+      margin: 0 4px 22px;
     }
 
-    .header-main::after {
-      content: "";
-      position: absolute;
-      inset: auto 0 0 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--info), var(--good), var(--warn), var(--bad));
-      opacity: 0.72;
-    }
-
-    h1,
-    h2,
-    h3,
-    p {
+    .brand h1,
+    .brand p,
+    .hero h2,
+    .hero p,
+    .panel h2,
+    .panel p,
+    .lens h2,
+    .lens p {
       margin: 0;
     }
 
-    h1,
-    h2,
-    h3 {
+    .brand h1 {
       font-family: var(--heading);
+      font-size: 1.52rem;
+      line-height: 1.1;
       letter-spacing: 0;
     }
 
-    h1 {
-      max-width: 820px;
-      font-size: 3rem;
-      line-height: 1;
-      font-weight: 800;
-    }
-
-    h2 {
-      font-size: 1.45rem;
-      line-height: 1.08;
-      font-weight: 700;
-    }
-
-    h3 {
-      font-size: 1rem;
-      line-height: 1.18;
-      font-weight: 700;
-    }
-
-    .subtitle {
-      max-width: 720px;
-      margin-top: 12px;
+    .brand p,
+    .source-pill {
       color: var(--muted);
-      font-size: 1.02rem;
+      font-size: 0.98rem;
     }
 
-    .header-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      margin-top: 22px;
-    }
-
-    .refresh-button {
+    .source-pill {
       display: inline-flex;
-      min-height: 42px;
+      align-items: center;
+      gap: 10px;
+      max-width: 100%;
+      min-height: 44px;
+      border-radius: 999px;
+      padding: 0 18px;
+      background: rgba(29, 35, 43, 0.06);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .source-pill::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.64;
+    }
+
+    .hero,
+    .kpi-card,
+    .panel,
+    .lens,
+    .data-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 36px;
+      background:
+        linear-gradient(135deg, rgba(255, 250, 244, 0.96), rgba(249, 244, 236, 0.88)),
+        var(--panel);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--info), var(--good), var(--warn), var(--bad));
+      opacity: 0.75;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 470px);
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .eyebrow,
+    .section-kicker,
+    .label {
+      font-family: var(--mono);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow {
+      display: inline-flex;
       align-items: center;
       gap: 9px;
-      padding: 0 14px;
-      border: 1px solid var(--line-strong);
-      border-radius: 6px;
-      color: var(--text);
-      background: #172231;
-      cursor: pointer;
-    }
-
-    .refresh-button:hover {
-      border-color: var(--info);
-      background: #1b2b3e;
-    }
-
-    .refresh-button:focus-visible {
-      outline: 2px solid var(--info);
-      outline-offset: 2px;
-    }
-
-    .refresh-button svg {
-      width: 17px;
-      height: 17px;
-      flex: 0 0 auto;
-    }
-
-    .refresh-button[disabled] {
-      cursor: wait;
-      opacity: 0.68;
-    }
-
-    .status-line {
+      border-radius: 999px;
+      padding: 9px 14px;
       color: var(--muted);
-      font-family: var(--mono);
+      background: rgba(29, 35, 43, 0.06);
       font-size: 0.78rem;
     }
 
-    .metadata-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(120px, 1fr));
-      gap: 10px;
-      align-self: end;
-      min-width: 410px;
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--bad);
     }
 
-    .metadata-cell {
-      min-width: 0;
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 6px;
-      padding: 11px 12px;
-      background: rgba(8, 12, 17, 0.44);
+    .hero h2 {
+      max-width: 820px;
+      margin-top: 18px;
+      font-family: var(--heading);
+      font-size: clamp(2.35rem, 5.6vw, 5rem);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .hero h2 span {
+      color: var(--info);
+    }
+
+    .hero-copy {
+      max-width: 840px;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 1.06rem;
+      line-height: 1.55;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-top: 24px;
+    }
+
+    .refresh-btn,
+    .tab-btn,
+    .mode-btn,
+    .kpi-card {
+      border: 1px solid var(--line);
+      cursor: pointer;
+      color: var(--ink);
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    }
+
+    .refresh-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 52px;
+      border-radius: 15px;
+      padding: 0 18px;
+      background: var(--panel-strong);
+      font-weight: 800;
+    }
+
+    .refresh-btn:hover,
+    .tab-btn:hover,
+    .mode-btn:hover,
+    .kpi-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 28px rgba(34, 43, 54, 0.13);
+    }
+
+    .refresh-btn:focus-visible,
+    .tab-btn:focus-visible,
+    .mode-btn:focus-visible,
+    .kpi-card:focus-visible {
+      outline: 3px solid rgba(53, 200, 255, 0.55);
+      outline-offset: 2px;
+    }
+
+    .refresh-btn[disabled] {
+      cursor: wait;
+      opacity: 0.7;
+    }
+
+    .refresh-btn svg {
+      width: 19px;
+      height: 19px;
+      flex: 0 0 auto;
+    }
+
+    .refresh-status {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.86rem;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 11px;
+      align-content: start;
+    }
+
+    .meta-cell,
+    .health-box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.52);
+      padding: 15px;
+    }
+
+    .health-box {
+      display: grid;
+      grid-column: 1 / -1;
+      grid-template-columns: 112px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+    }
+
+    .score-ring {
+      --score-deg: 0deg;
+      --score-color: var(--bad);
+      display: grid;
+      place-items: center;
+      width: 112px;
+      height: 112px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle, #fffaf2 0 55%, transparent 56%),
+        conic-gradient(var(--score-color) var(--score-deg), rgba(29, 35, 43, 0.11) 0);
+    }
+
+    .score-ring strong {
+      font-family: var(--mono);
+      font-size: 2rem;
     }
 
     .label {
       display: block;
-      color: var(--faint);
-      font-family: var(--mono);
+      color: var(--soft);
       font-size: 0.72rem;
-      line-height: 1.2;
-      text-transform: uppercase;
-      letter-spacing: 0;
+      line-height: 1.25;
     }
 
-    .metadata-cell strong,
     .data-value {
       display: block;
-      margin-top: 5px;
+      margin-top: 6px;
       overflow-wrap: anywhere;
-      color: var(--text);
+      color: var(--ink);
       font-family: var(--mono);
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       font-weight: 500;
     }
 
-    .score-card {
-      display: grid;
-      align-content: space-between;
-      min-height: 260px;
-      padding: 24px;
-    }
-
-    .score-top {
-      display: flex;
-      gap: 18px;
+    .chip,
+    .tone-chip {
+      display: inline-flex;
       align-items: center;
-      justify-content: space-between;
-    }
-
-    .score-meter {
-      --score-deg: 0deg;
-      display: grid;
-      place-items: center;
-      width: 142px;
-      height: 142px;
-      border-radius: 999px;
-      background:
-        radial-gradient(circle at center, #101823 0 56%, transparent 57%),
-        conic-gradient(var(--score-color) var(--score-deg), #273443 0);
-      box-shadow: inset 0 0 28px rgba(255, 255, 255, 0.04);
-    }
-
-    .score-meter strong {
-      font-family: var(--mono);
-      font-size: 2.25rem;
-      line-height: 1;
-    }
-
-    .score-good {
-      --score-color: var(--good);
-    }
-
-    .score-warn {
-      --score-color: var(--warn);
-    }
-
-    .score-bad {
-      --score-color: var(--bad);
-    }
-
-    .score-copy {
-      min-width: 0;
-    }
-
-    .score-copy p {
-      margin-top: 7px;
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
-
-    .chip-row {
-      display: flex;
-      flex-wrap: wrap;
       gap: 8px;
-      margin-top: 16px;
+      min-height: 30px;
+      border-radius: 999px;
+      padding: 5px 11px;
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      font-weight: 500;
+      white-space: nowrap;
     }
 
     .chip {
-      display: inline-flex;
-      min-height: 28px;
-      align-items: center;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 4px 9px;
       color: var(--muted);
-      background: rgba(255,255,255,0.04);
-      font-family: var(--mono);
-      font-size: 0.73rem;
+      background: rgba(29, 35, 43, 0.06);
+      border: 1px solid rgba(29, 35, 43, 0.08);
     }
 
     .tone-good {
-      color: var(--good);
-      border-color: rgba(43, 217, 143, 0.36);
-      background: var(--good-soft);
+      color: var(--good-deep);
+      border-color: rgba(54, 215, 160, 0.38);
+      background: rgba(54, 215, 160, 0.14);
     }
 
     .tone-warn {
-      color: var(--warn);
-      border-color: rgba(240, 184, 79, 0.4);
-      background: var(--warn-soft);
+      color: var(--warn-deep);
+      border-color: rgba(247, 185, 85, 0.5);
+      background: rgba(247, 185, 85, 0.17);
     }
 
     .tone-bad {
-      color: var(--bad);
-      border-color: rgba(242, 95, 105, 0.42);
-      background: var(--bad-soft);
+      color: var(--bad-deep);
+      border-color: rgba(255, 104, 117, 0.46);
+      background: rgba(255, 104, 117, 0.14);
     }
 
     .tone-info {
-      color: var(--info);
-      border-color: rgba(97, 168, 255, 0.38);
-      background: var(--info-soft);
+      color: var(--info-deep);
+      border-color: rgba(53, 200, 255, 0.44);
+      background: rgba(53, 200, 255, 0.15);
     }
 
     .tone-neutral {
-      color: var(--neutral);
-      border-color: rgba(147, 164, 183, 0.3);
-      background: var(--neutral-soft);
+      color: var(--neutral-deep);
+      border-color: rgba(123, 132, 144, 0.3);
+      background: rgba(123, 132, 144, 0.12);
     }
 
-    main {
-      display: grid;
-      gap: 18px;
-      min-width: 0;
+    .latest {
+      margin-top: 22px;
+      padding: 28px 0 0;
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at top left, rgba(53, 200, 255, 0.18), transparent 31%),
+        radial-gradient(circle at top right, rgba(255, 104, 117, 0.10), transparent 34%),
+        linear-gradient(180deg, rgba(255,255,255,0.42), rgba(255,255,255,0.18));
     }
 
-    .section-block {
-      padding: 20px;
-    }
-
-    .section-heading {
-      display: flex;
-      gap: 16px;
-      align-items: start;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
-
-    .section-heading p {
+    .section-kicker {
+      display: inline-flex;
+      margin-left: 24px;
+      border: 1px solid rgba(53, 200, 255, 0.35);
+      border-radius: 999px;
+      padding: 10px 17px;
       color: var(--muted);
-      font-size: 0.94rem;
+      background: rgba(255,255,255,0.48);
+      font-size: 0.82rem;
     }
 
-    .section-index {
-      color: var(--faint);
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(198px, 1fr));
+      gap: 14px;
+      overflow-x: auto;
+      padding: 32px 24px 28px;
+      scrollbar-width: thin;
+    }
+
+    .kpi-card {
+      min-height: 150px;
+      min-width: 198px;
+      padding: 22px 24px;
+      text-align: left;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 249, 240, 0.78)),
+        var(--panel-strong);
+    }
+
+    .kpi-card.active {
+      border-color: rgba(29, 35, 43, 0.2);
+      box-shadow: 0 20px 40px rgba(34, 43, 54, 0.17);
+    }
+
+    .kpi-label {
+      display: block;
+      min-height: 38px;
+      color: var(--muted);
       font-family: var(--mono);
-      font-size: 0.74rem;
+      font-size: 0.86rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
     }
 
-    .grid-2 {
-      display: grid;
-      grid-template-columns: minmax(0, 1.08fr) minmax(280px, 0.92fr);
-      gap: 14px;
+    .kpi-value {
+      display: block;
+      margin-top: 14px;
+      font-family: var(--heading);
+      font-size: clamp(2rem, 3vw, 2.9rem);
+      line-height: 1;
+      letter-spacing: 0;
     }
 
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
+    .kpi-detail {
+      display: block;
+      margin-top: 11px;
+      color: var(--soft);
+      font-size: 0.86rem;
     }
 
-    .grid-4 {
+    .kpi-card[data-tone="good"] .kpi-value { color: var(--good); }
+    .kpi-card[data-tone="warn"] .kpi-value { color: var(--warn); }
+    .kpi-card[data-tone="bad"] .kpi-value { color: var(--bad); }
+    .kpi-card[data-tone="info"] .kpi-value { color: var(--info); }
+
+    .workspace {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .panel {
+      padding: 22px;
+    }
+
+    .control-panel {
+      display: grid;
+      gap: 18px;
+    }
+
+    .tabs,
+    .mode-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tab-btn,
+    .mode-btn {
+      min-height: 50px;
+      border-radius: 15px;
+      padding: 0 17px;
+      background: rgba(255,255,255,0.56);
+      font-weight: 800;
+    }
+
+    .tab-btn.active,
+    .mode-btn.active {
+      border-color: transparent;
+      color: #fff;
+      background: linear-gradient(135deg, #4ac7ff, #8a70ff 52%, #ff6f9b);
+    }
+
+    .control-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .lens {
+      padding: 22px;
+    }
+
+    .lens-head,
+    .panel-head,
+    .row-head {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .lens h2,
+    .panel h2 {
+      font-family: var(--heading);
+      font-size: 1.55rem;
+      line-height: 1.1;
+    }
+
+    .lens-value {
+      margin-top: 18px;
+      font-family: var(--heading);
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .lens-detail,
+    .lens-copy,
+    .panel-copy {
+      color: var(--muted);
+      line-height: 1.62;
+    }
+
+    .lens-detail {
+      margin-top: 12px;
+      font-size: 1rem;
+    }
+
+    .lens-copy {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+
+    .pill-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 18px;
+    }
+
+    .pillar-grid,
+    .focus-grid,
+    .card-grid,
+    .payment-grid {
+      display: grid;
       gap: 12px;
     }
 
     .pillar-grid {
-      display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 12px;
     }
 
-    .pillar {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 14px;
-      background: rgba(8, 12, 17, 0.48);
+    .card-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .pillar-head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
+    .payment-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .pillar-name {
-      color: var(--text);
-      font-weight: 700;
-    }
-
-    .pillar-score {
-      color: var(--text);
-      font-family: var(--mono);
-      font-size: 0.88rem;
-    }
-
-    .track {
-      width: 100%;
-      height: 9px;
-      margin-top: 12px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: #263240;
-    }
-
-    .fill {
-      width: var(--fill, 0%);
-      height: 100%;
-      border-radius: inherit;
-      background: var(--fill-color, var(--info));
-    }
-
-    .pillar-meta {
-      margin-top: 9px;
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: 0.76rem;
-    }
-
-    .executive-copy {
-      min-height: 100%;
-      border-left: 3px solid var(--info);
-      padding: 4px 0 4px 16px;
-      color: #dce7ec;
-      font-size: 1.04rem;
-    }
-
-    .focus-grid,
-    .decision-grid,
-    .risk-grid {
-      display: grid;
-      gap: 12px;
-    }
-
-    .focus-card,
-    .decision-card,
-    .risk-card {
-      border-radius: 8px;
-      padding: 15px;
+    .data-card {
+      padding: 16px;
       box-shadow: none;
+      background: rgba(255,255,255,0.58);
     }
 
-    .focus-card h3,
-    .decision-card h3,
-    .risk-card h3 {
-      margin-bottom: 7px;
+    .data-card h3 {
+      margin: 0;
+      font-family: var(--heading);
+      font-size: 1rem;
+      line-height: 1.2;
     }
 
-    .focus-card p,
-    .decision-card p,
-    .risk-card p {
+    .data-card p {
+      margin: 8px 0 0;
       color: var(--muted);
       font-size: 0.92rem;
     }
 
-    .metric-grid {
+    .bar-track {
+      width: 100%;
+      height: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      margin-top: 13px;
+      background: rgba(29, 35, 43, 0.11);
+    }
+
+    .bar-fill {
+      display: block;
+      width: var(--fill, 0%);
+      height: 100%;
+      border-radius: inherit;
+      background: var(--bar-color, var(--info));
+    }
+
+    .chart-list {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
+      gap: 11px;
     }
 
-    .metric-card {
-      min-height: 138px;
-      border-radius: 8px;
-      padding: 15px;
-      box-shadow: none;
+    .chart-row {
+      display: grid;
+      grid-template-columns: minmax(130px, 0.55fr) minmax(180px, 1fr) minmax(110px, auto);
+      gap: 13px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 13px;
+      background: rgba(255,255,255,0.55);
     }
 
-    .metric-card .metric-top {
-      display: flex;
-      gap: 10px;
-      align-items: start;
-      justify-content: space-between;
+    .chart-row strong {
+      display: block;
+      font-size: 0.94rem;
     }
 
-    .metric-label {
-      color: var(--muted);
-      font-size: 0.86rem;
-      font-weight: 700;
-    }
-
-    .metric-value {
-      margin-top: 16px;
-      color: var(--text);
+    .chart-row span {
+      color: var(--soft);
       font-family: var(--mono);
-      font-size: 1.55rem;
-      line-height: 1.05;
-      font-weight: 500;
-      overflow-wrap: anywhere;
+      font-size: 0.78rem;
     }
 
-    .metric-detail {
-      margin-top: 10px;
-      color: var(--faint);
-      font-size: 0.84rem;
+    .chart-value {
+      font-family: var(--mono);
+      text-align: right;
+      white-space: nowrap;
     }
 
     .table-wrap {
@@ -533,45 +656,41 @@
       min-width: 0;
       overflow-x: auto;
       border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(8, 12, 17, 0.4);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.54);
     }
 
     table {
       width: 100%;
-      min-width: 780px;
+      min-width: 760px;
       border-collapse: collapse;
     }
 
     th,
     td {
-      padding: 12px 13px;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--line);
       text-align: left;
       vertical-align: top;
     }
 
     th {
-      color: var(--faint);
-      background: rgba(255,255,255,0.025);
+      color: var(--soft);
       font-family: var(--mono);
       font-size: 0.72rem;
       font-weight: 500;
       text-transform: uppercase;
+      letter-spacing: 0.09em;
       white-space: nowrap;
     }
 
     td {
-      color: #dbe5ea;
-      font-size: 0.9rem;
+      color: var(--ink);
+      font-size: 0.92rem;
     }
 
-    tbody tr:last-child td {
+    tr:last-child td {
       border-bottom: 0;
-    }
-
-    tbody tr:hover td {
-      background: rgba(255,255,255,0.025);
     }
 
     .num {
@@ -583,133 +702,26 @@
       color: var(--muted);
     }
 
-    .small {
-      color: var(--faint);
-      font-size: 0.8rem;
-    }
-
-    .ratio-bar {
-      display: grid;
-      width: 130px;
-      height: 8px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: #263240;
-    }
-
-    .ratio-bar span {
-      width: var(--fill, 0%);
-      background: var(--fill-color, var(--info));
-    }
-
-    .capital-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .stack-row {
-      display: grid;
-      grid-template-columns: minmax(180px, 1fr) minmax(220px, 2fr) minmax(120px, auto);
-      gap: 14px;
-      align-items: center;
-      border-radius: 8px;
-      padding: 12px;
-      box-shadow: none;
-    }
-
-    .stack-label strong,
-    .projection-label strong {
-      display: block;
-      font-weight: 700;
-    }
-
-    .stack-label span,
-    .projection-label span {
-      display: block;
-      margin-top: 3px;
-      color: var(--faint);
-      font-size: 0.8rem;
-    }
-
-    .stack-track,
-    .projection-track {
-      height: 12px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: #263240;
-    }
-
-    .stack-track span,
-    .projection-track span {
-      display: block;
-      width: var(--fill, 0%);
-      height: 100%;
-      border-radius: inherit;
-      background: var(--fill-color, var(--info));
-    }
-
-    .stack-amount,
-    .projection-value {
-      font-family: var(--mono);
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    .watch-metric,
-    .decision-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 10px 0;
-    }
-
-    .decision-meta .chip,
-    .watch-metric .chip {
-      border-radius: 6px;
-    }
-
-    .projection-chart {
-      display: grid;
-      gap: 11px;
-    }
-
-    .projection-row {
-      display: grid;
-      grid-template-columns: 150px minmax(180px, 1fr) 150px;
-      gap: 14px;
-      align-items: center;
-      border-radius: 8px;
-      padding: 13px;
-      box-shadow: none;
-    }
-
-    .projection-movement {
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: 0.82rem;
-    }
-
-    .empty-state {
+    .empty {
       border: 1px dashed var(--line-strong);
-      border-radius: 8px;
-      padding: 16px;
+      border-radius: 18px;
+      padding: 18px;
       color: var(--muted);
-      background: rgba(8, 12, 17, 0.38);
+      background: rgba(255,255,255,0.44);
     }
 
     .toast {
       position: fixed;
       right: 20px;
       bottom: 20px;
-      z-index: 10;
+      z-index: 20;
       max-width: min(440px, calc(100vw - 40px));
-      border: 1px solid var(--line-strong);
-      border-radius: 8px;
-      padding: 12px 14px;
-      color: var(--text);
-      background: #111923;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 13px 15px;
+      background: var(--panel-strong);
       box-shadow: var(--shadow);
-      font-size: 0.9rem;
+      font-weight: 700;
     }
 
     .toast[hidden] {
@@ -717,97 +729,93 @@
     }
 
     @media (max-width: 1180px) {
-      .command-header,
-      .header-main,
-      .grid-2 {
+      .hero-grid,
+      .content-grid {
         grid-template-columns: 1fr;
       }
 
-      .metadata-grid {
-        min-width: 0;
-      }
-
       .pillar-grid,
-      .grid-4 {
+      .payment-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
-    @media (max-width: 820px) {
-      .app-shell {
-        padding: 14px;
+    @media (max-width: 760px) {
+      .wrap {
+        padding: 16px 12px;
       }
 
-      h1 {
-        font-size: 2.25rem;
-      }
-
-      .header-main,
-      .score-card,
-      .section-block {
-        padding: 16px;
-      }
-
-      .metadata-grid,
-      .metric-grid,
-      .grid-3,
-      .pillar-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .score-top {
-        align-items: start;
-      }
-
-      .score-meter {
-        width: 118px;
-        height: 118px;
-      }
-
-      .score-meter strong {
-        font-size: 1.9rem;
-      }
-
-      .stack-row,
-      .projection-row {
-        grid-template-columns: 1fr;
-      }
-
-      .stack-amount,
-      .projection-value {
-        text-align: left;
-      }
-    }
-
-    @media (max-width: 560px) {
-      h1 {
-        font-size: 1.9rem;
-      }
-
-      h2 {
-        font-size: 1.22rem;
-      }
-
-      .score-top,
-      .section-heading {
+      .topline,
+      .control-meta,
+      .lens-head,
+      .panel-head {
         flex-direction: column;
       }
 
-      .metric-value {
-        font-size: 1.32rem;
+      .source-pill {
+        width: 100%;
+        white-space: normal;
+      }
+
+      .hero,
+      .panel,
+      .lens {
+        border-radius: 20px;
+        padding: 20px;
+      }
+
+      .hero h2 {
+        font-size: 2.35rem;
+      }
+
+      .meta-grid,
+      .health-box,
+      .pillar-grid,
+      .card-grid,
+      .payment-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .kpi-strip {
+        grid-template-columns: repeat(9, minmax(185px, 1fr));
+        padding-inline: 16px;
+      }
+
+      .tab-btn,
+      .mode-btn,
+      .refresh-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .chart-row {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-value {
+        text-align: left;
       }
     }
   </style>
 </head>
 <body>
-  <div class="app-shell">
-    <header class="command-header">
-      <div class="header-main">
+  <div class="wrap">
+    <div class="topline">
+      <div class="brand">
+        <h1>Family Finance</h1>
+        <p>Clean operating view for household capital decisions.</p>
+      </div>
+      <div class="source-pill" id="liveUrl">Loading dashboard_data.json</div>
+    </div>
+
+    <section class="hero" aria-labelledby="dashboardTitle">
+      <div class="hero-grid">
         <div>
-          <h1 id="dashboardTitle">Family Finance Command Deck</h1>
-          <p class="subtitle" id="dashboardSubtitle">Executive view of household cash, commitments, debt, and long-term capital.</p>
-          <div class="header-actions">
-            <button class="refresh-button" id="refreshButton" type="button">
+          <div class="eyebrow" id="dataMode">Actuals live</div>
+          <h2 id="dashboardTitle">Family Finance <span>Command Deck</span></h2>
+          <p class="hero-copy" id="dashboardSubtitle">Executive view of household cash, commitments, debt, and long-term capital.</p>
+          <div class="hero-actions">
+            <button class="refresh-btn" id="refreshButton" type="button">
               <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 12a9 9 0 0 1-15.5 6.3"></path>
                 <path d="M3 12A9 9 0 0 1 18.5 5.7"></path>
@@ -816,260 +824,89 @@
               </svg>
               <span>Refresh Now</span>
             </button>
-            <span class="status-line" id="refreshStatus">Loading dashboard data...</span>
+            <span class="refresh-status" id="refreshStatus">Loading...</span>
           </div>
         </div>
-        <div class="metadata-grid" aria-label="Dashboard metadata">
-          <div class="metadata-cell">
+
+        <div class="meta-grid" aria-label="Dashboard metadata">
+          <div class="health-box">
+            <div class="score-ring" id="scoreRing">
+              <strong id="healthScore">0</strong>
+            </div>
+            <div>
+              <span class="label">Health Score</span>
+              <div class="data-value" id="healthLabel">Loading</div>
+              <div class="pill-grid">
+                <span class="tone-chip" id="healthTone">Pending</span>
+                <span class="tone-chip" id="qualityLabel">Pending</span>
+              </div>
+            </div>
+          </div>
+          <div class="meta-cell">
             <span class="label">Report Month</span>
-            <strong id="reportMonth">-</strong>
+            <strong class="data-value" id="reportMonth">-</strong>
           </div>
-          <div class="metadata-cell">
+          <div class="meta-cell">
             <span class="label">Last Updated</span>
-            <strong id="generatedAt">-</strong>
+            <strong class="data-value" id="generatedAt">-</strong>
           </div>
-          <div class="metadata-cell">
+          <div class="meta-cell">
             <span class="label">Source Updated</span>
-            <strong id="sourceUpdatedAt">-</strong>
+            <strong class="data-value" id="sourceUpdatedAt">-</strong>
           </div>
-          <div class="metadata-cell">
-            <span class="label">Data Mode</span>
-            <strong id="dataMode">-</strong>
-          </div>
-          <div class="metadata-cell">
-            <span class="label">Source</span>
-            <strong id="sourceName">-</strong>
-          </div>
-          <div class="metadata-cell">
-            <span class="label">Next Refresh</span>
-            <strong id="countdown">-</strong>
+          <div class="meta-cell">
+            <span class="label">Next Check</span>
+            <strong class="data-value" id="countdown">-</strong>
           </div>
         </div>
       </div>
+    </section>
 
-      <aside class="score-card" aria-label="Health score">
-        <div class="score-top">
-          <div class="score-meter score-bad" id="scoreMeter">
-            <strong id="healthScore">0</strong>
-          </div>
-          <div class="score-copy">
-            <span class="label">Health Score</span>
-            <h2 id="healthLabel">Loading</h2>
-            <p id="healthCopy">Score is evaluated against liquidity, margin, leverage, discipline, and balance sheet strength.</p>
-          </div>
-        </div>
-        <div class="chip-row">
-          <span class="chip" id="healthTone">Health pending</span>
-          <span class="chip" id="qualityLabel">Data pending</span>
-        </div>
-      </aside>
-    </header>
+    <section class="latest" aria-label="Latest KPI readings">
+      <span class="section-kicker">Latest Reading</span>
+      <div class="kpi-strip" id="kpiStrip"></div>
+    </section>
 
-    <main>
-      <section class="section-block" aria-labelledby="pillarsTitle">
-        <div class="section-heading">
-          <div>
-            <span class="section-index">01 / Health Pillars</span>
-            <h2 id="pillarsTitle">Health Pillars</h2>
-          </div>
-          <p>Weighted contribution to the household finance score.</p>
+    <main class="workspace">
+      <section class="panel control-panel" aria-label="Dashboard controls">
+        <div class="tabs" id="sectionTabs"></div>
+        <div class="mode-tabs" id="modeTabs">
+          <button class="mode-btn active" type="button" data-mode="table">Table</button>
+          <button class="mode-btn" type="button" data-mode="chart">Chart</button>
         </div>
-        <div class="pillar-grid" id="pillarGrid"></div>
-      </section>
-
-      <section class="section-block" aria-labelledby="summaryTitle">
-        <div class="section-heading">
-          <div>
-            <span class="section-index">02 / Executive Summary</span>
-            <h2 id="summaryTitle">Executive Summary</h2>
-          </div>
-          <p id="dataQualityDetail"></p>
-        </div>
-        <div class="grid-2">
-          <p class="executive-copy" id="executiveSummary">No executive summary available.</p>
-          <div class="focus-grid" id="focusGrid"></div>
+        <div class="control-meta">
+          <span id="activeSectionLabel">Overview</span>
+          <span id="rowCount">0 rows</span>
         </div>
       </section>
 
-      <section class="section-block" aria-labelledby="boardTitle">
-        <div class="section-heading">
-          <div>
-            <span class="section-index">03 / Board Summary</span>
-            <h2 id="boardTitle">Board Summary</h2>
+      <div class="content-grid">
+        <section class="lens" aria-labelledby="lensTitle">
+          <div class="lens-head">
+            <div>
+              <span class="section-kicker" style="margin-left:0">KPI Lens</span>
+              <h2 id="lensTitle">Select a KPI</h2>
+            </div>
+            <span class="tone-chip" id="lensTone">Pending</span>
           </div>
-          <p>Key measures from income, outflows, runway, vehicle load, savings, and net worth.</p>
-        </div>
-        <div class="metric-grid" id="summaryCards"></div>
-      </section>
+          <div class="lens-value" id="lensValue">-</div>
+          <p class="lens-detail" id="lensDetail">Click a KPI card above to browse the related operating detail.</p>
+          <div class="pill-grid" id="lensLinks"></div>
+          <p class="lens-copy" id="executiveSummary">No executive summary available.</p>
+        </section>
 
-      <section class="section-block" aria-labelledby="operatingTitle">
-        <div class="section-heading">
-          <div>
-            <span class="section-index">04 / Operating Model</span>
-            <h2 id="operatingTitle">Operating Model</h2>
+        <section class="panel" aria-labelledby="contentTitle">
+          <div class="panel-head">
+            <div>
+              <span class="section-kicker" style="margin-left:0" id="contentKicker">Overview</span>
+              <h2 id="contentTitle">Executive View</h2>
+            </div>
+            <span class="tone-chip" id="contentTone">Live</span>
           </div>
-          <p>Budget versus actual performance for the current reporting month.</p>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Line</th>
-                <th>Budget</th>
-                <th>Actual</th>
-                <th>Variance</th>
-                <th>Execution</th>
-              </tr>
-            </thead>
-            <tbody id="performanceRows"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="section-block" aria-labelledby="capitalTitle">
-        <div class="section-heading">
-          <div>
-            <span class="section-index">05 / Capital Stack</span>
-            <h2 id="capitalTitle">Capital Stack</h2>
-          </div>
-          <p>Assets, float, liabilities, and tracked net worth.</p>
-        </div>
-        <div class="capital-list" id="capitalStack"></div>
-      </section>
-
-      <section class="section-block" aria-labelledby="costTitle">
-        <div class="section-heading">
-          <div>
-            <span class="section-index">06 / Top Cost Drivers</span>
-            <h2 id="costTitle">Top Cost Drivers</h2>
-          </div>
-          <p>Largest committed or variable rows requiring management attention.</p>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Cost Driver</th>
-                <th>Owner</th>
-                <th>Budget</th>
-                <th>Actual</th>
-                <th>Variance</th>
-                <th>Timing</th>
-                <th>Priority</th>
-              </tr>
-            </thead>
-            <tbody id="topCostRows"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="section-block" aria-labelledby="watchTitle">
-        <div class="section-heading">
-          <div>
-            <span class="section-index">07 / Risk Watchlist</span>
-            <h2 id="watchTitle">Risk Watchlist</h2>
-          </div>
-          <p>Tone-coded issues where cash leakage, leverage, or discipline risk is visible.</p>
-        </div>
-        <div class="risk-grid grid-3" id="watchlistRows"></div>
-      </section>
-
-      <section class="section-block" aria-labelledby="decisionTitle">
-        <div class="section-heading">
-          <div>
-            <span class="section-index">08 / Decisions Required</span>
-            <h2 id="decisionTitle">Decisions Required</h2>
-          </div>
-          <p>Management actions with owner, timeframe, and expected impact.</p>
-        </div>
-        <div class="decision-grid grid-3" id="decisionRows"></div>
-      </section>
-
-      <section class="section-block" aria-labelledby="projectionTitle">
-        <div class="section-heading">
-          <div>
-            <span class="section-index">09 / 6-Month Projection</span>
-            <h2 id="projectionTitle">6-Month Projection</h2>
-          </div>
-          <p>Projected cash path using the current monthly movement.</p>
-        </div>
-        <div class="projection-chart" id="projectionRows"></div>
-      </section>
-
-      <section class="section-block" aria-labelledby="cashTitle">
-        <div class="section-heading">
-          <div>
-            <span class="section-index">10 / Cash & Reserves</span>
-            <h2 id="cashTitle">Cash &amp; Reserves</h2>
-          </div>
-          <p>Transaction cash, notice savings, and reserve accounts.</p>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Account</th>
-                <th>Owner</th>
-                <th>Balance</th>
-                <th>Tag</th>
-                <th>As At</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody id="cashAccounts"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="section-block" aria-labelledby="investTitle">
-        <div class="section-heading">
-          <div>
-            <span class="section-index">11 / Investments & Retirement</span>
-            <h2 id="investTitle">Investments &amp; Retirement</h2>
-          </div>
-          <p>Long-term capital, tax-free investments, and brokerage balances.</p>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Asset</th>
-                <th>Owner</th>
-                <th>Balance</th>
-                <th>Tag</th>
-                <th>As At</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody id="investmentRows"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section class="section-block" aria-labelledby="debtTitle">
-        <div class="section-heading">
-          <div>
-            <span class="section-index">12 / Debt Summary</span>
-            <h2 id="debtTitle">Debt Summary</h2>
-          </div>
-          <p>Tracked debt balances and monthly instalment load.</p>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Debt</th>
-                <th>Owner</th>
-                <th>Balance</th>
-                <th>Instalment</th>
-                <th>As At</th>
-                <th>Notes</th>
-              </tr>
-            </thead>
-            <tbody id="debtHighlights"></tbody>
-          </table>
-        </div>
-      </section>
+          <p class="panel-copy" id="contentDescription">Browse focused dashboard sections using the tabs.</p>
+          <div id="contentHost" style="margin-top:18px"></div>
+        </section>
+      </div>
     </main>
   </div>
 
@@ -1079,46 +916,37 @@
     const DATA_URL = "./dashboard_data.json";
     const SAST_TIMEZONE = "Africa/Johannesburg";
     const DEFAULT_REFRESH_SECONDS = 300;
+
     const state = {
       dashboard: null,
+      selectedKpi: 0,
+      selectedSection: "overview",
+      selectedMode: "table",
       loading: false,
       refreshTimeout: null,
       countdownTimer: null,
       nextRefreshAt: null
     };
 
+    const sectionDefs = [
+      { key: "overview", label: "Overview" },
+      { key: "operating", label: "Operating Model" },
+      { key: "capital", label: "Capital Stack" },
+      { key: "costs", label: "Cost Drivers" },
+      { key: "risks", label: "Risks" },
+      { key: "decisions", label: "Decisions" },
+      { key: "payments", label: "Payments" },
+      { key: "accounts", label: "Accounts" },
+      { key: "debt", label: "Debt" }
+    ];
+
     const ids = [
-      "dashboardTitle",
-      "dashboardSubtitle",
-      "refreshButton",
-      "refreshStatus",
-      "reportMonth",
-      "generatedAt",
-      "sourceUpdatedAt",
-      "dataMode",
-      "sourceName",
-      "countdown",
-      "scoreMeter",
-      "healthScore",
-      "healthLabel",
-      "healthCopy",
-      "healthTone",
-      "qualityLabel",
-      "pillarGrid",
-      "executiveSummary",
-      "dataQualityDetail",
-      "focusGrid",
-      "summaryCards",
-      "performanceRows",
-      "capitalStack",
-      "topCostRows",
-      "watchlistRows",
-      "decisionRows",
-      "projectionRows",
-      "cashAccounts",
-      "investmentRows",
-      "debtHighlights",
-      "toast"
+      "liveUrl", "dataMode", "dashboardTitle", "dashboardSubtitle", "refreshButton", "refreshStatus",
+      "scoreRing", "healthScore", "healthLabel", "healthTone", "qualityLabel", "reportMonth",
+      "generatedAt", "sourceUpdatedAt", "countdown", "kpiStrip", "sectionTabs", "modeTabs",
+      "activeSectionLabel", "rowCount", "lensTitle", "lensTone", "lensValue", "lensDetail",
+      "lensLinks", "executiveSummary", "contentKicker", "contentTitle", "contentTone",
+      "contentDescription", "contentHost", "toast"
     ];
 
     const el = Object.fromEntries(ids.map((id) => [id, document.getElementById(id)]));
@@ -1150,13 +978,16 @@
       return `R ${sign}${amount}`;
     }
 
-    function fmtPlainNumber(value, digits = 1) {
-      const numeric = toNumber(value);
-      if (numeric === null) return "-";
-      return numeric.toLocaleString("en-ZA", {
-        minimumFractionDigits: digits,
-        maximumFractionDigits: digits
-      });
+    function fmtDate(value) {
+      if (!value) return "-";
+      const date = new Date(`${value}T00:00:00`);
+      if (Number.isNaN(date.getTime())) return String(value);
+      return new Intl.DateTimeFormat("en-ZA", {
+        timeZone: SAST_TIMEZONE,
+        month: "short",
+        day: "2-digit",
+        year: "numeric"
+      }).format(date);
     }
 
     function fmtDateTime(value) {
@@ -1174,14 +1005,17 @@
       }).format(date) + " SAST";
     }
 
-    function toneName(value) {
-      return ["good", "warn", "bad", "info"].includes(value) ? value : "neutral";
+    function fmtNumber(value, digits = 1) {
+      const numeric = toNumber(value);
+      if (numeric === null) return "-";
+      return numeric.toLocaleString("en-ZA", {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits
+      });
     }
 
-    function scoreTone(score) {
-      if (score < 40) return "bad";
-      if (score <= 70) return "warn";
-      return "good";
+    function toneName(value) {
+      return ["good", "warn", "bad", "info"].includes(value) ? value : "neutral";
     }
 
     function toneColor(tone) {
@@ -1194,6 +1028,12 @@
       }[toneName(tone)];
     }
 
+    function scoreTone(score) {
+      if (score < 40) return "bad";
+      if (score <= 70) return "warn";
+      return "good";
+    }
+
     function clamp(value, min, max) {
       return Math.min(max, Math.max(min, value));
     }
@@ -1202,12 +1042,9 @@
       node.textContent = value ?? "-";
     }
 
-    function setToneClass(node, tone, baseClass = "chip") {
-      node.className = `${baseClass} tone-${toneName(tone)}`;
-    }
-
-    function emptyMarkup(message) {
-      return `<div class="empty-state">${esc(message)}</div>`;
+    function setTone(node, tone, text) {
+      node.className = `tone-chip tone-${toneName(tone)}`;
+      node.textContent = text ?? toneName(tone).toUpperCase();
     }
 
     function showToast(message, tone = "info") {
@@ -1218,12 +1055,6 @@
       showToast.timer = window.setTimeout(() => {
         el.toast.hidden = true;
       }, 5200);
-    }
-
-    function setLoading(isLoading) {
-      state.loading = isLoading;
-      el.refreshButton.disabled = isLoading;
-      el.refreshButton.querySelector("span").textContent = isLoading ? "Refreshing" : "Refresh Now";
     }
 
     function scheduleRefresh(seconds) {
@@ -1247,286 +1078,451 @@
       setText(el.countdown, `${minutes}:${String(seconds).padStart(2, "0")}`);
     }
 
-    function ratioCell(ratio, tone) {
-      const numeric = toNumber(ratio);
-      const percent = numeric === null ? 0 : clamp(Math.abs(numeric) * 100, 0, 140);
+    function setLoading(isLoading) {
+      state.loading = isLoading;
+      el.refreshButton.disabled = isLoading;
+      el.refreshButton.querySelector("span").textContent = isLoading ? "Refreshing" : "Refresh Now";
+    }
+
+    function empty(message) {
+      return `<div class="empty">${esc(message)}</div>`;
+    }
+
+    function rowCount(rows) {
+      return Array.isArray(rows) ? rows.length : 0;
+    }
+
+    function maxAbs(rows, key) {
+      return Math.max(1, ...rows.map((row) => Math.abs(Number(row[key] || 0))));
+    }
+
+    function renderTable(headers, rows, cells, emptyMessage) {
+      if (!rows.length) return empty(emptyMessage);
       return `
-        <div class="ratio-bar" aria-hidden="true">
-          <span style="--fill:${percent}%; --fill-color:${toneColor(tone)}"></span>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>${headers.map((header) => `<th>${esc(header)}</th>`).join("")}</tr></thead>
+            <tbody>${rows.map((row) => `<tr>${cells(row).join("")}</tr>`).join("")}</tbody>
+          </table>
         </div>
-        <span class="small">${numeric === null ? "Not applicable" : `${fmtPlainNumber(numeric * 100, 1)}%`}</span>
+      `;
+    }
+
+    function renderChart(rows, config) {
+      if (!rows.length) return empty(config.empty || "No chart data available.");
+      const max = config.max || Math.max(1, ...rows.map((row) => Math.abs(Number(config.value(row) || 0))));
+      return `
+        <div class="chart-list">
+          ${rows.map((row) => {
+            const value = Number(config.value(row) || 0);
+            const tone = toneName(config.tone ? config.tone(row) : row.tone);
+            const width = clamp(Math.abs(value) / max * 100, 3, 100);
+            return `
+              <div class="chart-row tone-${tone}">
+                <div>
+                  <strong>${esc(config.label(row))}</strong>
+                  <span>${esc(config.sub ? config.sub(row) : "")}</span>
+                </div>
+                <div class="bar-track" aria-hidden="true">
+                  <span class="bar-fill" style="--fill:${width}%; --bar-color:${toneColor(tone)}"></span>
+                </div>
+                <div class="chart-value">${esc(config.format ? config.format(value, row) : fmtMoney(value))}</div>
+              </div>
+            `;
+          }).join("")}
+        </div>
       `;
     }
 
     function renderHeader(data) {
       const healthScore = clamp(Number(data.healthScore || 0), 0, 100);
-      const scoreClass = scoreTone(healthScore);
-      const health = data.health || {};
-      const quality = data.dataQuality || {};
-
-      setText(el.dashboardTitle, data.title || "Family Finance Command Deck");
-      setText(el.dashboardSubtitle, data.subtitle || "Executive view of household cash, commitments, debt, and long-term capital.");
+      const healthTone = scoreTone(healthScore);
+      document.body.dataset.theme = data.theme || "clean-light";
+      setText(el.liveUrl, `${location.origin}${location.pathname}`);
+      setText(el.dataMode, data.dataMode || "-");
+      el.dashboardTitle.innerHTML = `${esc(data.title || "Family Finance Command Deck").replace("Command Deck", "<span>Command Deck</span>")}`;
+      setText(el.dashboardSubtitle, data.subtitle || "");
+      setText(el.healthScore, String(Math.round(healthScore)));
+      setText(el.healthLabel, data.health?.label || "Health pending");
+      el.scoreRing.style.setProperty("--score-deg", `${healthScore * 3.6}deg`);
+      el.scoreRing.style.setProperty("--score-color", toneColor(healthTone));
+      setTone(el.healthTone, healthTone, data.health?.label || "Health pending");
+      setTone(el.qualityLabel, data.dataQuality?.tone || "info", data.dataQuality?.label || "Data");
       setText(el.reportMonth, data.reportMonth || "-");
       setText(el.generatedAt, fmtDateTime(data.generatedAt));
       setText(el.sourceUpdatedAt, fmtDateTime(data.sourceUpdatedAt));
-      setText(el.dataMode, data.dataMode || "-");
-      setText(el.sourceName, data.sourceName || "-");
-      setText(el.healthScore, String(Math.round(healthScore)));
-      setText(el.healthLabel, health.label || "Health pending");
-      setText(el.healthCopy, quality.detail || "Dashboard data is loaded from dashboard_data.json.");
-
-      el.scoreMeter.className = `score-meter score-${scoreClass}`;
-      el.scoreMeter.style.setProperty("--score-deg", `${healthScore * 3.6}deg`);
-      setToneClass(el.healthTone, scoreClass);
-      setText(el.healthTone, health.label || "Health pending");
-      setToneClass(el.qualityLabel, quality.tone || "info");
-      setText(el.qualityLabel, quality.label || data.dataMode || "Data live");
-      setText(el.dataQualityDetail, quality.detail || "");
-    }
-
-    function renderPillars(rows = []) {
-      if (!rows.length) {
-        el.pillarGrid.innerHTML = emptyMarkup("No pillar scores available.");
-        return;
-      }
-
-      el.pillarGrid.innerHTML = rows.map((item) => {
-        const score = Number(item.score || 0);
-        const outOf = Number(item.outOf || 0);
-        const percent = outOf ? clamp((score / outOf) * 100, 0, 100) : 0;
-        const tone = scoreTone(outOf ? (score / outOf) * 100 : 0);
-        return `
-          <article class="pillar">
-            <div class="pillar-head">
-              <span class="pillar-name">${esc(item.label || "Pillar")}</span>
-              <span class="pillar-score">${esc(score)}/${esc(outOf)}</span>
-            </div>
-            <div class="track" aria-hidden="true">
-              <div class="fill" style="--fill:${percent}%; --fill-color:${toneColor(tone)}"></div>
-            </div>
-            <div class="pillar-meta">${fmtPlainNumber(percent, 1)}% of allocated points</div>
-          </article>
-        `;
-      }).join("");
-    }
-
-    function renderExecutive(data) {
       setText(el.executiveSummary, data.executiveSummary || "No executive summary available.");
-      const rows = data.focusItems || [];
-      if (!rows.length) {
-        el.focusGrid.innerHTML = emptyMarkup("No focus items available.");
+    }
+
+    function renderKpis(data) {
+      const cards = data.summaryCards || [];
+      if (!cards.length) {
+        el.kpiStrip.innerHTML = empty("No KPI cards available.");
         return;
       }
-      el.focusGrid.innerHTML = rows.map((item) => `
-        <article class="focus-card tone-${toneName(item.tone)}">
-          <h3>${esc(item.title || "Focus item")}</h3>
-          <p>${esc(item.detail || "")}</p>
-        </article>
+      state.selectedKpi = clamp(state.selectedKpi, 0, cards.length - 1);
+      el.kpiStrip.innerHTML = cards.map((card, index) => `
+        <button class="kpi-card ${index === state.selectedKpi ? "active" : ""}" type="button" data-index="${index}" data-tone="${toneName(card.tone)}">
+          <span class="kpi-label">${esc(card.label)}</span>
+          <strong class="kpi-value">${esc(card.value)}</strong>
+          <span class="kpi-detail">${esc(card.detail)}</span>
+        </button>
       `).join("");
+      el.kpiStrip.querySelectorAll(".kpi-card").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.selectedKpi = Number(button.dataset.index);
+          renderDashboard(state.dashboard);
+        });
+      });
+      renderLens(data);
     }
 
-    function renderSummaryCards(rows = []) {
-      if (!rows.length) {
-        el.summaryCards.innerHTML = emptyMarkup("No KPI cards available.");
-        return;
+    function kpiRelatedRows(data, card) {
+      const label = (card?.label || "").toLowerCase();
+      if (label.includes("income") || label.includes("outflow") || label.includes("position")) {
+        return data.performanceRows || [];
       }
-      el.summaryCards.innerHTML = rows.map((item) => `
-        <article class="metric-card tone-${toneName(item.tone)}">
-          <div class="metric-top">
-            <span class="metric-label">${esc(item.label || "Metric")}</span>
-            <span class="chip tone-${toneName(item.tone)}">${esc(toneName(item.tone).toUpperCase())}</span>
-          </div>
-          <div class="metric-value">${esc(item.value || "-")}</div>
-          <p class="metric-detail">${esc(item.detail || "")}</p>
-        </article>
+      if (label.includes("cash") || label.includes("runway") || label.includes("relocation")) {
+        return [...(data.cashAccounts || []), ...(data.watchlistRows || []).filter((row) => /cash|runway|relocation/i.test(row.item || row.reason || ""))];
+      }
+      if (label.includes("vehicle")) {
+        return [...(data.debtHighlights || []), ...(data.topCostRows || []).filter((row) => /vehicle|finance|bmw|audi/i.test(row.item || row.group || ""))];
+      }
+      if (label.includes("saving") || label.includes("worth")) {
+        return [...(data.capitalStack || []), ...(data.investmentRows || [])];
+      }
+      return data.focusItems || [];
+    }
+
+    function renderLens(data) {
+      const card = (data.summaryCards || [])[state.selectedKpi] || {};
+      const related = kpiRelatedRows(data, card);
+      setText(el.lensTitle, card.label || "KPI Lens");
+      setText(el.lensValue, card.value || "-");
+      setText(el.lensDetail, card.detail || "Click a KPI above to browse related detail.");
+      setTone(el.lensTone, card.tone || "info", toneName(card.tone).toUpperCase());
+      el.lensValue.style.color = toneColor(card.tone || "info");
+      el.lensLinks.innerHTML = `
+        <span class="chip">${esc(data.reportMonth || "-")}</span>
+        <span class="chip">${related.length} related rows</span>
+        <span class="chip">${esc(data.sourceName || "Source")}</span>
+      `;
+    }
+
+    function buildTabs() {
+      el.sectionTabs.innerHTML = sectionDefs.map((item) => `
+        <button class="tab-btn ${item.key === state.selectedSection ? "active" : ""}" type="button" data-section="${item.key}">${esc(item.label)}</button>
       `).join("");
+      el.sectionTabs.querySelectorAll(".tab-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.selectedSection = button.dataset.section;
+          renderDashboard(state.dashboard);
+        });
+      });
+
+      el.modeTabs.querySelectorAll(".mode-btn").forEach((button) => {
+        button.classList.toggle("active", button.dataset.mode === state.selectedMode);
+        button.onclick = () => {
+          state.selectedMode = button.dataset.mode;
+          renderDashboard(state.dashboard);
+        };
+      });
     }
 
-    function renderPerformanceRows(rows = []) {
-      if (!rows.length) {
-        el.performanceRows.innerHTML = `<tr><td colspan="5">${emptyMarkup("No operating model rows available.")}</td></tr>`;
-        return;
-      }
-      el.performanceRows.innerHTML = rows.map((row) => {
-        const tone = toneName(row.tone);
-        return `
-          <tr>
-            <td><strong>${esc(row.label || "-")}</strong></td>
-            <td class="num">${fmtMoney(row.budget)}</td>
-            <td class="num">${fmtMoney(row.actual)}</td>
-            <td class="num tone-${tone}">${fmtMoney(row.variance)}</td>
-            <td>${ratioCell(row.ratio, tone)}</td>
-          </tr>
-        `;
-      }).join("");
+    function renderOverview(data) {
+      const alerts = data.alerts || [];
+      const focus = data.focusItems || [];
+      const pillars = data.pillarScores || [];
+      el.contentHost.innerHTML = `
+        <div class="card-grid">
+          ${alerts.map((item) => `
+            <article class="data-card tone-${toneName(item.tone)}">
+              <h3>${esc(item.title)}</h3>
+              <p>${esc(item.detail)}</p>
+            </article>
+          `).join("")}
+        </div>
+        <div class="pillar-grid" style="margin-top:14px">
+          ${pillars.map((item) => {
+            const pct = item.outOf ? clamp(item.score / item.outOf * 100, 0, 100) : 0;
+            const tone = scoreTone(pct);
+            return `
+              <article class="data-card">
+                <div class="row-head">
+                  <h3>${esc(item.label)}</h3>
+                  <span class="num">${esc(item.score)}/${esc(item.outOf)}</span>
+                </div>
+                <div class="bar-track"><span class="bar-fill" style="--fill:${pct}%; --bar-color:${toneColor(tone)}"></span></div>
+                <p>${fmtNumber(pct, 1)}% of allocated points</p>
+              </article>
+            `;
+          }).join("")}
+        </div>
+        <div class="card-grid" style="margin-top:14px">
+          ${focus.map((item) => `
+            <article class="data-card tone-${toneName(item.tone)}">
+              <h3>${esc(item.title)}</h3>
+              <p>${esc(item.detail)}</p>
+            </article>
+          `).join("")}
+        </div>
+      `;
+      return alerts.length + focus.length + pillars.length;
     }
 
-    function renderCapitalStack(rows = []) {
-      if (!rows.length) {
-        el.capitalStack.innerHTML = emptyMarkup("No capital stack rows available.");
-        return;
+    function renderOperating(data) {
+      const rows = data.performanceRows || [];
+      if (state.selectedMode === "chart") {
+        el.contentHost.innerHTML = renderChart(rows, {
+          label: (row) => row.label,
+          sub: (row) => `Budget ${fmtMoney(row.budget)}`,
+          value: (row) => row.actual,
+          tone: (row) => row.tone,
+          format: (value) => fmtMoney(value)
+        });
+      } else {
+        el.contentHost.innerHTML = renderTable(
+          ["Line", "Budget", "Actual", "Variance", "Ratio"],
+          rows,
+          (row) => [
+            `<td><strong>${esc(row.label)}</strong></td>`,
+            `<td class="num">${fmtMoney(row.budget)}</td>`,
+            `<td class="num">${fmtMoney(row.actual)}</td>`,
+            `<td class="num tone-${toneName(row.tone)}">${fmtMoney(row.variance)}</td>`,
+            `<td class="num">${row.ratio === null || row.ratio === undefined ? "-" : `${fmtNumber(Number(row.ratio) * 100, 1)}%`}</td>`
+          ],
+          "No operating rows available."
+        );
       }
-      const maxAbs = Math.max(1, ...rows.map((item) => Math.abs(Number(item.amount || 0))));
-      el.capitalStack.innerHTML = rows.map((item) => {
-        const amount = Number(item.amount || 0);
-        const tone = toneName(item.tone || (amount < 0 ? "bad" : "info"));
-        const width = clamp(Math.abs(amount) / maxAbs * 100, 3, 100);
-        return `
-          <article class="stack-row tone-${tone}">
-            <div class="stack-label">
-              <strong>${esc(item.label || "-")}</strong>
-              <span>${esc(item.detail || "")}</span>
-            </div>
-            <div class="stack-track" aria-hidden="true">
-              <span style="--fill:${width}%; --fill-color:${toneColor(tone)}"></span>
-            </div>
-            <div class="stack-amount">${fmtMoney(amount)}</div>
-          </article>
-        `;
-      }).join("");
+      return rows.length;
     }
 
-    function renderTopCosts(rows = []) {
-      if (!rows.length) {
-        el.topCostRows.innerHTML = `<tr><td colspan="7">${emptyMarkup("No cost drivers available.")}</td></tr>`;
-        return;
+    function renderCapital(data) {
+      const rows = data.capitalStack || [];
+      if (state.selectedMode === "chart") {
+        el.contentHost.innerHTML = renderChart(rows, {
+          label: (row) => row.label,
+          sub: (row) => row.detail,
+          value: (row) => row.amount,
+          tone: (row) => row.tone,
+          format: (value) => fmtMoney(value),
+          max: maxAbs(rows, "amount")
+        });
+      } else {
+        el.contentHost.innerHTML = renderTable(
+          ["Capital Line", "Amount", "Tone", "Detail"],
+          rows,
+          (row) => [
+            `<td><strong>${esc(row.label)}</strong></td>`,
+            `<td class="num">${fmtMoney(row.amount)}</td>`,
+            `<td><span class="tone-chip tone-${toneName(row.tone)}">${esc(toneName(row.tone).toUpperCase())}</span></td>`,
+            `<td class="muted">${esc(row.detail)}</td>`
+          ],
+          "No capital stack rows available."
+        );
       }
-      el.topCostRows.innerHTML = rows.map((row) => {
-        const variance = Number(row.variance || 0);
-        const tone = variance > 0 ? "bad" : variance < 0 ? "good" : "info";
-        return `
-          <tr>
-            <td>
-              <strong>${esc(row.item || "-")}</strong>
-              <div class="small">${esc(row.section || "")}${row.group ? ` / ${esc(row.group)}` : ""}</div>
-            </td>
-            <td>${esc(row.owner || "-")}</td>
-            <td class="num">${fmtMoney(row.budget)}</td>
-            <td class="num">${fmtMoney(row.actual)}</td>
-            <td class="num tone-${tone}">${fmtMoney(row.variance)}</td>
-            <td>${esc(row.timing || "-")}</td>
-            <td>
-              <span class="chip tone-${row.priority === "Critical" ? "bad" : row.priority === "High" ? "warn" : "info"}">${esc(row.priority || "-")}</span>
-              <div class="small">${esc(row.tag || "")}</div>
-            </td>
-          </tr>
-        `;
-      }).join("");
+      return rows.length;
     }
 
-    function renderWatchlist(rows = []) {
-      if (!rows.length) {
-        el.watchlistRows.innerHTML = emptyMarkup("No active watchlist items.");
-        return;
+    function renderCosts(data) {
+      const rows = data.topCostRows || [];
+      if (state.selectedMode === "chart") {
+        el.contentHost.innerHTML = renderChart(rows, {
+          label: (row) => row.item,
+          sub: (row) => `${row.owner || "-"} / ${row.priority || "-"}`,
+          value: (row) => row.actual,
+          tone: (row) => Number(row.variance || 0) > 0 ? "bad" : "info",
+          format: (value) => fmtMoney(value)
+        });
+      } else {
+        el.contentHost.innerHTML = renderTable(
+          ["Cost Driver", "Owner", "Budget", "Actual", "Variance", "Timing", "Priority"],
+          rows,
+          (row) => [
+            `<td><strong>${esc(row.item)}</strong><div class="muted">${esc(row.notes || "")}</div></td>`,
+            `<td>${esc(row.owner || "-")}</td>`,
+            `<td class="num">${fmtMoney(row.budget)}</td>`,
+            `<td class="num">${fmtMoney(row.actual)}</td>`,
+            `<td class="num">${fmtMoney(row.variance)}</td>`,
+            `<td>${esc(row.timing || "-")}</td>`,
+            `<td><span class="chip">${esc(row.priority || "-")}</span></td>`
+          ],
+          "No cost drivers available."
+        );
       }
-      el.watchlistRows.innerHTML = rows.map((row) => `
-        <article class="risk-card tone-${toneName(row.tone)}">
-          <h3>${esc(row.item || "-")}</h3>
-          <div class="watch-metric">
-            <span class="chip tone-${toneName(row.tone)}">${esc(row.metric || "-")}</span>
-            <span class="chip">${esc(row.owner || "Household")}</span>
-          </div>
-          <p><strong>Reason:</strong> ${esc(row.reason || "")}</p>
-          <p><strong>Action:</strong> ${esc(row.action || "")}</p>
-        </article>
-      `).join("");
+      return rows.length;
     }
 
-    function renderDecisions(rows = []) {
-      if (!rows.length) {
-        el.decisionRows.innerHTML = emptyMarkup("No decisions required.");
-        return;
-      }
-      el.decisionRows.innerHTML = rows.map((row) => `
-        <article class="decision-card tone-${toneName(row.tone)}">
-          <h3>${esc(row.title || "-")}</h3>
-          <div class="decision-meta">
-            <span class="chip">${esc(row.owner || "Owner TBD")}</span>
-            <span class="chip tone-info">${esc(row.timeframe || "Timeframe TBD")}</span>
-            <span class="chip tone-${row.impact === "High" ? "bad" : row.impact === "Medium" ? "warn" : "info"}">${esc(row.impact || "Impact TBD")}</span>
-          </div>
-          <p>${esc(row.detail || "")}</p>
-        </article>
-      `).join("");
-    }
-
-    function renderProjection(rows = []) {
-      if (!rows.length) {
-        el.projectionRows.innerHTML = emptyMarkup("No projection rows available.");
-        return;
-      }
-      const maxClosing = Math.max(1, ...rows.map((row) => Math.abs(Number(row.closing || 0))));
-      el.projectionRows.innerHTML = rows.map((row) => {
-        const closing = Number(row.closing || 0);
-        const movement = Number(row.movement || 0);
-        const tone = toneName(row.tone || (movement < 0 ? "bad" : "good"));
-        const width = clamp(Math.abs(closing) / maxClosing * 100, 3, 100);
-        return `
-          <article class="projection-row tone-${tone}">
-            <div class="projection-label">
-              <strong>${esc(row.month || "-")}</strong>
-              <span>Opening ${fmtMoney(row.opening)}</span>
-            </div>
-            <div>
-              <div class="projection-track" aria-hidden="true">
-                <span style="--fill:${width}%; --fill-color:${toneColor(tone)}"></span>
+    function renderRisks(data) {
+      const rows = data.watchlistRows || [];
+      el.contentHost.innerHTML = `
+        <div class="card-grid">
+          ${rows.map((row) => `
+            <article class="data-card tone-${toneName(row.tone)}">
+              <div class="row-head">
+                <h3>${esc(row.item)}</h3>
+                <span class="tone-chip tone-${toneName(row.tone)}">${esc(row.metric || "-")}</span>
               </div>
-              <div class="projection-movement">Movement ${fmtMoney(movement)}</div>
-            </div>
-            <div class="projection-value">${fmtMoney(closing)}</div>
-          </article>
-        `;
-      }).join("");
+              <p><strong>Reason:</strong> ${esc(row.reason || "")}</p>
+              <p><strong>Action:</strong> ${esc(row.action || "")}</p>
+            </article>
+          `).join("")}
+        </div>
+      `;
+      return rows.length;
     }
 
-    function renderAccountRows(target, rows = [], emptyMessage = "No rows available.") {
-      if (!rows.length) {
-        target.innerHTML = `<tr><td colspan="6">${emptyMarkup(emptyMessage)}</td></tr>`;
-        return;
-      }
-      target.innerHTML = rows.map((row) => `
-        <tr>
-          <td><strong>${esc(row.item || "-")}</strong></td>
-          <td>${esc(row.owner || "-")}</td>
-          <td class="num">${fmtMoney(row.balance)}</td>
-          <td><span class="chip">${esc(row.tag || "-")}</span></td>
-          <td>${esc(row.timing || "-")}</td>
-          <td class="muted">${esc(row.notes || "")}</td>
-        </tr>
-      `).join("");
+    function renderDecisions(data) {
+      const rows = data.decisionRows || [];
+      el.contentHost.innerHTML = `
+        <div class="card-grid">
+          ${rows.map((row) => `
+            <article class="data-card tone-${toneName(row.tone)}">
+              <div class="row-head">
+                <h3>${esc(row.title)}</h3>
+                <span class="tone-chip tone-${row.impact === "High" ? "bad" : row.impact === "Medium" ? "warn" : "info"}">${esc(row.impact || "-")}</span>
+              </div>
+              <div class="pill-grid">
+                <span class="chip">${esc(row.owner || "-")}</span>
+                <span class="chip">${esc(row.timeframe || "-")}</span>
+              </div>
+              <p>${esc(row.detail || "")}</p>
+            </article>
+          `).join("")}
+        </div>
+      `;
+      return rows.length;
     }
 
-    function renderDebtRows(rows = []) {
-      if (!rows.length) {
-        el.debtHighlights.innerHTML = `<tr><td colspan="6">${emptyMarkup("No debt rows available.")}</td></tr>`;
-        return;
+    function renderPayments(data) {
+      const rows = data.upcomingPayments || [];
+      if (state.selectedMode === "chart") {
+        el.contentHost.innerHTML = renderChart(rows, {
+          label: (row) => row.item,
+          sub: (row) => `${fmtDate(row.dueDate)} / ${row.category || "-"}`,
+          value: (row) => row.amount,
+          tone: (row) => row.tone,
+          format: (value) => fmtMoney(value)
+        });
+      } else {
+        el.contentHost.innerHTML = renderTable(
+          ["Payment", "Amount", "Due", "Days", "Owner", "Category", "Auto"],
+          rows,
+          (row) => [
+            `<td><strong>${esc(row.item)}</strong></td>`,
+            `<td class="num">${fmtMoney(row.amount)}</td>`,
+            `<td>${fmtDate(row.dueDate)}</td>`,
+            `<td class="num">${esc(row.daysToDue ?? "-")}</td>`,
+            `<td>${esc(row.owner || "-")}</td>`,
+            `<td><span class="chip">${esc(row.category || "-")}</span></td>`,
+            `<td>${row.auto ? "Yes" : "No"}</td>`
+          ],
+          "No upcoming payments available."
+        );
       }
-      el.debtHighlights.innerHTML = rows.map((row) => `
-        <tr>
-          <td><strong>${esc(row.item || "-")}</strong></td>
-          <td>${esc(row.owner || "-")}</td>
-          <td class="num tone-bad">${fmtMoney(row.balance)}</td>
-          <td class="num">${fmtMoney(row.instalment)}</td>
-          <td>${esc(row.timing || "-")}</td>
-          <td class="muted">${esc(row.notes || "")}</td>
-        </tr>
-      `).join("");
+      return rows.length;
+    }
+
+    function renderAccounts(data) {
+      const cashRows = (data.cashAccounts || []).map((row) => ({ ...row, type: "Cash & Reserves" }));
+      const investmentRows = (data.investmentRows || []).map((row) => ({ ...row, type: "Investments" }));
+      const rows = [...cashRows, ...investmentRows];
+      if (state.selectedMode === "chart") {
+        el.contentHost.innerHTML = renderChart(rows, {
+          label: (row) => row.item,
+          sub: (row) => `${row.type} / ${row.owner || "-"}`,
+          value: (row) => row.balance,
+          tone: (row) => row.tag === "Cash" ? "bad" : row.tag === "Retirement" || row.tag === "Investment" ? "good" : "info",
+          format: (value) => fmtMoney(value)
+        });
+      } else {
+        el.contentHost.innerHTML = renderTable(
+          ["Account / Asset", "Type", "Owner", "Balance", "Tag", "As At", "Notes"],
+          rows,
+          (row) => [
+            `<td><strong>${esc(row.item)}</strong></td>`,
+            `<td>${esc(row.type)}</td>`,
+            `<td>${esc(row.owner || "-")}</td>`,
+            `<td class="num">${fmtMoney(row.balance)}</td>`,
+            `<td><span class="chip">${esc(row.tag || "-")}</span></td>`,
+            `<td>${esc(row.timing || "-")}</td>`,
+            `<td class="muted">${esc(row.notes || "")}</td>`
+          ],
+          "No account rows available."
+        );
+      }
+      return rows.length;
+    }
+
+    function renderDebt(data) {
+      const rows = data.debtHighlights || [];
+      if (state.selectedMode === "chart") {
+        el.contentHost.innerHTML = renderChart(rows, {
+          label: (row) => row.item,
+          sub: (row) => `Instalment ${fmtMoney(row.instalment)}`,
+          value: (row) => row.balance,
+          tone: () => "bad",
+          format: (value) => fmtMoney(value)
+        });
+      } else {
+        el.contentHost.innerHTML = renderTable(
+          ["Debt", "Owner", "Balance", "Instalment", "As At", "Notes"],
+          rows,
+          (row) => [
+            `<td><strong>${esc(row.item)}</strong></td>`,
+            `<td>${esc(row.owner || "-")}</td>`,
+            `<td class="num tone-bad">${fmtMoney(row.balance)}</td>`,
+            `<td class="num">${fmtMoney(row.instalment)}</td>`,
+            `<td>${esc(row.timing || "-")}</td>`,
+            `<td class="muted">${esc(row.notes || "")}</td>`
+          ],
+          "No debt rows available."
+        );
+      }
+      return rows.length;
+    }
+
+    function renderSection(data) {
+      const active = sectionDefs.find((item) => item.key === state.selectedSection) || sectionDefs[0];
+      const copy = {
+        overview: ["Executive View", data.dataQuality?.detail || "Current household command view.", "info"],
+        operating: ["Budget vs Actual", "Monthly operating model lines with variance and execution ratio.", "info"],
+        capital: ["Capital Stack", "Assets, reserves, deposits, investments, retirement, liabilities, and net worth.", "good"],
+        costs: ["Top Cost Drivers", "Largest monthly rows and variance pressure points.", "warn"],
+        risks: ["Risk Watchlist", "Active issues where cash, relocation, leverage, or discipline require attention.", "bad"],
+        decisions: ["Decisions Required", "Management decisions with owner, timeframe, and impact.", "warn"],
+        payments: ["Upcoming Payments", "Near-term June debits and manual payments from the data payload.", "bad"],
+        accounts: ["Accounts & Assets", "Cash, reserves, investments, retirement, deposits, and illiquid assets.", "info"],
+        debt: ["Debt Summary", "Vehicle finance balances and instalment load.", "bad"]
+      }[active.key];
+
+      setText(el.activeSectionLabel, active.label);
+      setText(el.contentKicker, active.label);
+      setText(el.contentTitle, copy[0]);
+      setText(el.contentDescription, copy[1]);
+      setTone(el.contentTone, copy[2], active.label);
+
+      const renderers = {
+        overview: renderOverview,
+        operating: renderOperating,
+        capital: renderCapital,
+        costs: renderCosts,
+        risks: renderRisks,
+        decisions: renderDecisions,
+        payments: renderPayments,
+        accounts: renderAccounts,
+        debt: renderDebt
+      };
+      const count = renderers[active.key](data);
+      setText(el.rowCount, `${count} ${count === 1 ? "row" : "rows"}`);
     }
 
     function renderDashboard(data) {
+      if (!data) return;
       renderHeader(data);
-      renderPillars(data.pillarScores || []);
-      renderExecutive(data);
-      renderSummaryCards(data.summaryCards || []);
-      renderPerformanceRows(data.performanceRows || []);
-      renderCapitalStack(data.capitalStack || []);
-      renderTopCosts(data.topCostRows || []);
-      renderWatchlist(data.watchlistRows || []);
-      renderDecisions(data.decisionRows || []);
-      renderProjection(data.projectionRows || []);
-      renderAccountRows(el.cashAccounts, data.cashAccounts || [], "No cash accounts available.");
-      renderAccountRows(el.investmentRows, data.investmentRows || [], "No investment rows available.");
-      renderDebtRows(data.debtHighlights || []);
+      buildTabs();
+      renderKpis(data);
+      renderSection(data);
     }
 
     async function loadDashboard(manual = false) {
@@ -1536,9 +1532,7 @@
 
       try {
         const response = await fetch(`${DATA_URL}?v=${Date.now()}`, { cache: "no-store" });
-        if (!response.ok) {
-          throw new Error(`dashboard_data.json returned HTTP ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`dashboard_data.json returned HTTP ${response.status}`);
         const data = await response.json();
         state.dashboard = data;
         renderDashboard(data);

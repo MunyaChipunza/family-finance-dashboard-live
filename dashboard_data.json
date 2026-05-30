@@ -22,7 +22,7 @@
     { "label": "Discipline", "score": 0, "outOf": 10 },
     { "label": "Balance Sheet", "score": 0, "outOf": 10 }
   ],
-  "executiveSummary": "May 2026: household health reads critical. Income R65,619 versus outflows of approximately R63,800, leaving a thin surplus. Transaction cash is dangerously low at R22,251 combined across accounts. A potential forced relocation adds an immediate R45,000 capital requirement against a R44,000 deposit held with the current landlord. Vehicle load remains at 21% of income. Savings rate is zero. Net worth is negative.",
+  "executiveSummary": "May 2026: household health reads critical. Income R65,619 versus outflows approximately R63,800, leaving a thin surplus of R1,819. Liquid cash of R45,792 covers less than one month of outflows. A potential forced relocation requires R45,000 new deposit against R44,000 held with current landlord. Vehicle load at 21% of income. Savings rate zero. With corrected Audi settlement value, net worth is now R48,259.",
   "focusItems": [
     { "title": "Relocation capital gap", "detail": "Safety concerns at Zeeland Crescent may require a move. New deposit: R45,000 needed. Current deposit held: R44,000. Net shortfall: R1,000 plus moving costs. Cash position cannot absorb this without drawing on reserves.", "tone": "bad" },
     { "title": "Cash is near zero", "detail": "ABSA cleared to R87. SBSA at R22,163 only after a R12,000 same-day transfer. Discovery main account is the primary buffer at R23,539. Combined liquid cash is R45,792 — less than one month of outflows.", "tone": "bad" },
@@ -38,7 +38,7 @@
     { "label": "Relocation Exposure", "value": "R 45,000", "detail": "New deposit needed if forced to move", "tone": "bad" },
     { "label": "Vehicle Load", "value": "R 13,492", "detail": "20.6% of take-home income", "tone": "warn" },
     { "label": "Savings Rate", "value": "0.0%", "detail": "No formal saving this month", "tone": "bad" },
-    { "label": "Net Worth", "value": "R -4,388", "detail": "Tracked assets less tracked liabilities (updated)", "tone": "bad" }
+    { "label": "Net Worth", "value": "R 48,259", "detail": "Tracked assets less tracked liabilities (updated)", "tone": "good" }
   ],
   "performanceRows": [
     { "label": "Income", "budget": 65463.26, "actual": 65619, "variance": 155.74, "tone": "good", "ratio": 1.002 },
@@ -55,12 +55,12 @@
     { "label": "Lupp Investment", "amount": 30000, "tone": "info", "detail": "Pre-seed equity, Lupp Rewards SA — illiquid" },
     { "label": "Investments", "amount": 56740.70, "tone": "good", "detail": "Allan Gray RA R55,051 + Tax-Free R1,689" },
     { "label": "Retirement", "amount": 260824.62, "tone": "good", "detail": "Sanlam provident fund (29 May 2026)" },
-    { "label": "Liabilities", "amount": -422051.42, "tone": "bad", "detail": "BMW R268,989 + Audi R153,062" },
-    { "label": "Net Worth", "amount": -4388, "tone": "bad", "detail": "Tracked assets less tracked liabilities" }
+    { "label": "Liabilities", "amount": -420346.48, "tone": "bad", "detail": "BMW R268,989 + Audi R151,358 (settlement)" },
+    { "label": "Net Worth", "amount": 48258.63, "tone": "bad", "detail": "Tracked assets less tracked liabilities" }
   ],
   "topCostRows": [
     { "item": "Rent", "owner": "Household", "budget": 22000, "actual": 22668.54, "variance": 668.54, "currency": "ZAR", "timing": "1st of month", "auto": "Yes", "tag": "Core", "priority": "Critical", "notes": "R668.54 arrears top-up paid 5 May." },
-    { "item": "1 Life Med Insurance (Zeeland)", "owner": "Household", "budget": 4680, "actual": 4680, "variance": 0, "currency": "ZAR", "timing": "Mid-month", "auto": "Yes", "tag": "Core", "priority": "High", "notes": "New line from April 2026. Confirm if replacing or adding to existing cover." },
+    { "item": "1Life security (Zeeland)", "owner": "Household", "budget": 399, "actual": 399, "variance": 0, "currency": "ZAR", "timing": "Mid-month", "auto": "Yes", "tag": "Core", "priority": "High", "notes": "1Life security monitoring. Installation was once-off. Ongoing R399/month." },
     { "item": "Tithe", "owner": "Household", "budget": 6100, "actual": 6600, "variance": 500, "currency": "ZAR", "timing": "Auto debit", "auto": "Yes", "tag": "Core", "priority": "High", "notes": "Running over budget consistently." },
     { "item": "BMW X1 finance", "owner": "Household", "budget": 6299.18, "actual": 6299.18, "variance": 0, "currency": "ZAR", "timing": "Around 1st/2nd", "auto": "Yes", "tag": "Core", "priority": "Critical", "notes": "" },
     { "item": "Audi finance", "owner": "Household", "budget": 4693.29, "actual": 4693.29, "variance": 0, "currency": "ZAR", "timing": "Month-end", "auto": "Yes", "tag": "Core", "priority": "Critical", "notes": "" },
@@ -71,14 +71,12 @@
   "watchlistRows": [
     { "item": "Liquid cash runway", "owner": "Household", "metric": "0.7 months", "reason": "Combined liquid cash of R45,792 covers less than one month of outflows.", "action": "Do not touch reserves. Prioritise rebuilding transaction cash next payday.", "tone": "bad" },
     { "item": "Forced relocation risk", "owner": "Household", "metric": "R45,000 needed", "reason": "Safety concerns at Zeeland Crescent may force a move. New deposit required before landlord releases current one.", "action": "Quantify timeline. Identify bridge funding source — reserves are the only option currently.", "tone": "bad" },
-    { "item": "1 Life insurance line", "owner": "Household", "metric": "R4,680/month", "reason": "New debit from April 2026. Total insurance basket may now exceed R10,000/month.", "action": "Confirm what this covers and whether it replaces or adds to existing Discovery / Outsurance.", "tone": "warn" },
     { "item": "Vehicle exposure", "owner": "Household", "metric": "20.6% of income", "reason": "Two vehicle finance payments consuming R10,992/month before fuel.", "action": "Decision on vehicle strategy still outstanding.", "tone": "warn" },
     { "item": "Savings discipline", "owner": "Household", "metric": "0.0%", "reason": "No savings allocated for the fourth consecutive month.", "action": "Begin R2,000/month minimum once relocation risk is resolved.", "tone": "warn" },
     { "item": "ABSA account", "owner": "Munya", "metric": "R87 balance", "reason": "Account cleared after salary disbursements. All funds routed out immediately.", "action": "Maintain at minimum R2,000 float at all times.", "tone": "bad" }
   ],
   "decisionRows": [
     { "title": "Relocation decision", "owner": "Munya & Kuhle", "timeframe": "Within 30 days", "impact": "High", "detail": "Safety concerns are real. If moving, need R45,000 new deposit while awaiting return of R44,000 from current landlord. Net cash gap: approximately R1,000 plus moving costs (estimate R5,000-R10,000). Total exposure: up to R11,000 above the deposit. Only viable funding source currently is Discovery reserves.", "tone": "bad" },
-    { "title": "Confirm 1 Life insurance coverage", "owner": "Household", "timeframe": "This week", "impact": "Medium", "detail": "R4,680/month is a significant new line. If additive rather than replacement, insurance costs are now dangerously high. Cancel or consolidate immediately if duplicating existing cover.", "tone": "warn" },
     { "title": "Vehicle strategy", "owner": "Household", "timeframe": "Next 60 days", "impact": "High", "detail": "BMW + Audi finance + fuel = approximately R15,500/month. Selling one vehicle would free up approximately R5,000-R7,000/month immediately and reduce debt by R153,000-R269,000.", "tone": "warn" },
     { "title": "Restart monthly saving", "owner": "Household", "timeframe": "After relocation resolved", "impact": "Medium", "detail": "Once relocation is settled, begin R2,000/month minimum recurring transfer to reserve. Track via dashboard.", "tone": "info" }
   ],
@@ -125,7 +123,7 @@
   ],
   "debtHighlights": [
     { "item": "BMW X1 xDrive20d", "owner": "Household", "balance": 268988.90, "instalment": 6299.18, "timing": "As at 30 May 2026", "notes": "Standard Bank vehicle finance." },
-    { "item": "Audi finance", "owner": "Household", "balance": 153062.52, "instalment": 4693.29, "timing": "As at 06 Apr 2026", "notes": "ABSA vehicle finance." }
+    { "item": "Audi finance", "owner": "Household", "balance": 151357.58, "instalment": 4693.29, "timing": "Settlement as at 10 May 2026", "notes": "2014 Audi A6 2.0 TDi. 43 months outstanding. Settlement R151,358." }
   ],
   "totals": {
     "budgetIncome": 65463.26,
@@ -140,12 +138,12 @@
     "investments": 87740.70,
     "retirement": 315876.02,
     "workingFloat": 0,
-    "debtBalances": 422051.42,
+    "debtBalances": 420346.48,
     "coverageRatio": 0.72,
     "vehicleLoad": 13492.47,
     "vehicleLoadRatio": 0.2056,
     "housingRatio": 0.3453,
-    "netWorth": -4388
+    "netWorth": 48258.63
   },
   "alerts": [
     {
