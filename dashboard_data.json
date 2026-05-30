@@ -3,8 +3,8 @@
   "subtitle": "Executive view of household cash, commitments, debt, and long-term capital.",
   "reportMonth": "April 2026",
   "sourceName": "Finance.xlsx",
-  "generatedAt": "2026-05-07T12:37:38.038300+02:00",
-  "sourceUpdatedAt": "2026-05-05T15:09:05+02:00",
+  "generatedAt": "2026-05-30T11:02:37.768717+02:00",
+  "sourceUpdatedAt": "2026-05-30T10:53:44.329374+02:00",
   "refreshSeconds": 300,
   "dataMode": "Actuals live",
   "dataQuality": {
@@ -13,24 +13,24 @@
     "detail": "The workbook now contains real actuals, so the dashboard can flag overspends, variances, and trend changes with confidence."
   },
   "health": {
-    "label": "Critical",
-    "tone": "bad"
+    "label": "Stable",
+    "tone": "info"
   },
-  "healthScore": 27,
+  "healthScore": 64,
   "pillarScores": [
     {
       "label": "Liquidity",
-      "score": 7,
+      "score": 19,
       "outOf": 35
     },
     {
       "label": "Margin",
-      "score": 10,
+      "score": 25,
       "outOf": 25
     },
     {
       "label": "Leverage",
-      "score": 10,
+      "score": 20,
       "outOf": 20
     },
     {
@@ -44,13 +44,8 @@
       "outOf": 10
     }
   ],
-  "executiveSummary": "April 2026: household health reads critical. Real actuals are now live. The current operating view implies a monthly surplus of R 5,102.69, with R 57,288.71 in transaction cash and R 15,284.67 in reserves. Vehicle load is 20.6%, tracked net worth is R -20,966.16, and the projected cash-zero date at the current burn rate is not at risk on the current run-rate.",
+  "executiveSummary": "April 2026: household health reads stable. Real actuals are now live. The current operating view implies a monthly surplus of R 43,618.99, with R 57,288.71 in transaction cash and R 15,284.67 in reserves. Vehicle load is 0.0%, tracked net worth is R -20,966.16, and the projected cash-zero date at the current burn rate is not at risk on the current run-rate.",
   "focusItems": [
-    {
-      "title": "Decide the vehicle strategy",
-      "detail": "Vehicle finance plus fuel is consuming 20.6% of take-home income.",
-      "tone": "warn"
-    },
     {
       "title": "Restart real saving",
       "detail": "Formal savings are effectively at zero, so the balance sheet is not strengthening month to month.",
@@ -66,13 +61,13 @@
     },
     {
       "label": "Monthly Outflows",
-      "value": "R 60,516.30",
+      "value": "R 22,000.00",
       "detail": "Living costs, debt, and savings transfers",
       "tone": "warn"
     },
     {
       "label": "Net Position",
-      "value": "R 5,102.69",
+      "value": "R 43,618.99",
       "detail": "Income minus all monthly outflows",
       "tone": "good"
     },
@@ -84,9 +79,9 @@
     },
     {
       "label": "Full-Outflow Runway",
-      "value": "1.2 months",
+      "value": "3.3 months",
       "detail": "Cash and reserves vs total monthly outflows",
-      "tone": "bad"
+      "tone": "warn"
     },
     {
       "label": "Cash-Zero Date",
@@ -96,9 +91,9 @@
     },
     {
       "label": "Vehicle Load",
-      "value": "R 13,492.47",
-      "detail": "20.6% of take-home income",
-      "tone": "warn"
+      "value": "R 0.00",
+      "detail": "0.0% of take-home income",
+      "tone": "good"
     },
     {
       "label": "Savings Rate",
@@ -125,18 +120,18 @@
     {
       "label": "Core Costs",
       "budget": 61330.32,
-      "actual": 49523.83,
-      "variance": -11806.489999999998,
+      "actual": 22000.0,
+      "variance": -39330.32,
       "tone": "good",
-      "ratio": 0.8074934225029317
+      "ratio": 0.35871327591312097
     },
     {
       "label": "Debt Service",
       "budget": 10992.470000000001,
-      "actual": 10992.470000000001,
-      "variance": 0.0,
-      "tone": "info",
-      "ratio": 1.0
+      "actual": 0.0,
+      "variance": -10992.470000000001,
+      "tone": "good",
+      "ratio": 0.0
     },
     {
       "label": "Savings Allocation",
@@ -149,10 +144,10 @@
     {
       "label": "Net Position",
       "budget": -6859.530000000013,
-      "actual": 5102.690000000002,
-      "variance": 11962.220000000016,
+      "actual": 43618.990000000005,
+      "variance": 50478.52000000002,
       "tone": "good",
-      "ratio": -0.743883327283355
+      "ratio": -6.358889020093201
     }
   ],
   "capitalStack": [
@@ -237,13 +232,28 @@
       "notes": ""
     },
     {
+      "section": "Debt Payment",
+      "group": "Vehicle Finance",
+      "item": "BMW X1 xDrive20d finance",
+      "owner": "Household",
+      "budget": 6299.18,
+      "actual": 0.0,
+      "variance": -6299.18,
+      "currency": "ZAR",
+      "timing": "Around 1st/2nd",
+      "auto": "Yes",
+      "tag": "Core",
+      "priority": "Critical",
+      "notes": "Vehicle finance debit seen in bank activity."
+    },
+    {
       "section": "Monthly Cost",
       "group": "Giving",
       "item": "Tithe",
       "owner": "Household",
       "budget": 6100.0,
-      "actual": 6600.0,
-      "variance": 500.0,
+      "actual": 0.0,
+      "variance": -6100.0,
       "currency": "ZAR",
       "timing": "Auto debit",
       "auto": "Yes",
@@ -254,26 +264,11 @@
     {
       "section": "Debt Payment",
       "group": "Vehicle Finance",
-      "item": "BMW X1 xDrive20d finance",
-      "owner": "Household",
-      "budget": 6299.18,
-      "actual": 6299.18,
-      "variance": 0.0,
-      "currency": "ZAR",
-      "timing": "Around 1st/2nd",
-      "auto": "Yes",
-      "tag": "Core",
-      "priority": "Critical",
-      "notes": "Vehicle finance debit seen in bank activity."
-    },
-    {
-      "section": "Debt Payment",
-      "group": "Vehicle Finance",
       "item": "Audi finance",
       "owner": "Household",
       "budget": 4693.29,
-      "actual": 4693.29,
-      "variance": 0.0,
+      "actual": 0.0,
+      "variance": -4693.29,
       "currency": "ZAR",
       "timing": "Month-end",
       "auto": "Yes",
@@ -287,8 +282,8 @@
       "item": "Anoona school fees",
       "owner": "Household",
       "budget": 4135.0,
-      "actual": 4135.0,
-      "variance": 0.0,
+      "actual": 0.0,
+      "variance": -4135.0,
       "currency": "ZAR",
       "timing": "Auto debit",
       "auto": "Yes",
@@ -317,8 +312,8 @@
       "item": "Math tutoring",
       "owner": "Household",
       "budget": 3000.0,
-      "actual": 3000.0,
-      "variance": 0.0,
+      "actual": 0.0,
+      "variance": -3000.0,
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "No",
@@ -328,54 +323,6 @@
     }
   ],
   "watchlistRows": [
-    {
-      "item": "Internet",
-      "owner": "Household",
-      "metric": "R 793.01",
-      "reason": "Actual spend is above budget on this line.",
-      "action": "Investigate whether this was a once-off or a structural overrun.",
-      "tone": "bad"
-    },
-    {
-      "item": "Discovery insurance",
-      "owner": "Kuhle",
-      "metric": "R 523.95",
-      "reason": "Actual spend is above budget on this line.",
-      "action": "Investigate whether this was a once-off or a structural overrun.",
-      "tone": "bad"
-    },
-    {
-      "item": "Tithe",
-      "owner": "Household",
-      "metric": "R 500.00",
-      "reason": "Actual spend is above budget on this line.",
-      "action": "Investigate whether this was a once-off or a structural overrun.",
-      "tone": "bad"
-    },
-    {
-      "item": "Telkom",
-      "owner": "Household",
-      "metric": "R 17.55",
-      "reason": "Actual spend is above budget on this line.",
-      "action": "Investigate whether this was a once-off or a structural overrun.",
-      "tone": "bad"
-    },
-    {
-      "item": "Runway coverage",
-      "owner": "Household",
-      "metric": "1.2 months",
-      "reason": "Cash plus reserves cover less than three months of full outflows.",
-      "action": "Treat reserve balances as protected and avoid optional leakage.",
-      "tone": "bad"
-    },
-    {
-      "item": "Vehicle exposure",
-      "owner": "Household",
-      "metric": "20.6% / R 13,492.47",
-      "reason": "Vehicle finance and fuel are taking a heavy share of take-home income.",
-      "action": "Decide whether to keep both cars, refinance, or lower transport load.",
-      "tone": "warn"
-    },
     {
       "item": "Housing concentration",
       "owner": "Household",
@@ -391,17 +338,17 @@
       "reason": "No formal monthly saving is currently being captured.",
       "action": "Restart even a small recurring transfer so progress becomes measurable.",
       "tone": "warn"
+    },
+    {
+      "item": "Balance sheet",
+      "owner": "Household",
+      "metric": "R -20,966.16",
+      "reason": "Tracked liabilities still exceed tracked assets.",
+      "action": "Avoid new debt and use any upside to repair net worth.",
+      "tone": "bad"
     }
   ],
   "decisionRows": [
-    {
-      "title": "Reset the vehicle strategy",
-      "owner": "Household",
-      "timeframe": "Next 30 days",
-      "impact": "High",
-      "detail": "BMW and Audi finance plus fuel are running at R 13,492.47 per month (20.6% of take-home). Decide whether both vehicles still make sense.",
-      "tone": "warn"
-    },
     {
       "title": "Protect reserve accounts",
       "owner": "Kuhle",
@@ -423,43 +370,43 @@
     {
       "month": "May 2026",
       "opening": 72573.38,
-      "movement": 5102.690000000002,
-      "closing": 77676.07,
+      "movement": 43618.990000000005,
+      "closing": 116192.37000000001,
       "tone": "good"
     },
     {
       "month": "Jun 2026",
-      "opening": 77676.07,
-      "movement": 5102.690000000002,
-      "closing": 82778.76000000001,
+      "opening": 116192.37000000001,
+      "movement": 43618.990000000005,
+      "closing": 159811.36000000002,
       "tone": "good"
     },
     {
       "month": "Jul 2026",
-      "opening": 82778.76000000001,
-      "movement": 5102.690000000002,
-      "closing": 87881.45000000001,
+      "opening": 159811.36000000002,
+      "movement": 43618.990000000005,
+      "closing": 203430.35000000003,
       "tone": "good"
     },
     {
       "month": "Aug 2026",
-      "opening": 87881.45000000001,
-      "movement": 5102.690000000002,
-      "closing": 92984.14000000001,
+      "opening": 203430.35000000003,
+      "movement": 43618.990000000005,
+      "closing": 247049.34000000003,
       "tone": "good"
     },
     {
       "month": "Sep 2026",
-      "opening": 92984.14000000001,
-      "movement": 5102.690000000002,
-      "closing": 98086.83000000002,
+      "opening": 247049.34000000003,
+      "movement": 43618.990000000005,
+      "closing": 290668.33,
       "tone": "good"
     },
     {
       "month": "Oct 2026",
-      "opening": 98086.83000000002,
-      "movement": 5102.690000000002,
-      "closing": 103189.52000000002,
+      "opening": 290668.33,
+      "movement": 43618.990000000005,
+      "closing": 334287.32,
       "tone": "good"
     }
   ],
@@ -624,8 +571,8 @@
       "item": "BMW X1 xDrive20d finance",
       "owner": "Household",
       "budget": 6299.18,
-      "actual": 6299.18,
-      "variance": 0.0,
+      "actual": 0.0,
+      "variance": -6299.18,
       "currency": "ZAR",
       "timing": "Around 1st/2nd",
       "auto": "Yes",
@@ -639,8 +586,8 @@
       "item": "Audi finance",
       "owner": "Household",
       "budget": 4693.29,
-      "actual": 4693.29,
-      "variance": 0.0,
+      "actual": 0.0,
+      "variance": -4693.29,
       "currency": "ZAR",
       "timing": "Month-end",
       "auto": "Yes",
@@ -684,8 +631,8 @@
       "item": "Tithe",
       "owner": "Household",
       "budget": 6100.0,
-      "actual": 6600.0,
-      "variance": 500.0,
+      "actual": 0.0,
+      "variance": -6100.0,
       "currency": "ZAR",
       "timing": "Auto debit",
       "auto": "Yes",
@@ -699,8 +646,8 @@
       "item": "Anoona school fees",
       "owner": "Household",
       "budget": 4135.0,
-      "actual": 4135.0,
-      "variance": 0.0,
+      "actual": 0.0,
+      "variance": -4135.0,
       "currency": "ZAR",
       "timing": "Auto debit",
       "auto": "Yes",
@@ -729,29 +676,14 @@
       "item": "Math tutoring",
       "owner": "Household",
       "budget": 3000.0,
-      "actual": 3000.0,
-      "variance": 0.0,
+      "actual": 0.0,
+      "variance": -3000.0,
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "No",
       "tag": "Core",
       "priority": "High",
       "notes": ""
-    },
-    {
-      "section": "Monthly Cost",
-      "group": "Insurance",
-      "item": "Discovery insurance",
-      "owner": "Kuhle",
-      "budget": 2015.11,
-      "actual": 2539.06,
-      "variance": 523.95,
-      "currency": "ZAR",
-      "timing": "Auto debit",
-      "auto": "Yes",
-      "tag": "Core",
-      "priority": "High",
-      "notes": "Insurance premium."
     },
     {
       "section": "Monthly Cost",
@@ -774,8 +706,8 @@
       "item": "BMW fuel",
       "owner": "Household",
       "budget": 2500.0,
-      "actual": 2500.0,
-      "variance": 0.0,
+      "actual": 0.0,
+      "variance": -2500.0,
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "No",
@@ -785,12 +717,27 @@
     },
     {
       "section": "Monthly Cost",
+      "group": "Insurance",
+      "item": "Discovery insurance",
+      "owner": "Kuhle",
+      "budget": 2015.11,
+      "actual": 0.0,
+      "variance": -2015.11,
+      "currency": "ZAR",
+      "timing": "Auto debit",
+      "auto": "Yes",
+      "tag": "Core",
+      "priority": "High",
+      "notes": "Insurance premium."
+    },
+    {
+      "section": "Monthly Cost",
       "group": "Education",
       "item": "Lumiso fees",
       "owner": "Household",
       "budget": 2000.0,
-      "actual": 1900.0,
-      "variance": -100.0,
+      "actual": 0.0,
+      "variance": -2000.0,
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "No",
@@ -800,27 +747,12 @@
     },
     {
       "section": "Monthly Cost",
-      "group": "Subscriptions",
-      "item": "Internet",
-      "owner": "Household",
-      "budget": 800.0,
-      "actual": 1593.01,
-      "variance": 793.01,
-      "currency": "ZAR",
-      "timing": "Auto debit",
-      "auto": "Yes",
-      "tag": "Core",
-      "priority": "Critical",
-      "notes": ""
-    },
-    {
-      "section": "Monthly Cost",
       "group": "Medical",
       "item": "Dis-Chem insurance",
       "owner": "Kuhle & kids",
       "budget": 1515.0,
-      "actual": 1515.0,
-      "variance": 0.0,
+      "actual": 0.0,
+      "variance": -1515.0,
       "currency": "ZAR",
       "timing": "Auto debit",
       "auto": "Yes",
@@ -830,27 +762,12 @@
     },
     {
       "section": "Monthly Cost",
-      "group": "Connectivity",
-      "item": "Telkom",
-      "owner": "Household",
-      "budget": 991.64,
-      "actual": 1009.19,
-      "variance": 17.550000000000068,
-      "currency": "ZAR",
-      "timing": "Auto debit",
-      "auto": "Yes",
-      "tag": "Core",
-      "priority": "Medium",
-      "notes": "Internet and telecoms."
-    },
-    {
-      "section": "Monthly Cost",
       "group": "Insurance",
       "item": "Discovery life cover",
       "owner": "Kuhle",
       "budget": 1001.09,
-      "actual": 1001.09,
-      "variance": 0.0,
+      "actual": 0.0,
+      "variance": -1001.09,
       "currency": "ZAR",
       "timing": "Auto debit",
       "auto": "Yes",
@@ -860,12 +777,42 @@
     },
     {
       "section": "Monthly Cost",
+      "group": "Connectivity",
+      "item": "Telkom",
+      "owner": "Household",
+      "budget": 991.64,
+      "actual": 0.0,
+      "variance": -991.64,
+      "currency": "ZAR",
+      "timing": "Auto debit",
+      "auto": "Yes",
+      "tag": "Core",
+      "priority": "Medium",
+      "notes": "Internet and telecoms."
+    },
+    {
+      "section": "Monthly Cost",
+      "group": "Subscriptions",
+      "item": "Internet",
+      "owner": "Household",
+      "budget": 800.0,
+      "actual": 0.0,
+      "variance": -800.0,
+      "currency": "ZAR",
+      "timing": "Auto debit",
+      "auto": "Yes",
+      "tag": "Core",
+      "priority": "Critical",
+      "notes": ""
+    },
+    {
+      "section": "Monthly Cost",
       "group": "Wellness",
       "item": "Virgin Active",
       "owner": "Household",
       "budget": 450.0,
-      "actual": 429.0,
-      "variance": -21.0,
+      "actual": 0.0,
+      "variance": -450.0,
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "Yes",
@@ -879,8 +826,8 @@
       "item": "Nyaradzo funeral cover",
       "owner": "Household",
       "budget": 288.0,
-      "actual": 288.0,
-      "variance": 0.0,
+      "actual": 0.0,
+      "variance": -288.0,
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "Yes",
@@ -894,8 +841,8 @@
       "item": "Netflix",
       "owner": "Household",
       "budget": 250.0,
-      "actual": 250.0,
-      "variance": 0.0,
+      "actual": 0.0,
+      "variance": -250.0,
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "Yes",
@@ -909,8 +856,8 @@
       "item": "Outsurance funeral cover",
       "owner": "Household",
       "budget": 222.0,
-      "actual": 222.0,
-      "variance": 0.0,
+      "actual": 0.0,
+      "variance": -222.0,
       "currency": "ZAR",
       "timing": "Auto debit",
       "auto": "Yes",
@@ -924,8 +871,8 @@
       "item": "Google One",
       "owner": "Household",
       "budget": 184.99,
-      "actual": 184.99,
-      "variance": 0.0,
+      "actual": 0.0,
+      "variance": -184.99,
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "Yes",
@@ -939,8 +886,23 @@
       "item": "Mukuru funeral cover",
       "owner": "Household",
       "budget": 182.5,
-      "actual": 182.5,
-      "variance": 0.0,
+      "actual": 0.0,
+      "variance": -182.5,
+      "currency": "ZAR",
+      "timing": "Auto debit",
+      "auto": "Yes",
+      "tag": "Core",
+      "priority": "Medium",
+      "notes": ""
+    },
+    {
+      "section": "Monthly Cost",
+      "group": "Funeral Cover",
+      "item": "Capitec Funeral Cover",
+      "owner": "Household",
+      "budget": 100.0,
+      "actual": 0.0,
+      "variance": -100.0,
       "currency": "ZAR",
       "timing": "Auto debit",
       "auto": "Yes",
@@ -954,28 +916,13 @@
       "item": "Spotify",
       "owner": "Household",
       "budget": 94.99,
-      "actual": 94.99,
-      "variance": 0.0,
+      "actual": 0.0,
+      "variance": -94.99,
       "currency": "ZAR",
       "timing": "Monthly",
       "auto": "Yes",
       "tag": "Flexible",
       "priority": "Low",
-      "notes": ""
-    },
-    {
-      "section": "Monthly Cost",
-      "group": "Funeral Cover",
-      "item": "Capitec Funeral Cover",
-      "owner": "Household",
-      "budget": 100.0,
-      "actual": 80.0,
-      "variance": -20.0,
-      "currency": "ZAR",
-      "timing": "Auto debit",
-      "auto": "Yes",
-      "tag": "Core",
-      "priority": "Medium",
       "notes": ""
     },
     {
@@ -1105,15 +1052,29 @@
       "savingsRate": 0.0,
       "runwayMonths": 1.1992368998104643,
       "debtServiceRatio": 0.1675196463706619
+    },
+    {
+      "reportMonth": "April 2026",
+      "generatedAt": "2026-05-30T11:02:37.768717+02:00",
+      "sourceUpdatedAt": "2026-05-30T10:53:44.329374+02:00",
+      "incomeActual": 65618.99,
+      "outflowsActual": 22000.0,
+      "surplusActual": 43618.990000000005,
+      "cashBuffer": 72573.38,
+      "netWorth": -20966.159999999916,
+      "vehicleLoad": 0.0,
+      "savingsRate": 0.0,
+      "runwayMonths": 3.2987900000000003,
+      "debtServiceRatio": 0.0
     }
   ],
   "totals": {
     "budgetIncome": 65463.259999999995,
     "actualIncome": 65618.99,
     "budgetOutflows": 72322.79000000001,
-    "actualOutflows": 60516.3,
+    "actualOutflows": 22000.0,
     "budgetSurplus": -6859.530000000013,
-    "actualSurplus": 5102.690000000002,
+    "actualSurplus": 43618.990000000005,
     "liquidCash": 57288.71,
     "reserves": 15284.670000000002,
     "medicalSaver": 15963.12,
@@ -1121,9 +1082,9 @@
     "retirement": 297215.13,
     "workingFloat": 2299.44,
     "debtBalances": 427121.43999999994,
-    "coverageRatio": 1.084319266048982,
-    "vehicleLoad": 13492.470000000001,
-    "vehicleLoadRatio": 0.20561837358362267,
+    "coverageRatio": 2.982681363636364,
+    "vehicleLoad": 0.0,
+    "vehicleLoadRatio": 0.0,
     "housingRatio": 0.3352687994740547,
     "netWorth": -20966.159999999916
   }
