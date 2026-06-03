@@ -348,6 +348,36 @@
       border: 1px solid rgba(29, 35, 43, 0.08);
     }
 
+    .due-date {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      border-radius: 999px;
+      padding: 5px 11px;
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .due-date--red {
+      color: var(--bad-deep);
+      border: 1px solid rgba(255, 104, 117, 0.46);
+      background: rgba(255, 104, 117, 0.14);
+    }
+
+    .due-date--amber {
+      color: var(--warn-deep);
+      border: 1px solid rgba(247, 185, 85, 0.5);
+      background: rgba(247, 185, 85, 0.17);
+    }
+
+    .due-date--green {
+      color: var(--good-deep);
+      border: 1px solid rgba(54, 215, 160, 0.38);
+      background: rgba(54, 215, 160, 0.14);
+    }
+
     .tone-good {
       color: var(--good-deep);
       border-color: rgba(54, 215, 160, 0.38);
@@ -930,12 +960,12 @@
 
     const sectionDefs = [
       { key: "overview", label: "Overview" },
+      { key: "payments", label: "Payments" },
       { key: "operating", label: "Operating Model" },
       { key: "capital", label: "Capital Stack" },
       { key: "costs", label: "Cost Drivers" },
       { key: "risks", label: "Risks" },
       { key: "decisions", label: "Decisions" },
-      { key: "payments", label: "Payments" },
       { key: "accounts", label: "Accounts" },
       { key: "debt", label: "Debt" }
     ];
@@ -988,6 +1018,40 @@
         day: "2-digit",
         year: "numeric"
       }).format(date);
+    }
+
+    function parseDateOnly(value) {
+      if (!value) return null;
+      const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value));
+      if (match) {
+        return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+      }
+      const date = new Date(`${value}T00:00:00`);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+
+    function startOfToday() {
+      const now = new Date();
+      return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    }
+
+    function paymentDueStatus(row) {
+      const dueDate = parseDateOnly(row.dueDate);
+      if (!dueDate) return "green";
+
+      const today = startOfToday();
+      if (dueDate < today) return "red";
+
+      const daysFromRow = Number(row.daysToDue);
+      const daysToDue = Number.isFinite(daysFromRow)
+        ? daysFromRow
+        : Math.ceil((dueDate - today) / 86400000);
+
+      if (daysToDue <= 7) return "red";
+      if (dueDate.getFullYear() === today.getFullYear() && dueDate.getMonth() === today.getMonth()) {
+        return "amber";
+      }
+      return "green";
     }
 
     function fmtDateTime(value) {
@@ -1411,7 +1475,7 @@
           (row) => [
             `<td><strong>${esc(row.item)}</strong></td>`,
             `<td class="num">${fmtMoney(row.amount)}</td>`,
-            `<td>${fmtDate(row.dueDate)}</td>`,
+            `<td><span class="due-date due-date--${paymentDueStatus(row)}">${fmtDate(row.dueDate)}</span></td>`,
             `<td class="num">${esc(row.daysToDue ?? "-")}</td>`,
             `<td>${esc(row.owner || "-")}</td>`,
             `<td><span class="chip">${esc(row.category || "-")}</span></td>`,
