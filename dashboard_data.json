@@ -81,9 +81,6 @@
     { "title": "Restart monthly saving", "owner": "Household", "timeframe": "After relocation resolved", "impact": "Medium", "detail": "Once relocation is settled, begin R2,000/month minimum recurring transfer to reserve. Track via dashboard.", "tone": "info" }
   ],
   "upcomingPayments": [
-    { "item": "Rent", "amount": 22000, "dueDate": "2026-06-05", "daysToDue": 6, "owner": "Household", "auto": false, "category": "Housing", "tone": "bad" },
-    { "item": "Lumiso school fees", "amount": 2000, "dueDate": "2026-06-05", "daysToDue": 6, "owner": "Household", "auto": false, "category": "Education", "tone": "warn" },
-    { "item": "RSAWeb internet", "amount": 1593.01, "dueDate": "2026-06-07", "daysToDue": 8, "owner": "Household", "auto": true, "category": "Connectivity", "tone": "warn" },
     { "item": "Dis-Chem medical", "amount": 1515, "dueDate": "2026-06-25", "daysToDue": 26, "owner": "Kuhle", "auto": true, "category": "Medical", "tone": "info" },
     { "item": "Outsurance funeral", "amount": 222, "dueDate": "2026-06-26", "daysToDue": 27, "owner": "Household", "auto": true, "category": "Insurance", "tone": "info" },
     { "item": "Audi finance", "amount": 4693.29, "dueDate": "2026-06-29", "daysToDue": 30, "owner": "Household", "auto": true, "category": "Debt", "tone": "warn" },
