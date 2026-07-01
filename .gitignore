@@ -1,3 +1,7 @@
 scripts/__pycache__/
 scripts/local_autopublish.log
 scripts/.sync_state.json
+.env
+.env.*
+.netlify/
+node_modules/

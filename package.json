@@ -1,0 +1,17 @@
+{
+  "name": "family-finance-dashboard-live",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm run typecheck",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^9.1.0",
+    "@netlify/functions": "^4.2.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.10",
+    "typescript": "^5.8.3"
+  }
+}

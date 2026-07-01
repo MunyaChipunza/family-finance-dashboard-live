@@ -835,7 +835,7 @@
         <h1>Family Finance</h1>
         <p>Clean operating view for household capital decisions.</p>
       </div>
-      <div class="source-pill" id="liveUrl">Loading dashboard_data.json</div>
+      <div class="source-pill" id="liveUrl">Loading live finance API</div>
     </div>
 
     <section class="hero" aria-labelledby="dashboardTitle">
@@ -943,7 +943,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script>
-    const DATA_URL = "./dashboard_data.json";
+    const API_URL = "/api/finance-dashboard";
     const SAST_TIMEZONE = "Africa/Johannesburg";
     const DEFAULT_REFRESH_SECONDS = 300;
 
@@ -1592,21 +1592,21 @@
     async function loadDashboard(manual = false) {
       if (state.loading) return;
       setLoading(true);
-      setText(el.refreshStatus, manual ? "Manual refresh in progress..." : "Checking dashboard_data.json...");
+      setText(el.refreshStatus, manual ? "Manual refresh in progress..." : "Checking live finance API...");
 
       try {
-        const response = await fetch(`${DATA_URL}?v=${Date.now()}`, { cache: "no-store" });
-        if (!response.ok) throw new Error(`dashboard_data.json returned HTTP ${response.status}`);
+        const response = await fetch(API_URL, { cache: "no-store" });
+        if (!response.ok) throw new Error(`Finance API returned HTTP ${response.status}`);
         const data = await response.json();
         state.dashboard = data;
         renderDashboard(data);
         scheduleRefresh(data.refreshSeconds || DEFAULT_REFRESH_SECONDS);
-        setText(el.refreshStatus, `Live from dashboard_data.json at ${fmtDateTime(new Date().toISOString())}`);
+        setText(el.refreshStatus, `${data.stale ? "Cached snapshot" : "Live API"} at ${fmtDateTime(new Date().toISOString())}`);
         if (manual) showToast("Dashboard data refreshed.", "good");
       } catch (error) {
         console.error(error);
-        setText(el.refreshStatus, "Unable to load dashboard_data.json.");
-        showToast(`Could not load dashboard_data.json. ${error.message}`, "bad");
+        setText(el.refreshStatus, "Unable to load live finance API.");
+        showToast(`Could not load live finance API. ${error.message}`, "bad");
         scheduleRefresh(state.dashboard?.refreshSeconds || DEFAULT_REFRESH_SECONDS);
       } finally {
         setLoading(false);

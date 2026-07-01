@@ -5,32 +5,16 @@ param(
     [string]$WorkbookPath = ""
 )
 
-$ErrorActionPreference = "Stop"
+$message = @"
+Local finance dashboard auto-publish is retired.
 
-$runnerScriptPath = (Resolve-Path (Join-Path $PSScriptRoot "run_local_autopublish.pyw")).Path
-$pythonPath = (Get-Command python -ErrorAction Stop).Source
-$pythonwPath = Join-Path (Split-Path $pythonPath) "pythonw.exe"
-$runnerExe = if (Test-Path $pythonwPath) { $pythonwPath } else { $pythonPath }
-$triggerTime = (Get-Date).AddMinutes(1)
+The production dashboard now uses:
+  - Google Sheets as the canonical source
+  - Netlify Function: /api/finance-dashboard
+  - Netlify Blobs as the latest-good snapshot cache
+  - Netlify scheduled refresh every 15 minutes
 
-if ($WorkbookPath -and -not $DataPath) {
-    Write-Host "WorkbookPath is retired. The scheduled task will watch dashboard_data.json instead."
-}
+No Windows scheduled task is required. Existing tasks named "$TaskName" can be disabled or deleted.
+"@
 
-if ($DataPath) {
-    $candidateData = (Resolve-Path $DataPath).Path
-} else {
-    $candidateData = (Resolve-Path (Join-Path $PSScriptRoot "..\dashboard_data.json")).Path
-}
-
-$taskArgs = '"' + $runnerScriptPath + '" --data "' + $candidateData + '"'
-$action = New-ScheduledTaskAction -Execute $runnerExe -Argument $taskArgs -WorkingDirectory $PSScriptRoot
-$trigger = New-ScheduledTaskTrigger -Once -At $triggerTime -RepetitionInterval (New-TimeSpan -Minutes 5) -RepetitionDuration (New-TimeSpan -Days 3650)
-$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -MultipleInstances IgnoreNew
-
-Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger -Settings $settings -Description "Checks dashboard_data.json and publishes the live finance dashboard when the data changes." -Force | Out-Null
-
-Write-Host "Scheduled task created:"
-Write-Host "  Name: $TaskName"
-Write-Host "  Data: $candidateData"
-Write-Host "  Checks every 5 minutes on this PC."
+Write-Host $message
