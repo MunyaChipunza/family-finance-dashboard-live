@@ -624,7 +624,11 @@ export function buildDashboardFromSheetValues(values: unknown[][], options: Dash
   const cashZeroDate = zeroDate(liquidCash + reserves, surplusActual);
 
   const vehicleDebtService = monthlyRows(rows, ["Debt Payment"])
-    .filter((row) => cleanText(row.group).toLowerCase().includes("vehicle"))
+    .filter((row) => {
+      const group = cleanText(row.group).toLowerCase();
+      const item = cleanText(row.item).toLowerCase();
+      return group.includes("vehicle") || item.includes("vehicle") || item.includes("finance") || item.includes("bmw") || item.includes("audi");
+    })
     .reduce((total, row) => total + Number(row.actual ?? 0), 0);
   const fuelSpend = monthlyRows(rows, ["Monthly Cost"])
     .filter((row) => cleanText(row.item).toLowerCase().includes("fuel"))
