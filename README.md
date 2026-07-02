@@ -15,12 +15,18 @@ https://munyachipunza.com/family-finance-dashboard-live/
 Production flow:
 
 1. The canonical finance source is a Google Sheet.
-2. `index.html` fetches `/api/finance-dashboard` with `cache: "no-store"`.
+2. `index.html` fetches the Netlify API endpoint with `cache: "no-store"`.
 3. The Netlify Function reads the Google Sheet server-side.
 4. The function transforms the sheet rows into the existing dashboard JSON schema.
 5. The latest successful payload is cached in Netlify Blobs.
 6. If Google Sheets is unavailable, the API returns the latest Blob snapshot with `stale: true` and a `fallback` warning.
 7. A scheduled Netlify Function refreshes the Blob snapshot every 15 minutes.
+
+Production is split across two hosts:
+
+- The public dashboard HTML at `https://munyachipunza.com/family-finance-dashboard-live/` is served by GitHub Pages from this finance dashboard repo.
+- The live API is hosted by Netlify at `https://inquisitive-pastelito-bd6463.netlify.app/api/finance-dashboard`.
+- That Netlify project is connected to `MunyaChipunza/munyaapp`, so the production function code is also installed in `C:\Users\Dell\OneDrive\100. Zee\munyaapp\netlify\functions`.
 
 ## Active Source Location
 
@@ -153,7 +159,7 @@ The created page ID is stored in Netlify Blobs so future refreshes update the sa
 
 ## Files
 
-- `index.html` renders the dashboard and fetches `/api/finance-dashboard`.
+- `index.html` renders the dashboard and fetches the live Netlify API endpoint.
 - `netlify/functions/finance-dashboard.mts` serves the live JSON endpoint.
 - `netlify/functions/finance-dashboard-refresh.mts` refreshes the Blob snapshot every 15 minutes.
 - `netlify/functions/_shared/finance-transformer.ts` converts Google Sheet rows to the dashboard schema.
