@@ -8,6 +8,9 @@ function jsonResponse(payload: unknown, status = 200, extraHeaders: HeadersInit 
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
       "Netlify-CDN-Cache-Control": "no-store",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
       Pragma: "no-cache",
       Expires: "0",
       ...extraHeaders,
@@ -16,6 +19,17 @@ function jsonResponse(payload: unknown, status = 200, extraHeaders: HeadersInit 
 }
 
 export default async (req: Request, _context: Context) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+    });
+  }
+
   if (req.method !== "GET") {
     return jsonResponse({ error: "Method not allowed" }, 405, { Allow: "GET" });
   }

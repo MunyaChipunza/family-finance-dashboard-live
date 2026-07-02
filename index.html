@@ -943,7 +943,9 @@
   <div class="toast" id="toast" hidden></div>
 
   <script>
-    const API_URL = "/api/finance-dashboard";
+    const API_URL = window.location.hostname === "munyachipunza.com"
+      ? "https://inquisitive-pastelito-bd6463.netlify.app/api/finance-dashboard"
+      : "/api/finance-dashboard";
     const SAST_TIMEZONE = "Africa/Johannesburg";
     const DEFAULT_REFRESH_SECONDS = 300;
 
